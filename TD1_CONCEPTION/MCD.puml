@@ -45,6 +45,7 @@ class FichePoste {
 }
 
 class Workflow {
+    -description: string
     -hours:  integer
     -remote: boolean
     -day_off: integer
@@ -58,6 +59,8 @@ class Salaire {
 
 class Candidature {
     -date: date
+    -filepath: string
+    -categorie: enum
 }
 
 class PieceDossier {
