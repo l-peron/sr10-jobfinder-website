@@ -1,0 +1,76 @@
+@startuml
+
+class Utilisateur {
+    -name: string
+    -surname: string
+    -email: string
+    -password: string
+    -phone_number: string
+    -create_at: date
+    -status: enum
+}
+
+class Recruteur {
+
+}
+
+class Administrateur {
+
+}
+
+Utilisateur  "1" *.. "0..1" Recruteur 
+Utilisateur  "1" *.. "0..1" Administrateur 
+
+class Organisation {
+    -siren: string
+    -name: string
+    -type:  string
+    -address: string
+}
+
+class OffreEmploi {
+    -number: integer
+    -status: enum
+    -valid_date: date
+    -description: string
+}
+
+class FichePoste {
+    -title: string
+    -status: enum
+    -responsable: string
+    -type: string
+    -location: string
+    -description: string
+}
+
+class Workflow {
+    -hours:  integer
+    -remote: boolean
+    -day_off: integer
+}
+
+class Salaire {
+    -average_salary: integer
+    -min_salary: integer
+    -max_salary: integer
+}
+
+class Candidature {
+    -date: date
+}
+
+class PieceDossier {
+
+}
+
+(Utilisateur, OffreEmploi) .. Candidature
+
+Candidature "1" *-- "*" PieceDossier
+Organisation "1" *-- "*" OffreEmploi
+
+FichePoste "1" *-- "1" Salaire
+FichePoste "1" *-- "1" Workflow
+
+OffreEmploi "*" *-- "1" FichePoste
+@enduml
