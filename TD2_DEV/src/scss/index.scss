@@ -1,0 +1,131 @@
+@import "./styles.scss";
+body, html {
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    height: $headerHeight;
+
+    .header_search img {
+        height: 25px;
+    }
+
+    #burger_icon {
+        height: 30px;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 28px;
+    }
+}
+
+main {
+    position: fixed;
+    top: $headerHeight;
+    height: calc(100% - $headerHeight);
+    width: 100%;
+    transition: width .5s ease-in-out;
+}
+
+aside {
+    position: fixed;
+    top: $headerHeight;
+    left: 0;
+    height: 100%;
+    width: $navWidth;
+    border-right: 2px solid black;
+}
+
+section {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: calc(100% - $navWidth);
+    overflow-y: scroll;
+}
+
+#salaray_slider {
+    height: 30px;
+}
+
+.nav_sidebar {
+    box-sizing: content-box;
+
+    width: 0px;
+    position: fixed;
+    height: 100%;
+    right: 0 !important;
+    z-index: 3000;
+    overflow: hidden;
+    transition: width .5s ease-in-out;
+    text-overflow: ellipsis;
+
+    background-color: black !important;
+    color: white !important;
+
+    h1 {
+        color: white !important;
+    }
+
+    a {
+        color: white !important;
+        text-decoration: none;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .nav_content {
+        white-space: nowrap;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        box-sizing: content-box;
+        overflow: hidden;
+    }
+
+    li:hover {
+        background-color: white;
+
+        a {
+            color: black !important;
+        }
+    }
+
+    #exit_nav {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+    }
+}
+
+.active {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+header {
+    z-index: 0 !important;
+}
+
+nav {
+    z-index: 1;
+}
+
+#main_overlay {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, .6);
+    z-index: 1000;
+    opacity: 0;
+}

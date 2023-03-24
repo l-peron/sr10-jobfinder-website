@@ -1,0 +1,73 @@
+// Import all of Bootstrap's CSS
+@import "~bootstrap/scss/bootstrap";
+@import url("../assets/webfonts/Montserrat.css");
+
+$headerHeight: 68px;
+$navWidth: 320px;
+
+
+$blackColor: #000000;
+$lightGreyColor: #8C8C8C;
+$darkGreyColor: #4D4D4D;
+
+body, html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+h1, h2, h3, h4, p {
+    margin: 4px;
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: $blackColor;
+}
+
+h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: $blackColor;
+}
+
+h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: $darkGreyColor;
+}
+
+h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: $lightGreyColor;
+}
+
+p {
+    text-align: justify;
+}
+
+input[type=text]:focus {
+    outline: none;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 2px solid black;
+    transform: translateY(-0.075em);
+
+    &:checked {
+        background-color: $blackColor;
+    }
+}

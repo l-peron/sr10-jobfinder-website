@@ -1,10 +1,4 @@
-Utilisateur(<ins>id</ins>,name, surname, email, password, phone_number, create_at, status)
-
-Recruteur(<ins>#user_id</ins>) 
-<br />#user_id: PK ET FK **Utilisateur**
-
-Administrateur(<ins>#user_id</ins>) 
-<br />#user_id: PK ET FK **Utilisateur**
+Utilisateur(<ins>id</ins>,name, surname, email, password, phone_number, create_at, status, role)
 
 Orgnisation(<ins>siren</ins>, name, type, location)
 
