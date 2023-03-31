@@ -5,8 +5,8 @@ CREATE TABLE utilisateurs(
     email VARCHAR(256) NOT NULL,
     password VARCHAR(256) NOT NULL,
     phone_number VARCHAR(256) NOT NULL,
-    create_at TIMESTAMP NOT NULL,
-    active BOOL NOT NULL,
+    create_at TIMESTAMP NOT NULL DEFAULT GETDATE(),
+    active BOOL NOT NULL DEFAULT true,
     role ENUM('utilisateur', 'recruteur', 'administrateur') DEFAULT 'utilisateur');
 
 CREATE TABLE organisations(

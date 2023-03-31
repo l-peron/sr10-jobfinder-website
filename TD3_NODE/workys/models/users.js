@@ -17,7 +17,7 @@ module.exports = {
     },
     areValid: function(email, password, callback) {
         sql = "SELECT password FROM utilisateurs WEHRE email = ?";
-        db.query(sql, function(err, results) {
+        db.query(sql, email, function(err, results) {
             if(err) throw err;
             if(results.length === 1 && results[0].password === password) {
                 callback(true);
@@ -27,6 +27,9 @@ module.exports = {
         });
     },
     createAccount: function(name, surname, email, password, phoneNumber, callback) {
-        sql = "INSERT INTO utilisateur VALUES ()"
+        sql = "INSERT INTO utilisateurs (name, surname, email, password, phone_number) VALUES (?, ?, ?, ?, ?)"
+        db.query(sql, name, surname, email, password, phoneNumber, function(err, results) {
+            callback(results);
+        });
     }
 }
