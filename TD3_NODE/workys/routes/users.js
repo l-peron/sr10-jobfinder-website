@@ -7,6 +7,10 @@ router.get('/', function(req, res, next) {
   res.send('oui tkt');
 });
 
+router.post('/inscription', function(req, res, next) {
+  res
+});
+
 router.get('/userlist', function (req, res, next) { 
   result=userModel.readall(function(result) {
     res.render('userlist', { title: 'List des utilisateurs', users: result });

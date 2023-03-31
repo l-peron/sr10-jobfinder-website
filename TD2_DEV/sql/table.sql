@@ -42,8 +42,8 @@ CREATE TABLE fiche_postes(
     workflow int NOT NULL,
     salary int NOT NULL,
     FOREIGN KEY (responsable) REFERENCES utilisateurs(id),
-    FOREIGN KEY (workflow) REFERENCES workflows(id),
-    FOREIGN KEY (salary) REFERENCES salarys(id)
+    FOREIGN KEY (workflow) REFERENCES workflows(id) ON DELETE CASCADE,
+    FOREIGN KEY (salary) REFERENCES salarys(id) ON DELETE CASCADE
 );
 
 CREATE TABLE offre_emplois(

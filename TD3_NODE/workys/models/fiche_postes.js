@@ -2,7 +2,7 @@ var db = require('./db.js');
 
 module.exports = {
     read: function(email, callback) {
-        sql = "SELECT * FROM utilisateurs WHERE email = ?";
+        sql = "SELECT * FROM fiche_postes WHERE email = ?";
         db.query(sql, email, function(err, results) {
             if(err) throw err;
             callback(results);
