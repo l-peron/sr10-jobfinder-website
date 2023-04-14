@@ -17,4 +17,12 @@ router.get('/userlist', function (req, res, next) {
   });
 });
 
+router.get('/:email', function (req, res, next) { 
+  const accountEmail = String(req.params.email);
+
+  result=userModel.read(accountEmail, function(result) {
+    res.render('user', { title: `Compte de ${accountEmail}`, user: result });
+  });
+});
+
 module.exports = router;

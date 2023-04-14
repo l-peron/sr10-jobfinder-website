@@ -5,6 +5,7 @@
     <table border>
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Email</th>
@@ -13,6 +14,9 @@
         <tbody>
             <% users.forEach((user)=> { %>
                 <tr> 
+                    <td> 
+                        <%= user.id %> 
+                    </td>
                     <td> 
                         <%= user.name %> 
                     </td>

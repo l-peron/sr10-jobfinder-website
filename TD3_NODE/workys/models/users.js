@@ -5,7 +5,7 @@ module.exports = {
         sql = "SELECT * FROM utilisateurs WHERE email = ?";
         db.query(sql, email, function(err, results) {
             if(err) throw err;
-            callback(results);
+            callback(results[0]);
         });
     },
     readall: function(callback) {
