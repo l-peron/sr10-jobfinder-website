@@ -1,0 +1,19 @@
+@import "./styles.scss";
+
+section {
+    width: 400px;
+    height: fit-content;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#register_wrapper {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: auto;
+}

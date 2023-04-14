@@ -1,0 +1,15 @@
+@import "./styles.scss";
+
+section {
+    width: 400px;
+    height: fit-content;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+aside {
+    width: calc(100% - 400px - 50px);
+    position: absolute;
+    right: 0;
+}
