@@ -28,31 +28,31 @@ module.exports = {
     },
     createAccount: function(name, surname, email, password, phoneNumber, callback) {
         sql = "INSERT INTO utilisateurs (name, surname, email, password, phone_number) VALUES (?, ?, ?, ?, ?)"
-        db.query(sql, name, surname, email, password, phoneNumber, function(err, results) {
+        db.query(sql, [name, surname, email, password, phoneNumber], function(err, results) {
             callback(results);
         });
     },
     modifyAccount: function(id, name, surname, email, phoneNumber, callback) {
         sql = "UPDATE utilisateurs SET name=?, surname=?, email=?, phone_number=? WHERE id=?"
-        db.query(sql, name, surname, email, phoneNumber, id, function(err, results) {
+        db.query(sql, [name, surname, email, phoneNumber, id], function(err, results) {
             callback(results);
         });
     },
     modifyPassword: function(id, password, callback) {
         sql = "UPDATE utilisateurs SET password=? WHERE id=?"
-        db.query(sql, password, id, function(err, results) {
+        db.query(sql, [password, id], function(err, results) {
             callback(results);
         });
     },
     desactivateAccount: function(id, callback) {
         sql = "UPDATE utilisateurs SET active=false WHERE id=?"
-        db.query(sql, password, id, function(err, results) {
+        db.query(sql, [password, id], function(err, results) {
             callback(results);
         });
     },
     activateAccount: function(id, callback) {
         sql = "UPDATE utilisateurs SET active=true WHERE id=?"
-        db.query(sql, password, id, function(err, results) {
+        db.query(sql, [password, id], function(err, results) {
             callback(results);
         });
     },

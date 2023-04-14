@@ -17,13 +17,13 @@ module.exports = {
     },
     createWorkflow: function(description, hours, remote, dayOff, callback) {
         sql = "INSERT INTO workflows (description, hours, remote, day_off) VALUES (?, ?, ?, ?)"
-        db.query(sql, description, hours, remote, dayOff, function(err, results) {
+        db.query(sql, [description, hours, remote, dayOff], function(err, results) {
             callback(results);
         });
     },
     modifyWorkflow: function(id, description, hours, remote, dayOff, callback) {
         sql = "UPDATE workflows set description=?, hours=?, remote=?, day_off=? WHERE id=?"
-        db.query(sql, description, hours, remote, dayOff, id, function(err, results) {
+        db.query(sql, [description, hours, remote, dayOff, id], function(err, results) {
             callback(results);
         });
     },
