@@ -1,6 +1,15 @@
 var db = require('./db.js');
 
 module.exports = {
+    read: function(siren, active, callback) {
+        sql = "SELECT * FROM organisations_members "
+        + "JOIN utilisateurs ON utilisateurs.id = organisations_members.user "
+        + "WHERE organisations_members.organisation LIKE ? AND organisations_members.active = ?";
+        db.query(sql, [siren, active], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
     apply: function(siren, user_id, callback) {
         sql = "INSERT INTO organisations_members (date, user, organisation) VALUES (CURRENT_TIME, ?, ?)";
         db.query(sql, [user_id, siren], function(err, results) {

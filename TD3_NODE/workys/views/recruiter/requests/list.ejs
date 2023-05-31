@@ -1,0 +1,28 @@
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <table border>
+        <thead>
+            <tr>
+                <th>Mail</th>
+                <th>Valider</th>
+                <th>Refuser</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% requests.forEach((request)=> { %>
+                <tr> 
+                    <td> 
+                        <%= request.email %> 
+                    </td>
+                    <td> 
+                        <button>Accepter</button>
+                    </td>
+                    <td> 
+                        <button>Refuser</button>
+                    </td> 
+                </tr>
+            <% }) %>
+        </tbody>
+</body>

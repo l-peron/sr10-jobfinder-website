@@ -32,7 +32,8 @@ router.post('/login', function(req, res, next) {
         req.session.user = {
           user_id : user_result.id,
           user_mail : user_result.email,
-          user_role : user_result.role
+          user_role : user_result.role,
+          organization_siren : user_result.organisation // Retrieve the possible organisation that the user is in
         }
 
         res.redirect('/');

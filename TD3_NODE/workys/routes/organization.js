@@ -19,7 +19,7 @@ router.get('/:siren/apply', function(req, res, next) {
   const org_siren = String(req.params.siren);
   const user_id = req.session.user.user_id;
 
-  result = organizationModel.apply(org_siren, user_id, function(result) {
+  result = organizationMembersModel.apply(org_siren, user_id, function(result) {
     return res.redirect('/organization/list');
   })
 
