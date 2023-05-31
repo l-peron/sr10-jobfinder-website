@@ -4,8 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// Routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var connectRouter = require('./routes/connect');
+var registerRouter = require('./routes/register');
+var recruiterRouter = require('./routes/recruiter');
+var organizationRouter = require('./routes/organization');
+var adminRouter = require('./routes/admin');
+
+var session = require('express-session')
 
 var app = express();
 
@@ -15,15 +23,37 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   express.static(path.join(__dirname, "node_modules/bootstrap/dist/"))
 );
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {}
+}))
 
+// Not logged in
+app.use('/connect', connectRouter);
+app.use('/register', registerRouter);
+
+// Now logged in + session
+app.use(function(req, res, next) {
+  if(!req.session.user)
+    return res.redirect('/connect');
+
+  res.locals.user = req.session.user;
+
+  next();
+});
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/recruiter', recruiterRouter);
+app.use('/organization', organizationRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

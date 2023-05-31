@@ -10,10 +10,10 @@
     <script type="module" src="javascripts/index.js"></script>
     <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
         <a class="navbar-brand px-3">WORKYS</a>
-        <div class="header_search w-25 p-2 border border-2 border-dark d-flex">
+        <form method="get" action="/" class="header_search w-25 p-2 border border-2 border-dark d-flex">
             <img src="images/mag_glass.svg" id="mag_glass"/>
-            <input type="text" placeholder="Rechercher une offre..." class="border border-0 pull-right flex-grow-1 mx-2"/>
-        </div>
+            <input type="text" name="q" placeholder="Rechercher une offre..." class="border border-0 pull-right flex-grow-1 mx-2"/>
+        </form>
         <img src="images/burger_icon.svg" id="burger_icon" class="px-3"/>
     </header>
     <div id="main_overlay"></div>
@@ -59,94 +59,16 @@
             </div>
         </aside>
         <section class="p-3">
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
-            <article class="border border-2 border-dark p-2 my-3">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <h1>Team informatique</h2>
-                    <h4>CDI - 500€/an</h4>
-                </div>
-                <h3>PVDC - Pic'Asso</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
-            </article>
+            <% annonces.forEach((annonce)=> { %>
+                <article class="border border-2 border-dark p-2 my-3">
+                    <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
+                        <h1>Team informatique</h2>
+                        <h4>CDI - 500€/an</h4>
+                    </div>
+                    <h3>PVDC - Pic'Asso</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
+                </article>
+            <% }) %>
         </section>
     </main>
     <nav class="nav_sidebar bg-white">
@@ -154,17 +76,25 @@
             <h1>MENU</h1>
             <ul>
                 <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="./connect.html">Se connecter</a>
+                    <a href="/users/me">Mon compte</a>
                 </li>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="./register.html">S'inscrire</a>
-                </li>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="#">Espace recruteur</a>
-                </li>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="#">Espace administrateur</a>
-                </li>
+                <% if(user.user_role != 'utilisateur') { %>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/recruiter">Espace recruteur</a>
+                    </li>
+                <% } else { %>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/organization/list">Rejoindre une organisation</a>
+                    </li>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/organization/create">Créer une organisation</a>
+                    </li>
+                <% } %>
+                <% if(user.user_role === 'administrateur') { %>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/admin">Espace administrateur</a>
+                    </li>
+                <% } %> 
             </ul>
             <p id="exit_nav">X</p>
         </div>
