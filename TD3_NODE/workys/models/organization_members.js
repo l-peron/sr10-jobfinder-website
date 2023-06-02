@@ -10,6 +10,13 @@ module.exports = {
             callback(results);
         });
     },
+    delete: function(siren, user_id, callback) {
+        sql = "DELETE FROM organisation_members WHERE user = ? AND organisation = ?";
+        db.query(sql, [siren, user_id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        })
+    },
     apply: function(siren, user_id, callback) {
         sql = "INSERT INTO organisations_members (date, user, organisation) VALUES (CURRENT_TIME, ?, ?)";
         db.query(sql, [user_id, siren], function(err, results) {

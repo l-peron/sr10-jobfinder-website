@@ -17,10 +17,10 @@
                         <%= request.email %> 
                     </td>
                     <td> 
-                        <button>Accepter</button>
+                        <button onclick="window.location.href='/recruiter/requests/<%= request.user %>/validate'">Accepter</button>
                     </td>
                     <td> 
-                        <button>Refuser</button>
+                        <button onclick="window.location.href='/recruiter/requests/<%= request.user %>/reject'">Refuser</button>
                     </td> 
                 </tr>
             <% }) %>

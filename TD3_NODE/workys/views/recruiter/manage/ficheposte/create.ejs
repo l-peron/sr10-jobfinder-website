@@ -1,0 +1,18 @@
+<body>
+    <h1><%= title %></h1>
+    <form method="post" action="/recruiter/manage/ficheposte/create/validate">
+        <input type="text" name="fp_title" placeholder="Intitulé"/>
+        <input type="text" name="fp_role" placeholder="Status du poste"/>
+        <select name="fp_resp">
+                <option></option>
+        </select>
+        <input type="text" name="fp_work_type" placeholder="Type de métier"/>
+        <input type="text" name="fp_address" placeholder="Lieu de la mission"/>
+        <input type="text" name="fp_workflow" placeholder="Nombre d'heures/semaine"/>
+        <input type="checkbox" name="fp_workaway" placeholder="Télétravail possible"/>
+        <input type="number" name="fp_salary_min" placeholder="Salaire min."/>
+        <input type="number" name="fp_salary_max" placeholder="Salaire max."/>
+        <input type="textarea" name="fp_desc" placeholder="Description"/>
+        <input type="submit" value="Envoyer"/>
+    </form> 
+</body>
