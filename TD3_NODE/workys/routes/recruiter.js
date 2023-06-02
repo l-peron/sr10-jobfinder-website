@@ -56,7 +56,7 @@ router.post('/manage/ficheposte/create/validate', function(req, res, next) {
 // /requests
 
 router.get('/requests/list', function(req, res, next) {
-  const org_siren = req.session.user.organization_siren;
+  const org_siren = req.session.user.org_siren;
 
   result = organizationMembersModel.read(org_siren, 0, function(result) {
     return res.render('recruiter/requests/list', { title : 'Liste des requêtes d\'adhésion', requests : result })
@@ -65,7 +65,7 @@ router.get('/requests/list', function(req, res, next) {
 
 // Actions
 router.get('/requests/:id/validate', function(req, res, next) {
-  const org_siren = req.session.user.organization_siren;
+  const org_siren = req.session.user.org_siren;
   const user_id = Number(req.params.id);
 
   result = organizationMembersModel.setActive(org_siren, user_id, 1, function(result) {
@@ -76,7 +76,7 @@ router.get('/requests/:id/validate', function(req, res, next) {
 })
 
 router.get('/requests/:id/reject', function(req, res, next) {
-  const org_siren = req.session.user.organization_siren;
+  const org_siren = req.session.user.org_siren;
   const user_id = Number(req.params.id);
 
   result = organizationMembersModel.delete(org_siren, user_id, function(result) {

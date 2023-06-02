@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require('../models/users.js');
+var organizationMembersModel = require('../models/organization_members.js');
 
 // UNLOGGED
 router.get('/', function(req, res, next) {
@@ -26,17 +27,23 @@ router.post('/login', function(req, res, next) {
   const user_pwd = req.body.pwd;
 
   result = userModel.areValid(user_mail, user_pwd, function(result) {
+
     if(result) {
       userModel.read(user_mail, function(user_result) {
 
-        req.session.user = {
-          user_id : user_result.id,
-          user_mail : user_result.email,
-          user_role : user_result.role,
-          organization_siren : user_result.organisation // Retrieve the possible organisation that the user is in
-        }
+        organizationMembersModel.getUserOrganization(user_result.id, function(org_result) {
 
-        res.redirect('/');
+          req.session.user = {
+            user_id : user_result.id,
+            user_mail : user_result.email,
+            user_role : user_result.role,
+            org_siren : org_result.organisation
+          }
+
+          console.log(req.session.user);
+
+          return res.redirect('/');
+        })
       })
     } else res.redirect('/connect');
   });

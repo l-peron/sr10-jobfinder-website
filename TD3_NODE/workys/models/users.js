@@ -2,9 +2,7 @@ var db = require('./db.js');
 
 module.exports = {
     read: function(email, callback) {
-        sql = "SELECT * FROM utilisateurs "
-        + "LEFT JOIN organisations_members ON utilisateurs.id = organisations_members.user "
-        + "WHERE utilisateurs.email = ?";
+        sql = "SELECT * FROM utilisateurs WHERE utilisateurs.email = ?";
         db.query(sql, email, function(err, results) {
             if(err) throw err;
             callback(results[0]);

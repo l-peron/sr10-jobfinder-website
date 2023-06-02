@@ -9,7 +9,7 @@ router.get('/list', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
   const user_id = req.session.user.user_id;
 
-  result = organizationModel.readNotJoined(query_string, user_id, function(result) {
+  result = organizationModel.read(query_string, function(result) {
     return res.render('organization/list', { title : 'Liste des organisation', organizations : result })
   })
 })
