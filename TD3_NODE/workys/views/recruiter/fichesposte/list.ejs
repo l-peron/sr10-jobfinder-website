@@ -1,0 +1,55 @@
+<body>
+    <h1><%= list_title%></h1>
+    <table border>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Adresse</th>
+                <th>Description</th>
+                <th>Responsable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% fichesPoste.forEach((fichePoste)=> { %>
+                <tr> 
+                    <td> 
+                        <%= fichePoste.title %> 
+                    </td>
+                    <td> 
+                        <%= fichePoste.status %> 
+                    </td>
+                    <td> 
+                        <%= fichePoste.type %> 
+                    </td>
+                    <td> 
+                        <%= fichePoste.address %> 
+                    </td>
+                    <td> 
+                        <%= fichePoste.description %> 
+                    </td>
+                    <td> 
+                        <%= fichePoste.responsable.name + ' ' + fichePoste.responsable.surname %> 
+                    </td>
+                </tr>
+            <% }) %>   
+        </tbody>
+    </table>
+    <h1><%= create_title %></h1>
+    <form method="post" action="/recruiter/fichesposte/create">
+        <input type="text" name="fp_title" placeholder="Intitulé"/>
+        <input type="text" name="fp_role" placeholder="Status du poste"/>
+        <select name="fp_resp">
+                <option></option>
+        </select>
+        <input type="text" name="fp_work_type" placeholder="Type de métier"/>
+        <input type="text" name="fp_address" placeholder="Lieu de la mission"/>
+        <input type="text" name="fp_workflow" placeholder="Nombre d'heures/semaine"/>
+        <input type="checkbox" name="fp_workaway" placeholder="Télétravail possible"/>
+        <input type="number" name="fp_salary_min" placeholder="Salaire min."/>
+        <input type="number" name="fp_salary_max" placeholder="Salaire max."/>
+        <input type="textarea" name="fp_desc" placeholder="Description"/>
+        <input type="submit" value="Envoyer"/>
+    </form> 
+</body>

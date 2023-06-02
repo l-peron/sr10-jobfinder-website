@@ -8,7 +8,14 @@ module.exports = {
             callback(results[0]);
         });
     },
-    readall: function(callback) {
+    readById: function(id, callback) {
+        sql = "SELECT * FROM utilisateurs WHERE id = ?";
+        db.query(sql, id, function(err, results) {
+            if(err) throw err;
+            callback(results[0]);
+        });
+    },
+    readAll: function(callback) {
         sql = "SELECT * FROM utilisateurs";
         db.query(sql, function(err, results) {
             if(err) throw err;
