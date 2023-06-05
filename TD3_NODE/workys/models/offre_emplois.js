@@ -22,4 +22,11 @@ module.exports = {
             callback(results);
         });
     },
+    create: function(valid_date, description, fiche, org_siren, callback) {
+        sql= "INSERT INTO offre_emplois (valid_date, description, fiche, organisation) VALUES (?, ?, ?, ?)";
+        db.query(sql, [valid_date, description, fiche, org_siren], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    }
 }

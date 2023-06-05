@@ -28,12 +28,11 @@
     </table>
     <h1><%= create_title %></h1>
     <form method="post" action="/recruiter/offresemploi/create">
-        <input type="text" name="oe_title" placeholder="Intitulé"/>
         <input type="date" name="oe_valid_date" placeholder="Date de début"/>
         <input type="text" name="oe_description" placeholder="Description de l'offre"/>
         <select name="oe_fiche">
             <% fichesPoste.forEach((fiche)=> { %>
-                <option> <%= fiche.title %> </option>
+                <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
             <% }) %>
         </select>
         <input type="submit" value="Envoyer"/>

@@ -33,9 +33,14 @@ router.get('/offresemploi/list', function(req, res, next) {
 
 // Offre emploi
 
-router.get('/offresemploi/create', function(req, res, next) {
-    // TODO...
-  // get fields
+router.post('/offresemploi/create', function(req, res, next) {
+  const valid_date = req.body.oe_valid_date;
+  const description = req.body.oe_description;
+  const fiche_id = req.body.oe_fiche;
+  const org_siren = req.session.user.org_siren;
+
+  offresEmploiModel.create(valid_date, description, fiche_id, org_siren, function(results) {});
+  
   return res.redirect('/recruiter/manage/create');
 })
 
@@ -85,7 +90,6 @@ router.post('/fichesposte/create', function(req, res, next) {
   const desc = req.body.fp_desc;
 
   workflowModel.createWorkflow(workflow, remote, dayoff, function(workflow) {
-    console.log(workflow.insertId);
 
     salaryModel.createSalary((min_salary+max_salary)/2, min_salary, max_salary, function(salary) {
       fichesPosteModel.createFichePoste(title, role, type, address, desc, resp_id, workflow.insertId, salary.insertId, req.session.user.org_siren, function(result) {});
