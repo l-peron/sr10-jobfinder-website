@@ -22,4 +22,11 @@ module.exports = {
             callback(results);
         });
     },
+    createFichePoste: function(title, status, type, address, description, resp_id, workflow_id, salary_id, org_id, callback) {
+        sql = "INSERT INTO fiche_postes (title, status, type, address, description, responsable, workflow, salary, organisation) VALUES (?,?,?,?,?,?,?,?,?)";
+        db.query(sql, [title, status, type, address, description, resp_id, workflow_id, salary_id, org_id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    }
 }

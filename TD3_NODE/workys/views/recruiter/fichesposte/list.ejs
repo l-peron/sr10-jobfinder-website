@@ -41,12 +41,15 @@
         <input type="text" name="fp_title" placeholder="Intitulé"/>
         <input type="text" name="fp_role" placeholder="Status du poste"/>
         <select name="fp_resp">
-                <option></option>
+            <% members.forEach((member)=> { %>
+                <option value="<%= member.id %>"><%= member.name + ' ' + member.surname %></option>
+            <% }) %>    
         </select>
         <input type="text" name="fp_work_type" placeholder="Type de métier"/>
         <input type="text" name="fp_address" placeholder="Lieu de la mission"/>
-        <input type="text" name="fp_workflow" placeholder="Nombre d'heures/semaine"/>
+        <input type="number" name="fp_workflow" placeholder="Nombre d'heures/semaine"/>
         <input type="checkbox" name="fp_workaway" placeholder="Télétravail possible"/>
+        <input type="number" name="fp_dayoff" placeholder="Nombre de jours de vacances"/>
         <input type="number" name="fp_salary_min" placeholder="Salaire min."/>
         <input type="number" name="fp_salary_max" placeholder="Salaire max."/>
         <input type="textarea" name="fp_desc" placeholder="Description"/>

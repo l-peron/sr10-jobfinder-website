@@ -4,6 +4,8 @@ var organizationMembersModel = require('../models/organization_members.js');
 var offresEmploiModel = require('../models/offre_emplois.js');
 var fichesPosteModel = require('../models/fiche_postes.js');
 var userModel = require('../models/users.js');
+var salaryModel = require('../models/salarys.js');
+var workflowModel = require('../models/workflows.js');
 
 // Recrutier check 🥳
 router.use('/', function(req, res, next) {
@@ -43,28 +45,55 @@ router.get('/fichesposte/list', function(req, res, next) {
   result = fichesPosteModel.readByOrganization(req.session.user.org_siren, function(fiches) {
 
     userModel.readAll(function(users) {
-      const parsed_fiches = [];
 
-      for(const fiche of fiches) {
-        parsed_fiches.push({
-          title: fiche.title,
-          status: fiche.status,
-          type: fiche.type,
-          address: fiche.address,
-          description: fiche.description,
-          responsable: users.find(u => u.id === fiche.responsable),
-        });
-      }
-      return res.render('recruiter/fichesposte/list', { list_title: 'Liste des fiches de postes', create_title : 'Créer une fiche de postes' , fichesPoste : parsed_fiches});
+      organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(members_id) {
+
+        const members = users.filter(u => members_id.find(m => m.user === u.id));
+
+        const fichesPoste = [];
+
+        for(const fiche of fiches) {
+          fichesPoste.push({
+            title: fiche.title,
+            status: fiche.status,
+            type: fiche.type,
+            address: fiche.address,
+            description: fiche.description,
+            responsable: users.find(u => u.id === fiche.responsable),
+          });
+        }
+  
+        return res.render('recruiter/fichesposte/list', { list_title: 'Liste des fiches de postes', create_title : 'Créer une fiche de postes' , fichesPoste, members});
+      });
     });
   });
 })
 
 router.post('/fichesposte/create', function(req, res, next) {
-  // TODO...
-  // get fields
-  return res.redirect('/recruiter/ficheposte/create');
-})
+  const title = req.body.fp_title;
+  const role = req.body.fp_role;
+  const resp_id = parseInt(req.body.fp_resp);
+  const type = req.body.fp_work_type;
+  const address = req.body.fp_address;
+
+  const workflow = req.body.fp_workflow;
+  const remote = req.body.fp_workaway !== null;
+  const dayoff = req.body.fp_dayoff;
+
+  const min_salary = req.body.fp_salary_min;
+  const max_salary = req.body.fp_salary_max;
+  const desc = req.body.fp_desc;
+
+  workflowModel.createWorkflow(workflow, remote, dayoff, function(workflow) {
+    console.log(workflow.insertId);
+
+    salaryModel.createSalary((min_salary+max_salary)/2, min_salary, max_salary, function(salary) {
+      fichesPosteModel.createFichePoste(title, role, type, address, desc, resp_id, workflow.insertId, salary.insertId, req.session.user.org_siren, function(result) {});
+    });
+  });
+
+  return res.redirect('/fichesposte/list');
+});
 
 // /requests
 
