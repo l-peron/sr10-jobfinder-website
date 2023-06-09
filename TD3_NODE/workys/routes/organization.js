@@ -1,3 +1,4 @@
+const { query } = require('express');
 var express = require('express');
 var organizationModel = require('../models/organization.js');
 var organizationMembersModel = require('../models/organization_members.js');
@@ -7,10 +8,9 @@ var router = express.Router();
 // LIST ORGANIZATION
 router.get('/list', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
-  const user_id = req.session.user.user_id;
 
   result = organizationModel.read(query_string, function(result) {
-    return res.render('organization/list', { title : 'Liste des organisation', organizations : result })
+    return res.render('organization/list', { title : 'Liste des organisation', organizations : result, query : req.query })
   })
 })
 

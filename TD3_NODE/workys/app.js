@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 // Routers
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var userRouter = require('./routes/user');
 var connectRouter = require('./routes/connect');
 var registerRouter = require('./routes/register');
 var recruiterRouter = require('./routes/recruiter');
@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', userRouter);
 app.use('/recruiter', recruiterRouter);
 app.use('/organization', organizationRouter);
 app.use('/admin', adminRouter);

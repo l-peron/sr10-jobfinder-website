@@ -1,0 +1,69 @@
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <form method="get" action="/admin/user/list">
+        <input type="text" name="q" placeholder="Rechercher une organisation..." value="<%= query.q %>"/>
+        <input type="submit" value="Rechercher"/>
+    </form>
+    <table border>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach((user)=> { %>
+                <tr> 
+                    <td> 
+                        <%= user.id %> 
+                    </td>
+                    <td> 
+                        <%= user.name %> 
+                    </td>
+                    <td> 
+                        <%= user.surname %> 
+                    </td> 
+                    <td> 
+                        <%= user.email %> 
+                    </td>
+                    <td>
+                        <button
+                            onclick="window.location.href='/admin/user/<%= user.id %>'"
+                        >
+                            Modifier
+                        </button>
+                    </td>
+                    <td>
+                        <button 
+                            onclick="window.location.href='/admin/user/<%= user.id %>/elevate'"
+                            <%= (user.role === 'administrateur')? "disabled" : ""  %>
+                        >
+                            Passer administrateur
+                        </button>
+                    </td>
+                    <td>
+                        <% if(user.active) { %>
+                            <button
+                                onclick="window.location.href='/admin/user/<%= user.id %>/desactivate'"
+                            >
+                                Desactiver le compte
+                            </button>
+                        <% } else { %>
+                            <button
+                                onclick="window.location.href='/admin/user/<%= user.id %>/activate'"
+                            >
+                                Activer le compte
+                            </button>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+</body>

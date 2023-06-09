@@ -14,7 +14,7 @@ router.use('/', function(req, res, next) {
 // Pages
 
 router.get('/', function(req, res, next) {
-  return res.render('recruiter', { title: 'Espace recruteur' });
+  return res.render('recruiter/index', { title: 'Espace recruteur' });
 });
 
 // /manage

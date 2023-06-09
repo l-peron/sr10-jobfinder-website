@@ -12,7 +12,7 @@
         <a class="navbar-brand px-3">WORKYS</a>
         <form method="get" action="/" class="header_search w-25 p-2 border border-2 border-dark d-flex">
             <img src="images/mag_glass.svg" id="mag_glass"/>
-            <input type="text" name="q" placeholder="Rechercher une offre..." class="border border-0 pull-right flex-grow-1 mx-2"/>
+            <input type="text" name="q" placeholder="Rechercher une offre..." value="<%= query.q %>" class="border border-0 pull-right flex-grow-1 mx-2"/>
         </form>
         <img src="images/burger_icon.svg" id="burger_icon" class="px-3"/>
     </header>
@@ -76,9 +76,9 @@
             <h1>MENU</h1>
             <ul>
                 <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/users/me">Mon compte</a>
+                    <a href="/user/me">Mon compte</a>
                 </li>
-                <% if(user.user_role != 'utilisateur') { %>
+                <% if(user.user_role != 'utilisateur' && user.org_siren !== null) { %>
                     <li class="border border-2 border-white p-2 m-2 w-100 d-block">
                         <a href="/recruiter">Espace recruteur</a>
                     </li>

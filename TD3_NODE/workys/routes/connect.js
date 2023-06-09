@@ -3,9 +3,24 @@ var router = express.Router();
 var userModel = require('../models/users.js');
 var organizationMembersModel = require('../models/organization_members.js');
 
+// LOGOUT
+router.get('/logout', function(req, res, next) {
+  req.session.destroy();
+
+  return res.redirect('/connect');
+})
+
+// IF ALREADY CONNECTED RETURN TO /
+router.use(function(req, res, next) {
+  if(req.session.user)
+    return res.redirect('/');
+
+  next();
+})
+
 // UNLOGGED
 router.get('/', function(req, res, next) {
-  res.render('connect')
+  return res.render('connect')
 });
 
 // CREATE ACCOUNT
@@ -30,17 +45,16 @@ router.post('/login', function(req, res, next) {
 
     if(result) {
       userModel.read(user_mail, function(user_result) {
-
+        user_result = user_result[0];
+        
         organizationMembersModel.getUserOrganization(user_result.id, function(org_result) {
 
           req.session.user = {
             user_id : user_result.id,
             user_mail : user_result.email,
             user_role : user_result.role,
-            org_siren : org_result.organisation
+            org_siren : (org_result)? org_result.organisation : null
           }
-
-          console.log(req.session.user);
 
           return res.redirect('/');
         })
