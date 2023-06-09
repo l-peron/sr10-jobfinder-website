@@ -17,9 +17,16 @@ module.exports = {
             callback(results[0]);
         });
     },
-    readall: function(page = 0, callback) {
-        sql = "SELECT * FROM utilisateurs LIMIT ? OFFSET ?";
-        db.query(sql, [pageSize, pageSize * page], function(err, results) {
+    readById: function(id, callback) {
+        sql = "SELECT * FROM utilisateurs WHERE id = ?";
+        db.query(sql, id, function(err, results) {
+            if(err) throw err;
+            callback(results[0]);
+        });
+    },
+    readAll: function(callback) {
+        sql = "SELECT * FROM utilisateurs";
+        db.query(sql, function(err, results) {
             if(err) throw err;
             callback(results);
         });

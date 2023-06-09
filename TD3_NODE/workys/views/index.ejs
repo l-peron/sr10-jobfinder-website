@@ -62,11 +62,11 @@
             <% annonces.forEach((annonce)=> { %>
                 <article class="border border-2 border-dark p-2 my-3">
                     <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                        <h1>Team informatique</h2>
-                        <h4>CDI - 500€/an</h4>
+                        <h1><%= annonce.title %></h2>
+                        <h4><%= annonce.type %> - <%= annonce.avg_salary %>€/an</h4>
                     </div>
-                    <h3>PVDC - Pic'Asso</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis nunc vitae nibh interdum ullamcorper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas... </p>
+                    <h3><%= annonce.org_name %></h3>
+                    <p><%= annonce.description %> </p>
                 </article>
             <% }) %>
         </section>

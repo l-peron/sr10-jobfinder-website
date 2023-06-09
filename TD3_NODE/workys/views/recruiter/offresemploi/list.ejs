@@ -1,6 +1,6 @@
 <body>
     <h1>
-        <%= title %>
+        <%= list_title %>
     </h1>
     <table border>
         <thead>
@@ -26,5 +26,15 @@
             <% }) %>
         </tbody>
     </table>
-    <a href="/recruiter/manage/create">Ajouter une offre d'emploi</a>
+    <h1><%= create_title %></h1>
+    <form method="post" action="/recruiter/offresemploi/create">
+        <input type="date" name="oe_valid_date" placeholder="Date de début"/>
+        <input type="text" name="oe_description" placeholder="Description de l'offre"/>
+        <select name="oe_fiche">
+            <% fichesPoste.forEach((fiche)=> { %>
+                <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
+            <% }) %>
+        </select>
+        <input type="submit" value="Envoyer"/>
+    </form> 
 </body>
