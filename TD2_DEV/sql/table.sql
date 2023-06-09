@@ -5,15 +5,18 @@ CREATE TABLE utilisateurs(
     email VARCHAR(256) NOT NULL,
     password VARCHAR(256) NOT NULL,
     phone_number VARCHAR(256) NOT NULL,
-    create_at TIMESTAMP NOT NULL,
-    active BOOL NOT NULL,
+    create_at TIMESTAMP NOT NULL DEFAULT GETDATE(),
+    active BOOL NOT NULL DEFAULT true,
     role ENUM('utilisateur', 'recruteur', 'administrateur') DEFAULT 'utilisateur');
 
 CREATE TABLE organisations(
     siren VARCHAR(256) NOT NULL PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
     type VARCHAR(256) NOT NULL,
-    address VARCHAR(256) NOT NULL 
+    address VARCHAR(256) NOT NULL,
+    active BOOL NOT NULL DEFAULT false,
+    created_by int NOT NULL,
+    FOREIGN KEY (created_by) REFERENCES utilisateurs(id),
 );
 
 CREATE TABLE workflows(
@@ -34,6 +37,7 @@ CREATE TABLE salarys(
 CREATE TABLE fiche_postes(
     id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(256) NOT NULL,
+    organisation VARCHAR(256) NOT NULL,
     status VARCHAR(256) NOT NULL,
     type VARCHAR(256) NOT NULL,
     address VARCHAR(256) NOT NULL,
@@ -41,9 +45,10 @@ CREATE TABLE fiche_postes(
     responsable int NOT NULL,
     workflow int NOT NULL,
     salary int NOT NULL,
+    FOREIGN KEY (organisation) REFERENCES organisations(siren),
     FOREIGN KEY (responsable) REFERENCES utilisateurs(id),
-    FOREIGN KEY (workflow) REFERENCES workflows(id),
-    FOREIGN KEY (salary) REFERENCES salarys(id)
+    FOREIGN KEY (workflow) REFERENCES workflows(id) ON DELETE CASCADE,
+    FOREIGN KEY (salary) REFERENCES salarys(id) ON DELETE CASCADE
 );
 
 CREATE TABLE offre_emplois(
@@ -72,4 +77,14 @@ CREATE TABLE pieces_jointes(
     categorie VARCHAR(256) NOT NULL,
     candidature int NOT NULL,
     FOREIGN KEY (candidature) REFERENCES candidatures(id)
+);
+
+CREATE TABLE organisations_members( 
+    id int NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+    date DATETIME NOT NULL, 
+    user int UNIQUE NOT NULL, 
+    organisation VARCHAR(256) NOT NULL, 
+    active BOOL NOT NULL DEFAULT false,
+    FOREIGN KEY (user) REFERENCES utilisateurs(id), 
+    FOREIGN KEY (organisation) REFERENCES organisations(siren) 
 );

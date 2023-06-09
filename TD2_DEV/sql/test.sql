@@ -1,0 +1,1 @@
+INSERT INTO `utilisateurs` (`name`, `surname`, `email`, `password`, `phone_number`) VALUES ('Prénom', 'Nom', 'prenom.nom@etu.utc.fr', 'motdepasse', '0701020304')

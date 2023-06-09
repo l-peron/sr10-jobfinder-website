@@ -1,0 +1,30 @@
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <table border>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Status</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% offresEmploi.forEach((offreEmploi)=> { %>
+                <tr> 
+                    <td> 
+                        <%= offreEmploi.id %> 
+                    </td>
+                    <td> 
+                        <%= offreEmploi.status %> 
+                    </td>
+                    <td> 
+                        <%= offreEmploi.description %> 
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <a href="/recruiter/manage/create">Ajouter une offre d'emploi</a>
+</body>
