@@ -4,11 +4,6 @@ var offresEmploiModel = require('../models/offre_emplois.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  /*
-  if(!req.session.user_mail)
-    return res.redirect('/connect');
-  */
-
   const query_string = `%${req.query.q || ''}%`
   
   offresEmploiModel.readAllWithExtendedInfos(function(result) {

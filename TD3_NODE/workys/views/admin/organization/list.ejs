@@ -3,8 +3,8 @@
         <%= title %>
     </h1>
     <table border>
-        <form method="get" action="/organization/list">
-            <input type="text" name="q" placeholder="Rechercher une organisation..."/>
+        <form method="get" action="/admin/organization/list">
+            <input type="text" name="q" placeholder="Rechercher une organisation..." value="<%= query.q %>"/>
             <input type="submit" value="Rechercher"/>
         </form>
         <thead>

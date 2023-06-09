@@ -1,0 +1,40 @@
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <table border>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <form action="/user/<%= user.id %>/update" method="post">
+                <tr> 
+                    <td> 
+                        <%= user.id %> 
+                    </td>
+                    <td> 
+                        <input type="text" name ="fname" value="<%= user.name %>"/>
+                    </td>
+                    <td> 
+                        <input type="text" name ="lname" value="<%= user.surname %>"/>
+                    </td> 
+                    <td> 
+                        <input type="text" name ="mail" value="<%= user.email %>"/>
+                    </td>
+                    <td> 
+                        <input type="text" name ="phone" value="<%= user.phone_number %>"/>
+                    </td>
+                    <td>
+                        <input type="submit" value="Mettre à jour">
+                    </td>
+                </tr>
+            </form>
+    </tbody>
+</body>

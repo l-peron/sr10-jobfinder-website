@@ -1,9 +1,18 @@
 var db = require('./db.js');
 
+const pageSize = Number(process.env.PAGE_SIZE);
+
 module.exports = {
-    read: function(email, callback) {
-        sql = "SELECT * FROM utilisateurs WHERE utilisateurs.email = ?";
-        db.query(sql, email, function(err, results) {
+    read: function(email, callback, page = 0) {
+        sql = "SELECT * FROM utilisateurs WHERE utilisateurs.email LIKE ? LIMIT ? OFFSET ?";
+        db.query(sql, [email, pageSize, pageSize * page], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
+    readById: function(user_id, callback) {
+        sql = "SELECT * FROM utilisateurs WHERE utilisateurs.id = ?";
+        db.query(sql, user_id, function(err, results) {
             if(err) throw err;
             callback(results[0]);
         });
@@ -23,7 +32,7 @@ module.exports = {
         });
     },
     areValid: function(email, password, callback) {
-        sql = "SELECT password FROM utilisateurs WHERE email = ?";
+        sql = "SELECT password FROM utilisateurs WHERE email = ? AND active = true";
         db.query(sql, email, function(err, results) {
             if(err) throw err;
             if(results.length === 1 && results[0].password === password) {
@@ -39,9 +48,10 @@ module.exports = {
             callback(results);
         });
     },
-    modifyAccount: function(id, name, surname, email, phoneNumber, password, callback) {
-        sql = "UPDATE utilisateurs SET name=?, surname=?, email=?, phone_number=?, password=? WHERE id=?"
-        db.query(sql, [name, surname, email, phoneNumber, password, id], function(err, results) {
+    update: function(id, name, surname, email, phoneNumber, callback) {
+        sql = "UPDATE utilisateurs SET name=?, surname=?, email=?, phone_number=? WHERE id=?"
+        db.query(sql, [name, surname, email, phoneNumber, id], function(err, results) {
+            if(err) throw err;
             callback(results);
         });
     },
@@ -54,14 +64,16 @@ module.exports = {
     },
     desactivateAccount: function(id, callback) {
         sql = "UPDATE utilisateurs SET active=false WHERE id=?"
-        db.query(sql, [password, id], function(err, results) {
+        db.query(sql, [id], function(err, results) {
+            if(err) throw(err);
             callback(results);
         });
     },
     activateAccount: function(id, callback) {
         sql = "UPDATE utilisateurs SET active=true WHERE id=?"
-        db.query(sql, [password, id], function(err, results) {
+        db.query(sql, [id], function(err, results) {
+            if(err) throw(err);
             callback(results);
         });
-    },
+    }
 }
