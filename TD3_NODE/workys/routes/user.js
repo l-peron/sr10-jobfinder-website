@@ -6,7 +6,8 @@ router.get('/me', function (req, res, next) {
   const accountEmail = req.session.user.user_mail;
 
   result=userModel.read(accountEmail, function(result) {
-    res.render('user/user', { title: `Compte de ${accountEmail}`, user: result });
+    const user = result[0] 
+    res.render('user/user', { title: `Compte de ${accountEmail}`, user: user });
   });
 });
 

@@ -26,8 +26,7 @@ router.get('/', function(req, res, next) {
       }
     });
 
-    console.log(annonces);
-    res.render('index', { user: req.session.user, annonces });
+    res.render('index', { user: req.session.user, annonces : annonces, query : req.query });
   });
 });
 
