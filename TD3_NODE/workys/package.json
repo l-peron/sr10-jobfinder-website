@@ -21,6 +21,7 @@
     "express-sessions": "^1.0.6",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "multiparty": "^4.2.3",
     "mysql": "^2.18.1",
     "node-sass": "^8.0.0",
     "sass": "^1.62.0"
