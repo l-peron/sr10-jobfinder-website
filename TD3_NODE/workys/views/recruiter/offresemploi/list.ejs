@@ -1,40 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <title>WORKYS</title>
+  </head>
 <body>
-    <h1>
-        <%= list_title %>
-    </h1>
-    <table border>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Status</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% offresEmploi.forEach((offreEmploi)=> { %>
-                <tr> 
-                    <td> 
-                        <%= offreEmploi.id %> 
-                    </td>
-                    <td> 
-                        <%= offreEmploi.status %> 
-                    </td>
-                    <td> 
-                        <%= offreEmploi.description %> 
-                    </td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-    <h1><%= create_title %></h1>
-    <form method="post" action="/recruiter/offresemploi/create">
-        <input type="date" name="oe_valid_date" placeholder="Date de début"/>
-        <input type="text" name="oe_description" placeholder="Description de l'offre"/>
-        <select name="oe_fiche">
-            <% fichesPoste.forEach((fiche)=> { %>
-                <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
-            <% }) %>
-        </select>
+    <script type="module" src="/javascripts/index.js"></script>
+    <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
+        <a class="navbar-brand px-3">WORKYS</a>
+        <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
+    </header>
+    <main class="p-3">
+        <h1>
+            <%= list_title %>
+        </h1>
+        <div class="p-3">
+            <table class="w-100 border border-2 border-dark">
+                <thead class="w-100 border-bottom border-1 border-dark">
+                    <tr>
+                        <th class="px-3 text-center">Id</th>
+                        <th class="px-3 text-center">Status</th>
+                        <th class="px-3 text-center">Description</th>
+                        <th class="px-3 text-center">Date de fin de validité</th>
+                        <th class="px-3">Action</th>
+                        <th class="px-3">Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% offresEmploi.forEach((offreEmploi)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= offreEmploi.id %> 
+                            </td>
+                            <td class="py-2 px-1 text-center">
+                                <% if(offreEmploi.status != 'published') { %>
+                                    Brouillon
+                                <% } else { %>
+                                    Publié
+                                <% } %>
+                            </td>
+                            <td class="py-2 px-1"> 
+                                <div class="description">
+                                    <p><%= offreEmploi.description %></p>
+                                </div> 
+                            </td>
+                            <td class="py-2 px-1 text-center">
+                                <%= offreEmploi.valid_date %>
+                            </td>
+                            <td class="py-2 px-1">
+                                <div class="d-flex flex-column h-100">
+                                    <% if(offreEmploi.status != 'published') { %>
+                                        <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/published'">Publier</button>
+                                    <% } else { %>
+                                        <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/drafted'">Mettre en brouillon</button>
+                                    <% } %>
+                                    <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/edit'">Editer</button>
+                                </div>
+                            </td>
+                            <td class="py-2 px-1">
+                                <button onclick="window.location.href='/admin/organization/<%= offreEmploi.id %>/delete'">Supprimer</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <h1><%= create_title %></h1>
+        <form method="post" action="/recruiter/offresemploi/create" class="d-flex flex-column flex-grow-1 p-3">
+        <div class="d-flex flex-row">
+            <div class="p-1">
+                <h2 class="mx-2">Fiche de poste</h2>
+                <select name="oe_fiche" class="p-1 m-2">
+                    <% fichesPoste.forEach((fiche)=> { %>
+                        <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="p-1">
+                <h2 class="mx-2">Date de début</h2>
+                <input type="date" name="oe_valid_date" placeholder="Date de début" class="p-1 m-2"/>
+            </div>
+        </div>
+        <div class="p-1">
+            <h2>Description de l'offre</h2>
+            <textarea type="text" name="oe_description" placeholder="Description de l'offre" class="p-1 m-2 w-100 desc_offer"></textarea>
+        </div>
         <input type="submit" value="Envoyer"/>
-    </form> 
+        </form>
+    </main>
+    <nav class="nav_sidebar bg-white">
+        <div class="nav_content m-5">
+            <h1>MENU</h1>
+            <ul>
+                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                    <a href="/">Accueil</a>
+                </li>
+                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                    <a href="/user/me">Mon compte</a>
+                </li>
+                <% if(user.user_role != 'utilisateur' && user.org_siren !== null) { %>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/recruiter">Espace recruteur</a>
+                    </li>
+                <% } else { %>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/organization/list">Rejoindre une organisation</a>
+                    </li>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/organization/create">Créer une organisation</a>
+                    </li>
+                <% } %>
+                <% if(user.user_role === 'administrateur') { %>
+                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                        <a href="/admin">Espace administrateur</a>
+                    </li>
+                <% } %> 
+                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
+                    <a href="/connect/logout">Se déconnecter</a>
+                </li>
+            </ul>
+            <p id="exit_nav">X</p>
+        </div>
+    </nav>
 </body>
+</html>

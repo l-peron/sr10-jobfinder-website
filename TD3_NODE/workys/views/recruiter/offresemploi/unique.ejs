@@ -3,30 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="stylesheets/recruiter_index.css"/>
+    <link rel="stylesheet" href="/stylesheets/fichesemploi_list.css"/>
     <title>WORKYS</title>
   </head>
-<body>
-    <script type="module" src="javascripts/index.js"></script>
+  <body>
+    <script type="module" src="/javascripts/index.js"></script>
     <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
         <a class="navbar-brand px-3">WORKYS</a>
-        <img src="images/burger_icon.svg" id="burger_icon" class="px-3"/>
+        <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
     </header>
-    <main class="p-2">
-        <h1>
-            <%= title %>
-        </h1>
-        <ul>
-            <li class="border border-2 border-dark p-2 m-2 d-block">
-                <a href="/recruiter/offresemploi/list">Gestion des offres d'emploi</a>
-            </li>
-            <li class="border border-2 border-dark p-2 m-2 d-block">
-                <a href="/recruiter/fichesposte/list">Gestion des fiches de poste</a>
-            </li>
-            <li class="border border-2 border-dark p-2 m-2 d-block">
-                <a href="/recruiter/fichesposte/list">Voir les candidatures</a>
-            </li>
-        </ul>
+    <main class="p-3">
+        <h1>Editer l'offre d'emploi</h1>
+        <form method="put" action="/recruiter/offresemploi/create" class="d-flex flex-column flex-grow-1 p-3">
+            <div class="d-flex flex-row">
+                <div class="p-1">
+                    <h2 class="mx-2">Fiche de poste</h2>
+                    <select name="oe_fiche" class="p-1 m-2" value="offre.fiche">
+                        <% fichesPoste.forEach((fiche)=> { %>
+                            <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="p-1">
+                    <h2 class="mx-2">Date de début</h2>
+                    <input type="date" name="oe_valid_date" placeholder="Date de début" class="p-1 m-2" value="offre.valid_date"/>
+                </div>
+            </div>
+            <div class="p-1">
+                <h2>Description de l'offre</h2>
+                <textarea type="text" name="oe_description" placeholder="Description de l'offre" class="p-1 m-2 w-100 desc_offer"><%= offre.description %></textarea>
+            </div>
+            <input type="submit" value="Modifier"/>
+            </form> 
     </main>
     <nav class="nav_sidebar bg-white">
         <div class="nav_content m-5">
