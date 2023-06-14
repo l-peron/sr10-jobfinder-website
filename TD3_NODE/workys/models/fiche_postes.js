@@ -8,6 +8,13 @@ module.exports = {
             callback(results);
         });
     },
+    readById: function(id, callback) {
+        sql = "SELECT * FROM fiche_postes WHERE id = ?";
+        db.query(sql, [id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
     readByOrganization: function(org_siren, callback) {
         sql = "SELECT * FROM fiche_postes WHERE organisation = ?";
         db.query(sql, [org_siren], function(err, results) {

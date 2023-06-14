@@ -2,8 +2,8 @@ var db = require('./db.js');
 
 module.exports = {
     read: function(id, callback) {
-        sql = "SELECT * FROM workflows WHERE id = ?";
-        db.query(sql, id, function(err, results) {
+        sql = "SELECT * FROM workflows WHERE id=?";
+        db.query(sql, [id], function(err, results) {
             if(err) throw err;
             callback(results);
         });

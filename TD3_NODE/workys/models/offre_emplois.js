@@ -35,5 +35,19 @@ module.exports = {
             if(err) throw err;
             callback(results);
         });
+    },
+    setPublished: function(id, callback) {
+        sql="UPDATE offre_emplois SET status='published' WHERE id=?";
+        db.query(sql, [id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
+    setDrafted: function(id, callback) {
+        sql="UPDATE offre_emplois SET status='draft' WHERE id=?";
+        db.query(sql, [id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
     }
 }
