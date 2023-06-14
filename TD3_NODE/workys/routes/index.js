@@ -8,6 +8,8 @@ router.get('/', function(req, res, next) {
   
   offresEmploiModel.readAllWithExtendedInfos(function(result) {
 
+    result.forEach(s => console.log(new Date() < new Date(s.valid_date)));
+
     const annonces = result.filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; }).map(a => {
       return {
         id: a.id,
@@ -26,7 +28,7 @@ router.get('/', function(req, res, next) {
       }
     });
 
-    res.render('index', { user: req.session.user, annonces : annonces, query : req.query });
+    res.render('index', { user: req.session.user, annonces, query : req.query });
   });
 });
 

@@ -13,62 +13,21 @@
         <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
     </header>
     <main class="p-3">
-        <h1><%= list_title%></h1>
-        <table class="w-100 border border-2 border-dark m-2">
-            <thead class="w-100 border-bottom border-1 border-dark">
-                <tr>
-                    <th class="px-3 text-center">Titre</th>
-                    <th class="px-3 text-center">Status</th>
-                    <th class="px-3 text-center">Type</th>
-                    <th class="px-3 text-center">Adresse</th>
-                    <th class="px-3 text-center">Description</th>
-                    <th class="px-3 text-center">Responsable</th>
-                    <th class="px-3 text-center">Détail</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% fichesPoste.forEach((fichePoste)=> { %>
-                    <tr class="border-bottom border-1 border-grey"> 
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.title %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.status %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.type %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.address %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.description %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.responsable.name + ' ' + fichePoste.responsable.surname %> 
-                        </td>
-                        <td>
-                            <button class="mx-2 my-1" onclick="window.location.href='/recruiter/fichesposte/<%= fichePoste.id %>'">Détail</button>
-                        </td>
-                    </tr>
-                <% }) %>   
-            </tbody>
-        </table>
-        <h1><%= create_title %></h1>
-        <form method="post" action="/recruiter/fichesposte/create" class="m-2 p-2">
+        <h1>Editer la fiche de poste</h1>
+        <form method="patch" action="/recruiter/fichesposte/create" class="m-2 p-2">
             <div class="container">
                 <div class="row">
                     <div class="col-sm mx-1 my-2">
                         <h2>Intitulé</h2>
-                        <input type="text" name="fp_title" placeholder="Intitulé" class="w-100"/>
+                        <input type="text" name="fp_title" placeholder="Intitulé" value="<%= fiche.title %>" class="w-100"/>
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Statut du poste</h2>
-                        <input type="text" name="fp_role" placeholder="Statut du poste" class="w-100"/>
+                        <input type="text" name="fp_role" placeholder="Statut du poste" value="<%= fiche.status %>" class="w-100"/>
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Responsable</h2>
-                        <select name="fp_resp" class="w-100">
+                        <select name="fp_resp" value="<%=fiche.responsable.id %>" class="w-100">
                             <% members.forEach((member)=> { %>
                                 <option value="<%= member.id %>"><%= member.name + ' ' + member.surname %></option>
                             <% }) %>    
@@ -76,31 +35,31 @@
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Type de métier</h2>
-                        <input type="text" name="fp_work_type" placeholder="Type de métier" class="w-100"/>
+                        <input type="text" name="fp_work_type" placeholder="Type de métier" value="<%= fiche.type %>" class="w-100"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm mx-1 my-2">
                         <h2>Nombre d'heures/semaine</h2>
-                        <input type="number" name="fp_workflow" placeholder="Nombre d'heures/semaine" class="w-100"/>
+                        <input type="number" name="fp_workflow" placeholder="Nombre d'heures/semaine" value="<%= fiche.workflow.hours %>" class="w-100"/>
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Nombre de jours de vacances</h2>
-                        <input type="number" name="fp_dayoff" placeholder="Nombre de jours de vacances" class="w-100"/>
+                        <input type="number" name="fp_dayoff" placeholder="Nombre de jours de vacances" value="<%= fiche.workflow.day_off %>" class="w-100"/>
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Salaire Minimum</h2>
-                        <input type="number" name="fp_salary_min" placeholder="Salaire min." class="w-100"/>
+                        <input type="number" name="fp_salary_min" placeholder="Salaire min." value="<%= fiche.salary.min_salary %>" class="w-100"/>
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Salaire Maximum</h2>
-                        <input type="number" name="fp_salary_max" placeholder="Salaire max." class="w-100"/>
+                        <input type="number" name="fp_salary_max" placeholder="Salaire max." value="<%= fiche.salary.min_salary %>" class="w-100"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm mx-1 my-2">
                         <h2>Lieu de la mission</h2>
-                        <input type="text" name="fp_address" placeholder="Lieu de la mission" class="w-100"/>
+                        <input type="text" name="fp_address" placeholder="Lieu de la mission" value="<%= fiche.address %>" class="w-100"/>
                     </div>
                     <div class="col-sm d-flex flex-row align-items-center justify-content-end">
                         <h2>Télétravail possible ?</h2>
@@ -110,11 +69,11 @@
                 <div class="row">
                     <div class="col-sm mx-1 my-2">
                         <h2>Description de l'offre</h2>
-                        <textarea type="text" name="fp_desc" placeholder="Description" class="w-100"></textarea>
+                        <textarea type="text" name="fp_desc" placeholder="Description" class="w-100"><%= fiche.description %></textarea>
                     </div>
                 </div>
                 <div class="row mx-1">
-                    <input type="submit" value="Envoyer"/>
+                    <input type="submit" value="Modifier"/>
                 </div>
             </div>
         </form> 
