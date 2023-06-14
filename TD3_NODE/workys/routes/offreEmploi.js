@@ -1,9 +1,13 @@
 const { query } = require('express');
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 var candidaturesModel = require('../models/candidatures.js');
 var offreEmploiModel = require('../models/offre_emplois.js');
+var piecesJointesModel = require('../models/pieces_jointes.js');
 var multiparty = require('multiparty');
+
+const FILE_PATH = `${__dirname}/../private/files/`
 
 router.get('/:id', function(req, res, next) {
   const offer_id = Number(req.params.id);
@@ -30,14 +34,33 @@ router.post('/:id/apply', function(req, res, next) {
       const parsedTypes = fields['type[]']
       const parsedFiles = files['file[]']
 
+      if(!parsedFiles || parsedFiles.lenth === 0) return res.redirect('back')
+
       // For each piece, add it
       for(let i = 0; i < parsedFiles.length; i++) {
-        candidaturesModel.addPiece(candidature_id, parsedFiles[i].path, parsedTypes[i], () => {})
+        // Skip empty files
+        if(parsedFiles[i].size === 0) continue;
+
+        // Save the file
+        const newFileName = saveFile(parsedFiles[i].path, candidature_id);
+
+        // Once saved, add the piece
+        piecesJointesModel.add(candidature_id, newFileName, parsedFiles[i].originalFilename, parsedTypes[i], () => {})
       }
 
-      return res.redirect('/')
+      return res.redirect('back')
     });
   });
 })
+
+const saveFile = (filepath, candidature_id) => {
+  const extension = filepath.split('.')?.pop() || ''
+  const newFileName = `${Date.now()}-${candidature_id}.${extension}`;
+  const newFilePath = `${FILE_PATH}${newFileName}`
+
+  fs.copyFileSync(filepath, newFilePath);
+
+  return newFileName;
+}
 
 module.exports = router;

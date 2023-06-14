@@ -1,0 +1,52 @@
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <table border>
+        <thead>
+            <tr>
+                <th>SIREN de l'entreprise</th>
+                <th>Nom de l'entreprise</th>
+                <th>Date de création</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr> 
+                <td> 
+                    <%= candidature.siren %> 
+                </td>
+                <td> 
+                    <%= candidature.name %> 
+                </td>
+                <td> 
+                    <%= candidature.date %> 
+                </td>
+                <td>
+                    <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/delete'">
+                        Supprimer la candidature
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <ul>
+            <form method="post" action="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/add" id="candidature_form" enctype="multipart/form-data">
+                <input type="file" name="file" placeholder="Fichier"/> 
+                <select name="type">
+                    <option value="Autre">Autre</option>
+                    <option value="CV">CV</option>
+                    <option value="Lettre de motivation">Lettre de motivation</option>
+                </select>
+                <input type="submit" value="Ajouter une pièce"/>
+            </form>
+            <% pieces.forEach((piece)=> { %>
+                <li>
+                    <a href="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/<%= piece.id %>" target="_blank"><%= piece.original_filename %></a>
+                    <p><%= piece.categorie %></p>
+                    <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/<%= piece.id %>/delete'">
+                        Supprimer la PJ
+                    </button>
+                </li>
+            <% }) %>
+        </ul>
+</body>
