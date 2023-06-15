@@ -1,6 +1,12 @@
 var express = require('express');
 var userModel = require('../models/users.js');
+var candidaturesModel = require('../models/candidatures.js');
+var piecesJointesModel = require('../models/pieces_jointes.js');
+var fs = require('fs');
 var router = express.Router();
+var multiparty = require('multiparty');
+
+const FILE_PATH = `${__dirname}/../private/files/`
 
 router.get('/me', function (req, res, next) { 
   const accountEmail = req.session.user.user_mail;
@@ -11,7 +17,7 @@ router.get('/me', function (req, res, next) {
   });
 });
 
-// PERSONAL OR ADMIN
+// PERSONAL OR ADMIN HEADER
 
 router.use(function(req, res, next) {
   if(req.session.user.user_role !== 'administrateur' && req.session.user.user_id != user_id)
@@ -61,5 +67,92 @@ router.post('/:id/update', function (req, res, next) {
         return res.redirect(`/user/${user_id}`)
       });
 });
+
+// CANDIDATURES
+
+router.get('/:id/candidatures/list', function (req, res, next) { 
+  const user_id = Number(req.params.id);
+
+  candidaturesModel.readByUserId(user_id, function(result) {
+    return res.render('user/candidatures/list', { title: `Candidature de X`, candidatures: result });
+  })
+})
+
+router.get('/:id/candidatures/:cid', function (req, res, next) { 
+  const candidature_id = Number(req.params.cid);
+
+  candidaturesModel.readById(candidature_id, function(result) {
+    const candidature_result = result[0]
+
+    piecesJointesModel.read(candidature_id, function(piece_result) {
+      return res.render('user/candidatures/candidatures', { title: `Candidature X`, candidature: candidature_result, pieces : piece_result });
+    })
+  })
+})
+
+router.get('/:id/candidatures/:cid/delete', function (req, res, next) { 
+  const candidature_id = Number(req.params.cid);
+
+  candidaturesModel.delete(candidature_id, function(result) {
+    res.redirect('back');
+  })
+})
+
+router.post('/:id/candidatures/:cid/pieces_jointes/add', function(req, res, next) {
+  const candidature_id = Number(req.params.cid);
+
+  const form = new multiparty.Form();
+
+  // Parse the form
+  form.parse(req, function(err, fields, files) {  
+    const parsedType = fields['type']
+    const parsedFiles = files['file']
+
+    if(parsedFiles.length === 0 || parsedFiles[0].size === 0) return;
+
+    const parsedFile = parsedFiles[0];
+
+    // Save the file
+    const newFileName = saveFile(parsedFile.path, candidature_id);
+
+    // Once saved, add the piece
+    piecesJointesModel.add(candidature_id, newFileName, parsedFile.originalFilename, parsedType, () => {})
+
+    return res.redirect('back')
+  });
+})
+
+router.get('/:id/candidatures/:cid/pieces_jointes/:pjid', function(req, res, next) {
+  const candidature_id = Number(req.params.cid);
+
+  piecesJointesModel.read(candidature_id, function(result) {
+    try {
+      const piece_result = result[0]
+      const file = `${FILE_PATH}${piece_result.filename}`;
+      
+      return res.download(file, piece_result.orginal_filename);
+    } catch {
+      return res.status(404).send('File not found');
+    }
+  })
+})
+
+router.get('/:id/candidatures/:cid/pieces_jointes/:pjid/delete', function(req, res, next) {
+  const piece_id = Number(req.params.pjid);
+
+  piecesJointesModel.delete(piece_id, function(result) {
+    res.redirect('/')
+  })
+})
+
+const saveFile = (filepath, candidature_id) => {
+  const extension = filepath.split('.')?.pop() || ''
+  const newFileName = `${Date.now()}-${candidature_id}.${extension}`;
+  const newFilePath = `${FILE_PATH}${newFileName}`
+
+  fs.copyFileSync(filepath, newFilePath);
+
+  return newFileName;
+}
 
 module.exports = router;

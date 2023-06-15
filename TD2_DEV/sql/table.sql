@@ -71,6 +71,8 @@ CREATE TABLE candidatures(
     FOREIGN KEY (offre) REFERENCES offre_emplois(id)
 );
 
+ALTER TABLE candidatures ADD CONSTRAINT uq_candidatures UNIQUE(user, offre);
+
 CREATE TABLE pieces_jointes(
     id int NOT NULL,
     filepath VARCHAR(256) NOT NULL,

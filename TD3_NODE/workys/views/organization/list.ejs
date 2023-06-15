@@ -7,33 +7,37 @@
             <input type="text" name="q" placeholder="Rechercher une organisation..."/>
             <input type="submit" value="Rechercher"/>
         </form>
-        <thead>
-            <tr>
-                <th>SIREN</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Address</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% organizations.forEach((organization)=> { %>
-                <tr> 
-                    <td> 
-                        <%= organization.siren %> 
-                    </td>
-                    <td> 
-                        <%= organization.name %> 
-                    </td>
-                    <td> 
-                        <%= organization.type %> 
-                    </td> 
-                    <td> 
-                        <%= organization.address %> 
-                    </td>
-                    <td>
-                        <button onclick="window.location.href='/organization/<%= organization.siren %>/apply'">Rejoindre</button>
-                    </td>
+        <%= if(organizations.length > 0) {
+            <thead>
+                <tr>
+                    <th>SIREN</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Address</th>
                 </tr>
-            <% }) %>
-        </tbody>
+            </thead>
+            <tbody>
+                <% organizations.forEach((organization)=> { %>
+                    <tr> 
+                        <td> 
+                            <%= organization.siren %> 
+                        </td>
+                        <td> 
+                            <%= organization.name %> 
+                        </td>
+                        <td> 
+                            <%= organization.type %> 
+                        </td> 
+                        <td> 
+                            <%= organization.address %> 
+                        </td>
+                        <td>
+                            <button onclick="window.location.href='/organization/<%= organization.siren %>/apply'">Rejoindre</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        <% } else { %>
+            <h2>Aucune organisation :(</h2>
+        <% } %>
 </body>
