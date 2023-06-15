@@ -68,10 +68,22 @@ router.get('/offresemploi/:id/edit', function(req, res, next) {
   offresEmploiModel.readAllWithExtendedInfos(function(offres) {
 
     fichesPosteModel.readByOrganization(req.session.user.org_siren, function(fichesPoste) {
-      return res.render('recruiter/offresemploi/unique', { offre: offres.find(o => o.id === fiche_id ), fichesPoste});
+      return res.render('recruiter/offresemploi/unique', { offre: [offres.find(o => o.id === fiche_id )].map(o => { return { ...o, valid_date: new Date(o.valid_date).toISOString().split('T')[0] }})[0], fichesPoste});
     });
 
   })
+});
+
+router.post('/offresemploi/:id/edit', function(req, res, next) {
+  const offre_id = Number(req.params.id);
+
+  const valid_date = req.body.oe_valid_date;
+  const description = req.body.oe_description;
+  const fiche_id = req.body.oe_fiche;
+
+  offresEmploiModel.update(offre_id, valid_date, description, fiche_id, function(result) {
+    return res.redirect(`/recruiter/offresemploi/${offre_id}/edit`);
+  }); 
 });
 
 // Fiche poste
