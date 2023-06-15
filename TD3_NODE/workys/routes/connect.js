@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var userModel = require('../models/users.js');
 var organizationMembersModel = require('../models/organization_members.js');
+var offresEmploiModel = require('../models/offre_emplois.js');
+
 
 // LOGOUT
 router.get('/logout', function(req, res, next) {
@@ -20,7 +22,31 @@ router.use(function(req, res, next) {
 
 // UNLOGGED
 router.get('/', function(req, res, next) {
-  return res.render('connect')
+
+  offresEmploiModel.readAllWithExtendedInfos(function(result) {
+
+    result.forEach(s => console.log(new Date() < new Date(s.valid_date)));
+
+    const annonces = result.filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; }).map(a => {
+      return {
+        id: a.id,
+        description: a.description,
+        title: a.title,
+        poste_status: a.poste_status,
+        type: a.type,
+        address: a.poste_description,
+        responsable: a.responsable,
+        max_salary: a.max_salary,
+        min_salary: a.min_salary,
+        avg_salary: a.average_salary,
+        hours: a.hours,
+        day_off: a.day_off,
+        org_name: a.name
+      }
+    });
+
+    return res.render('connect', { annonces });
+  });
 });
 
 // CREATE ACCOUNT

@@ -14,26 +14,28 @@
     </header>
     <main class="p-3">
         <h1>Editer l'offre d'emploi</h1>
-        <form method="put" action="/recruiter/offresemploi/create" class="d-flex flex-column flex-grow-1 p-3">
+        <form method="post" action="/recruiter/offresemploi/<%= offre.id %>/edit" class="d-flex flex-column flex-grow-1 p-3">
             <div class="d-flex flex-row">
                 <div class="p-1">
                     <h2 class="mx-2">Fiche de poste</h2>
-                    <select name="oe_fiche" class="p-1 m-2" value="offre.fiche">
+                    <select name="oe_fiche" class="p-1 m-2" value="<%= offre.fiche %>">
                         <% fichesPoste.forEach((fiche)=> { %>
                             <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
                         <% }) %>
                     </select>
                 </div>
                 <div class="p-1">
-                    <h2 class="mx-2">Date de début</h2>
-                    <input type="date" name="oe_valid_date" placeholder="Date de début" class="p-1 m-2" value="offre.valid_date"/>
+                    <h2 class="mx-2">Date de fin de validité</h2>
+                    <input type="date" name="oe_valid_date" placeholder="Date de début" class="p-1 m-2" value="<%= offre.valid_date %>"/>
                 </div>
             </div>
             <div class="p-1">
                 <h2>Description de l'offre</h2>
-                <textarea type="text" name="oe_description" placeholder="Description de l'offre" class="p-1 m-2 w-100 desc_offer"><%= offre.description %></textarea>
+                <textarea type="text" name="oe_description" placeholder="Description de l'offre" class="p-1 my-1 w-100 desc_offer"><%= offre.description %></textarea>
             </div>
-            <input type="submit" value="Modifier"/>
+            <div class="p-1">
+                <input type="submit" value="Modifier" class="w-100"/>
+            </div>
             </form> 
     </main>
     <nav class="nav_sidebar bg-white">

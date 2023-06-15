@@ -23,8 +23,8 @@ module.exports = {
         });
     },
     modifySalary: function(id, avgSalary, minSalary, maxSalary, callback) {
-        sql = "UPDATE salarys set average_salary=?, min_salary=?, max_salary=?, WHERE id=?"
-        db.query(sql, [avgSalary, minSalary, maxSalary], id, function(err, results) {
+        sql = "UPDATE salarys set average_salary=?, min_salary=?, max_salary=? WHERE id=?"
+        db.query(sql, [avgSalary, minSalary, maxSalary, id], function(err, results) {
             if(err) throw err;
             callback(results);
         });
