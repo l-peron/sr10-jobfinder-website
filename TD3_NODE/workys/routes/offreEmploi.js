@@ -5,6 +5,7 @@ var fs = require('fs');
 var candidaturesModel = require('../models/candidatures.js');
 var offreEmploiModel = require('../models/offre_emplois.js');
 var piecesJointesModel = require('../models/pieces_jointes.js');
+var organizationModel = require('../models/organization.js');
 var multiparty = require('multiparty');
 
 const FILE_PATH = `${__dirname}/../private/files/`
@@ -15,8 +16,17 @@ router.get('/:id', function(req, res, next) {
   result = offreEmploiModel.readWithExtendedInfos(offer_id, function(result) {
     const offer = result[0];
 
-    return res.render('offreEmploi/offreEmploi', { title : 'Titre', offre : offer })
-  })
+    organizationModel.read(offer.siren, function(organisation) {
+
+      organisation = organisation[0];
+
+      offreEmploiModel.readAllWithExtendedInfos(function(offres) {
+
+        return res.render('offreEmploi/offreEmploi', { title : 'Titre', offre : { ...offer, organisation}, others: offres.filter(o => o.siren === organisation.siren) });
+
+      });
+    });
+  });
 })
 
 router.post('/:id/apply', function(req, res, next) {
