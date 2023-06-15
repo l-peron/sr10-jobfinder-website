@@ -20,6 +20,8 @@
                     <tr>
                         <th class="px-3 text-center">Id</th>
                         <th class="px-3 text-center">Status</th>
+                        <th class="px-3 text-center">Poste</th>
+                        <th class="px-3 text-center">Status du Poste</th>
                         <th class="px-3 text-center">Description</th>
                         <th class="px-3 text-center">Date de fin de validité</th>
                         <th class="px-3">Action</th>
@@ -38,6 +40,12 @@
                                 <% } else { %>
                                     Publié
                                 <% } %>
+                            </td>
+                            <td class="py-2 px-1"> 
+                                <p><%= offreEmploi.title %></p>
+                            </td>
+                            <td class="py-2 px-1"> 
+                                <p><%= offreEmploi.poste_status %></p>
                             </td>
                             <td class="py-2 px-1"> 
                                 <div class="description">
@@ -77,7 +85,7 @@
                 </select>
             </div>
             <div class="p-1">
-                <h2 class="mx-2">Date de début</h2>
+                <h2 class="mx-2">Date de fin de validité</h2>
                 <input type="date" name="oe_valid_date" placeholder="Date de début" class="p-1 m-2"/>
             </div>
         </div>
