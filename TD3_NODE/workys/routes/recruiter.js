@@ -46,32 +46,44 @@ router.post('/offresemploi/create', function(req, res, next) {
 
 router.get('/offresemploi/:id/published', function(req, res, next) {
 
-  const fiche_id = Number(req.params.id);
+  const offre_id = Number(req.params.id);
 
-  offresEmploiModel.setPublished(fiche_id, function(results) {});
+  offresEmploiModel.setPublished(offre_id, function(results) {});
   
   return res.redirect('/recruiter/offresemploi/list');
 });
 
 router.get('/offresemploi/:id/drafted', function(req, res, next) {
 
-  const fiche_id = Number(req.params.id);
+  const offre_id = Number(req.params.id);
 
-  offresEmploiModel.setDrafted(fiche_id, function(results) {});
+  offresEmploiModel.setDrafted(offre_id, function(results) {});
   
   return res.redirect('/recruiter/offresemploi/list');
 });
 
 router.get('/offresemploi/:id/edit', function(req, res, next) {
-  const fiche_id = Number(req.params.id);
+  const offre_id = Number(req.params.id);
 
   offresEmploiModel.readAllWithExtendedInfos(function(offres) {
 
     fichesPosteModel.readByOrganization(req.session.user.org_siren, function(fichesPoste) {
-      return res.render('recruiter/offresemploi/unique', { offre: offres.find(o => o.id === fiche_id ), fichesPoste});
+      return res.render('recruiter/offresemploi/unique', { offre: [offres.find(o => o.id === offre_id )].map(o => { return { ...o, valid_date: new Date(o.valid_date).toISOString().split('T')[0] }})[0], fichesPoste});
     });
 
   })
+});
+
+router.post('/offresemploi/:id/edit', function(req, res, next) {
+  const offre_id = Number(req.params.id);
+
+  const valid_date = req.body.oe_valid_date;
+  const description = req.body.oe_description;
+  const fiche_id = req.body.oe_fiche;
+
+  offresEmploiModel.update(offre_id, valid_date, description, fiche_id, function(result) {
+    return res.redirect(`/recruiter/offresemploi/${offre_id}/edit`);
+  }); 
 });
 
 // Fiche poste
@@ -105,7 +117,7 @@ router.get('/fichesposte/list', function(req, res, next) {
   });
 });
 
-router.get('/fichesposte/:id', function(req, res, next) {
+router.get('/fichesposte/:id/edit', function(req, res, next) {
   const fiche_id = Number(req.params.id);
 
   userModel.readAll(function(users) {
@@ -138,6 +150,35 @@ router.get('/fichesposte/:id', function(req, res, next) {
 
           });
         });
+      });
+    });
+  });
+});
+
+router.post('/fichesposte/:id/edit', function(req, res, next) {
+
+  const fiche_id = Number(req.params.id);
+
+  const title = req.body.fp_title;
+  const role = req.body.fp_role;
+  const resp_id = parseInt(req.body.fp_resp);
+  const type = req.body.fp_work_type;
+  const address = req.body.fp_address;
+
+  const wf_id = parseInt(req.body.fp_workflow_id);
+  const workflow = req.body.fp_workflow;
+  const remote = req.body.fp_workaway !== null;
+  const dayoff = req.body.fp_dayoff;
+
+  const salary_id = parseInt(req.body.fp_salary_id);
+  const min_salary = req.body.fp_salary_min;
+  const max_salary = req.body.fp_salary_max;
+  const desc = req.body.fp_desc;
+
+  workflowModel.modifyWorkflow(wf_id,workflow, remote, dayoff, function(workflow) {
+    salaryModel.modifySalary(salary_id,(min_salary+max_salary)/2, min_salary, max_salary, function(salary) {
+      fichesPosteModel.updateFichePoste(fiche_id, title, role, type, address, desc, resp_id, function(result) {
+        return res.redirect(`/recruiter/fichesposte/${fiche_id}/edit`);
       });
     });
   });

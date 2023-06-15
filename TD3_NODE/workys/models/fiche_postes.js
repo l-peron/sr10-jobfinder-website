@@ -35,5 +35,12 @@ module.exports = {
             if(err) throw err;
             callback(results);
         });
-    }
+    },
+    updateFichePoste: function(id, title, status, type, address, description, resp_id, callback) {
+        sql = "UPDATE fiche_postes SET title=?, status=?, type=?, address=?, description=?, responsable=? WHERE id=?";
+        db.query(sql, [title, status, type, address, description, resp_id, id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
 }
