@@ -12,7 +12,7 @@
     <%- include('../../header.ejs'); %>
     <main class="p-3">
         <h1>Editer la fiche de poste</h1>
-        <form method="patch" action="/recruiter/fichesposte/create" class="m-2 p-2">
+        <form method="post" action="/recruiter/fichesposte/<%= fiche.id %>/edit" class="m-2 p-2">
             <div class="container">
                 <div class="row">
                     <div class="col-sm mx-1 my-2">
@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-sm mx-1 my-2">
                         <h2>Salaire Maximum</h2>
-                        <input type="number" name="fp_salary_max" placeholder="Salaire max." value="<%= fiche.salary.min_salary %>" class="w-100"/>
+                        <input type="number" name="fp_salary_max" placeholder="Salaire max." value="<%= fiche.salary.max_salary %>" class="w-100"/>
                     </div>
                 </div>
                 <div class="row">
@@ -74,6 +74,8 @@
                     <input type="submit" value="Modifier"/>
                 </div>
             </div>
+            <input name="fp_workflow_id" type="hidden" value="<%= fiche.workflow.id %>">
+            <input name="fp_salary_id" type="hidden" value="<%= fiche.salary.id %>">
         </form> 
     </main>
     <%- include('../../header.ejs'); %>

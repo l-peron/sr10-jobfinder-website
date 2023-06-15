@@ -3,14 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheets/connect.css"/>
     <title>SE CONNECTER</title>
   </head>
   <body>
     <main class="d-flex justify-content-center">
         <section class="w-50 vh-100 d-flex justify-content-center align-items-center">
-            <form method="post" action="/connect/login" class="container d-flex flex-column justify-content-center">
-                <h1>WORKYS</h1>
-                <div class="p-3 border border-2 border-dark h-auto">
+            <form method="post" action="/connect/login" class="container d-flex flex-column justify-content-center align-items-center">
+                <h1 class="p-2" id="workys_title">WORKYS</h1>
+                <div class="p-3 border border-2 border-dark h-auto d-flex flex-column">
                     <div class="p-2">
                         <h2>Email</h2>
                         <input type="text" name="mail" placeholder="Entrer votre adresse mail..." class="border border-2 border-dark py-1 px-2 w-100"/>
@@ -19,18 +20,25 @@
                         <h2>Mot de passe</h2>
                         <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2 w-100"/>
                     </div>
-                    <div class="p-4 m-2 border border-2 border-dark d-flex justify-content-center">
-                        <input type="submit"/>
-                    </div>
-                    <div class="px-4 py-1 m-2 border border-2 border-dark d-flex justify-content-center">
-                        <h1>Mot de passe oublié</h1>
-                    </div>
+                    <input type="submit" value="Se connecter" class="mx-2 my-3"/>
+                    <button class="mx-2 my-2 p-3">Mot de passe oublié</button>
                     <h3>Pas encore inscrit.e ? <a href="/register">Inscrivez-vous !</a></h3>
                 </div>
             </form>
         </section>
         <aside class="p-3 w-50">
-      </aside>
+          <% annonces.forEach((annonce)=> { %>
+            <article class="border border-2 border-dark p-2 my-3">
+                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
+                    <h1><%= annonce.title %></h2>
+                    <h4><%= annonce.type %> - <%= annonce.avg_salary %>€/an</h4>
+                </div>
+                <h3><%= annonce.org_name %></h3>
+                <p><%= annonce.description %> </p>
+            </article>
+          <% }) %>
+        </aside>
     </main>
+    <footer><p class="m-2">made by léo péron and eugène valty</p></footer>
   </body>
 </html>
