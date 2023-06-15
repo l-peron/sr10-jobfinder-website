@@ -3,11 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheets/register.css"/>
     <title>S'INSCRIRE</title>
   </head>
   <body>
     <main class="d-flex justify-content-center">
-      <section id="register_wrapper" class="p-3 m-3 border border-2 border-dark">
+      <section id="register_wrapper" class="border border-2 border-dark">
         <h1>WORKYS</h1>
         <form method="post" action="/connect/create" class="container d-flex flex-column justify-content-center">
             <div class="d-flex">
@@ -23,7 +24,7 @@
             <div class="d-flex">
                 <div class="p-2 d-inline-block flex-grow-1">
                     <h2>Numéro de téléphone</h2>
-                    <input type="number" name="phnbr" nbrplaceholder="Entrer votre numéro de téléphone..." class="border border-2 border-dark py-1 px-2"/>
+                    <input type="number" name="phnbr" placeholder="Entrer votre numéro..." class="border border-2 border-dark py-1 px-2"/>
                 </div>
                 <div class="p-2 d-inline-block flex-grow-1">
                     <h2>Email</h2>
@@ -35,9 +36,12 @@
                     <h2>Mot de passe</h2>
                     <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2"/>
                 </div>
+                <div class="p-2 d-inline-block flex-grow-1">
+                  <h2>Confirmer votre mot de</h2>
+                  <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2"/>
+                </div>
             </div>
-            <input type="submit" class="p-4 m-2 border border-2 border-dark d-flex justify-content-center">
-              S'inscrire
+            <input type="submit" class="m-2 border border-2 border-dark d-flex justify-content-center" value="S'inscrire">
             </div>
             <h3>Déjà inscrit.e ? <a href="/connect">Connectez vous !</a></h3>
           </form>
