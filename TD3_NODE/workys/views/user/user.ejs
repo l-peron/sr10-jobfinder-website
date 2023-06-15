@@ -1,41 +1,112 @@
-<body>
-    <h1>
-        <%= title %>
-    </h1>
-    <table border>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <form action="/user/<%= user.id %>/update" method="post">
-                <tr> 
-                    <td> 
-                        <%= user.id %> 
-                    </td>
-                    <td> 
-                        <input type="text" name ="fname" value="<%= user.name %>"/>
-                    </td>
-                    <td> 
-                        <input type="text" name ="lname" value="<%= user.surname %>"/>
-                    </td> 
-                    <td> 
-                        <input type="text" name ="mail" value="<%= user.email %>"/>
-                    </td>
-                    <td> 
-                        <input type="text" name ="phone" value="<%= user.phone_number %>"/>
-                    </td>
-                    <td>
-                        <input type="submit" value="Mettre à jour">
-                    </td>
-                </tr>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/user_index.css"/>
+    <title>WORKYS</title>
+  </head>
+    <body>
+        <script type="module" src="/javascripts/index.js"></script>
+        <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
+            <a class="navbar-brand px-3">WORKYS</a>
+            <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
+        </header>
+        <main class="p-2">
+            <h1>
+                <%= title %>
+            </h1>
+            <ul class="p-0">
+                <li class="border border-2 border-dark p-2 m-2 d-block">
+                    <a class="w-100 d-block" href="/user/<%= user.id %>/candidatures/list">Gestion des candidatures</a>
+                </li>
+            </ul>
+            <h1>
+                Modifier mes informations
+            </h1>
+            <form class="p-2 m-2 d-block" action="/user/<%= user.id %>/update" method="post">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm mx-1 my-2">
+                            <h2>Prénom</h2>
+                            <input class="text-secondary bg-dark infos-input" disabled type="text" name ="fname" value="<%= user.name %>"/>
+                        </div>
+                        <div class="col-sm mx-1 my-2">
+                            <h2>Nom</h2>
+                            <input  class="text-secondary bg-dark infos-input" disabled type="text" name ="lname" value="<%= user.surname %>"/>
+                        </div>
+                        <div class="col-sm mx-1 my-2">
+                            <h2>Mail</h2>
+                            <input class="text-secondary bg-dark infos-input" disabled type="text" name ="mail" value="<%= user.email %>"/>
+                        </div>
+                        <div class="col-sm mx-1 my-2">
+                            <h2>Numéro de téléphone</h2>
+                            <input class="text-secondary bg-dark infos-input" disabled type="text" name ="phone" value="<%= user.phone_number %>"/>
+                        </div>
+                    </div>
+                    <!-- Default row -->
+                    <div id="default-row" class="row">
+                        <div class="col mx-1 my-2 w-100">
+                            <button type="button" class="w-100" onclick="modifyInfos()">
+                                Modifier mes informations
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Save row -->
+                    <div id="save-row" class="row d-none">
+                        <div class="col mx-1 my-2 w-100">
+                            <button type="button" class="w-100" onclick="cancelModifications()">
+                                Annuler
+                            </button>
+                        </div>
+                        <div class="col mx-1 my-2 w-100">
+                            <button class="w-100 bg-dark text-white border-2 border-white">
+                                Sauvegarder les modifications
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </form>
-    </tbody>
-    <a href="/user/<%= user.id %>/candidatures/list">Gestion des candidatures</a>
-</body>
+        </main>
+        <%- include('../header.ejs'); %>
+        <script>
+            const infosInputs = document.getElementsByClassName("infos-input");
+            const defaultRow = document.getElementById("default-row");
+            const saveRow = document.getElementById("save-row");
+
+            const setInputDisabled = (bool) => {
+                for(let i = 0; i < infosInputs.length; i++) {
+                    let element = infosInputs[i];
+
+                    element.disabled = bool;
+
+                    if(bool) {
+                        element.classList.remove('bg-light');
+                        element.classList.remove('text-dark');
+
+                        element.classList.add('bg-dark');
+                        element.classList.add('text-secondary');
+                    } else {
+                        element.classList.remove('bg-dark');
+                        element.classList.remove('text-secondary');
+
+                        element.classList.add('bg-light');
+                        element.classList.add('text-dark');
+                    }
+                }
+            }
+
+            function modifyInfos() {
+                setInputDisabled(false);
+                saveRow.classList.remove("d-none");
+                defaultRow.classList.add("d-none");
+            }
+
+            function cancelModifications() {
+                setInputDisabled(true);
+                saveRow.classList.add("d-none");
+                defaultRow.classList.remove("d-none");
+            }
+        </script>
+    </body>
+</html>
