@@ -18,7 +18,7 @@
             <div class="d-flex flex-row">
                 <div class="p-1">
                     <h2 class="mx-2">Fiche de poste</h2>
-                    <select name="oe_fiche" class="p-1 m-2" value="offre.fiche">
+                    <select name="oe_fiche" class="p-1 m-2" value="<%= offre.fiche %>">
                         <% fichesPoste.forEach((fiche)=> { %>
                             <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
                         <% }) %>
