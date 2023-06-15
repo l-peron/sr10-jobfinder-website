@@ -7,11 +7,9 @@
     <title>WORKYS</title>
   </head>
     <body>
+        <div id="main_overlay"></div>
         <script type="module" src="/javascripts/index.js"></script>
-        <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
-            <a class="navbar-brand px-3">WORKYS</a>
-            <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
-        </header>
+        <%- include('../header.ejs'); %>
         <main class="p-2">
             <h1>
                 <%= title %>
@@ -68,7 +66,7 @@
                 </div>
             </form>
         </main>
-        <%- include('../header.ejs'); %>
+        <%- include('../nav.ejs'); %>
         <script>
             const infosInputs = document.getElementsByClassName("infos-input");
             const defaultRow = document.getElementById("default-row");
