@@ -7,11 +7,9 @@
     <title>WORKYS</title>
   </head>
   <body>
+    <div id="main_overlay"></div>
     <script type="module" src="/javascripts/index.js"></script>
-    <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
-        <a class="navbar-brand px-3">WORKYS</a>
-        <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
-    </header>
+    <%- include('../../header.ejs'); %>
     <main class="p-3">
         <h1>Editer l'offre d'emploi</h1>
         <form method="post" action="/recruiter/offresemploi/<%= offre.id %>/edit" class="d-flex flex-column flex-grow-1 p-3">
@@ -38,39 +36,6 @@
             </div>
             </form> 
     </main>
-    <nav class="nav_sidebar bg-white">
-        <div class="nav_content m-5">
-            <h1>MENU</h1>
-            <ul>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/">Accueil</a>
-                </li>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/user/me">Mon compte</a>
-                </li>
-                <% if(user.user_role != 'utilisateur' && user.org_siren !== null) { %>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/recruiter">Espace recruteur</a>
-                    </li>
-                <% } else { %>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/organization/list">Rejoindre une organisation</a>
-                    </li>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/organization/create">Créer une organisation</a>
-                    </li>
-                <% } %>
-                <% if(user.user_role === 'administrateur') { %>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/admin">Espace administrateur</a>
-                    </li>
-                <% } %> 
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/connect/logout">Se déconnecter</a>
-                </li>
-            </ul>
-            <p id="exit_nav">X</p>
-        </div>
-    </nav>
+    <%- include('../../nav.ejs'); %>
 </body>
 </html>

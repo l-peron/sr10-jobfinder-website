@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/user_index.css"/>
+    <title>WORKYS</title>
+  </head>
+    <body>
+        <div id="main_overlay"></div>
+        <script type="module" src="/javascripts/index.js"></script>
+        <%- include('../header.ejs') %>
+        <main class="p-3">
+            <h1><%= offre.title %></h1>
+            <div class="d-flex flex-row">
+                <div class="p-1">
+                    <h2 class="mx-2 d-inline">Nom de l'entreprise : </h2>
+                    <p class="mx-2 d-inline"><%= offre.name %></p>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <div class="p-1">
+                    <h2 class="mx-2 d-inline">Type de contrat :</h2>
+                    <p class="mx-2 d-inline"><%= offre.type %></p>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <div class="p-1">
+                    <h2 class="mx-2 d-inline">Salaire moyen :</h2>
+                    <p class="mx-2 d-inline"><%= offre.average_salary %>€/an</p>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <div class="p-1">
+                    <h2 class="mx-2">Description de l'offre :</h2>
+                    <p class="mx-2"><%= offre.description %></h2>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <h1>Postuler à cette offre...</h1>
+            </div>
+            <div class="container">
+                <div class="row m-2">
+                    <h2>
+                        Mes pièces
+                    </h2>
+                    <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="/offreemploi/<%= offre.id %>/apply" id="candidature_form" enctype="multipart/form-data">
+                    </form>
+                </div>
+                <div class="row m-2">
+                    <button onclick="addPiece()">Ajouter une pièce</button>
+                </div>
+                <div class="row m-2">
+                    <button onclick="submitForm()">Envoyer ma candidature</button>
+                </div>
+            </div>
+        </main>
+        <%- include('../nav.ejs'); %>
+        <script>
+            const formField = document.getElementById("candidature_form");
+            let PIECES_COUNT = 0;
+
+            const createPiece = (fileId) => {
+                var newRow = document.createElement('div');
+                newRow.classList.add("row", "w-100", "p-0", "m-0")
+                newRow.setAttribute('id', `fileRow${fileId}`)
+
+                // Create the file input
+                var newField = document.createElement('input');
+                newField.setAttribute('type','file');
+                newField.setAttribute('name','file[]');
+                newField.setAttribute('placeholder','Fichier');
+                newField.classList.add("fileFields", "col-sm", "form-control", "rounded-0", "h-100")
+                newRow.appendChild(newField);
+
+                // Create the file select
+                var newSelect = document.createElement('select');
+                newSelect.setAttribute('name','type[]');
+                newSelect.classList.add("col-sm", "border-0")
+
+                // Create the options
+                var selectTypes = ['Autre', 'CV', 'Lettre de motivation']
+                selectTypes.forEach(element => {
+                    var newSelectType = document.createElement('option')
+                    newSelectType.value = element;
+                    newSelectType.text = element;
+
+                    newSelect.appendChild(newSelectType);
+                })
+                newRow.appendChild(newSelect);
+
+                // Create the delete button
+                var deleteBtn = document.createElement('button');
+                deleteBtn.innerHTML = 'X'
+                deleteBtn.onclick = (event) => {
+                    event.preventDefault();
+
+                    newRow.remove();
+                }
+                deleteBtn.classList.add("col-sm", "border-0", "btn", "btn-dark", "rounded-0")
+
+                newRow.appendChild(deleteBtn);
+
+                return newRow;
+            }
+
+            const addPiece = () => {
+                var files = document.getElementsByClassName("fileFields");
+
+                // If exist one element and has a file => exit
+                if(files[files.length - 1]?.files?.length === 0)
+                    return;
+
+                var newPiece = createPiece(PIECES_COUNT)
+
+                PIECES_COUNT++;
+
+                formField.appendChild(newPiece);
+            }
+
+            const submitForm = () => {
+                formField.submit();
+            }
+        </script>
+    </body>
+</html>

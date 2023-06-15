@@ -12,6 +12,7 @@ var registerRouter = require('./routes/register');
 var recruiterRouter = require('./routes/recruiter');
 var organizationRouter = require('./routes/organization');
 var adminRouter = require('./routes/admin');
+var offreEmploiRouter = require('./routes/offreEmploi');
 
 var session = require('express-session')
 
@@ -54,6 +55,7 @@ app.use('/user', userRouter);
 app.use('/recruiter', recruiterRouter);
 app.use('/organization', organizationRouter);
 app.use('/admin', adminRouter);
+app.use('/offreemploi', offreEmploiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -8,15 +8,43 @@
   </head>
   <body>
     <script type="module" src="javascripts/index.js"></script>
+    <!-- Pas d'import parceque recherche ! -->
     <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
-        <a class="navbar-brand px-3">WORKYS</a>
+        <a href="/" class="navbar-brand px-3">WORKYS</a>
         <form method="get" action="/" class="header_search w-25 p-2 border border-2 border-dark d-flex">
             <img src="images/mag_glass.svg" id="mag_glass"/>
             <input type="text" name="q" placeholder="Rechercher une offre..." value="<%= query.q %>" class="border border-0 pull-right flex-grow-1 mx-2"/>
         </form>
         <img src="images/burger_icon.svg" id="burger_icon" class="px-3"/>
     </header>
-    <div id="main_overlay"></div>
+    <div id="main_overlay">
+    </div>
+    <div id="modal_overlay_bg">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div id="modal_overlay" class="bg-white border border-2 border-dark shadow-sm w-50 h-50 position-relative p-2">
+                <button onclick="closeAnnonceModal()" class="position-absolute top-0 end-0 m-2">X</button>
+                <h1 id="modal_title" class="text-dark">Title</h1>
+                <h2 id="modal_org" class="text-dark">par Organization</h2>
+                <h3 class="text-dark pt-2">Description de l'offre : </h3>
+                <p id="modal_desc" class="text-dark">Descritpion</p>
+                <div class="container">
+                    <div class="row m-2">
+                        <h2>
+                            Mes pièces
+                        </h2>
+                        <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="#" id="candidature_form" enctype="multipart/form-data">
+                        </form>
+                    </div>
+                    <div class="row m-2">
+                        <button onclick="addPiece()">Ajouter une pièce</button>
+                    </div>
+                    <div class="row m-2">
+                        <button onclick="submitForm()">Envoyer ma candidature</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <main>
         <aside class="p-3">
             <h1>Affiner votre recherche</h1>
@@ -60,50 +88,119 @@
         </aside>
         <section class="p-3">
             <% annonces.forEach((annonce)=> { %>
-                <article class="border border-2 border-dark p-2 my-3">
+                <article style="z-index: 1" class="border border-2 border-dark p-2 my-3">
                     <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
                         <h1><%= annonce.title %></h2>
                         <h4><%= annonce.type %> - <%= annonce.avg_salary %>€/an</h4>
                     </div>
-                    <h3><%= annonce.org_name %></h3>
+                    <h3>par <b><%= annonce.org_name %></b></h3>
                     <p><%= annonce.description %> </p>
+                    <div class="row align-items-end">
+                        <div class="col-3 align-self-start">
+                            <button style="z-index: 2" class="w-100" onclick="openAnnonceModal(<%= JSON.stringify(annonce) %>)">Candidater</button>
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-3 align-self-end">
+                            <button style="z-index: 2" class="w-100" onclick="window.location.href='/offreemploi/<%= annonce.id %>'">Voir plus...</button>
+                        </div>
+                    </div>
                 </article>
             <% }) %>
         </section>
     </main>
-    <nav class="nav_sidebar bg-white">
-        <div class="nav_content m-5">
-            <h1>MENU</h1>
-            <ul>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/">Accueil</a>
-                </li>
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/user/me">Mon compte</a>
-                </li>
-                <% if(user.user_role != 'utilisateur' && user.org_siren !== null) { %>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/recruiter">Espace recruteur</a>
-                    </li>
-                <% } else { %>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/organization/list">Rejoindre une organisation</a>
-                    </li>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/organization/create">Créer une organisation</a>
-                    </li>
-                <% } %>
-                <% if(user.user_role === 'administrateur') { %>
-                    <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                        <a href="/admin">Espace administrateur</a>
-                    </li>
-                <% } %> 
-                <li class="border border-2 border-white p-2 m-2 w-100 d-block">
-                    <a href="/connect/logout">Se déconnecter</a>
-                </li>
-            </ul>
-            <p id="exit_nav">X</p>
-        </div>
-    </nav>
+    <%- include('./nav.ejs'); %>
+    <script>
+        const mainOverlayBg = document.querySelector('#modal_overlay_bg');
+        const mainOverlay = document.querySelector('#modal_overlay');
+        
+        const modal = {
+            title : document.querySelector('#modal_title'),
+            organization : document.querySelector('#modal_org'),
+            description : document.querySelector('#modal_desc'),
+
+        }
+       
+        const openAnnonceModal = (annonce) => {
+            mainOverlayBg.classList.toggle('active');
+            mainOverlay.classList.toggle('active');
+
+            modal.title.innerHTML = annonce.title;
+            modal.description.innerHTML = annonce.description;
+            modal.organization.innerHTML = `par ${annonce.org_name}`;
+            
+            formField.action = `/offreemploi/${annonce.id}/apply`
+        }
+
+        const closeAnnonceModal = () => {
+            mainOverlayBg.classList.remove('active');
+            mainOverlay.classList.remove('active');
+        }
+    </script>
+    <script>
+        const formField = document.getElementById("candidature_form");
+        let PIECES_COUNT = 0;
+
+        const createPiece = (fileId) => {
+            var newRow = document.createElement('div');
+            newRow.classList.add("row", "w-100", "p-0", "m-0")
+            newRow.setAttribute('id', `fileRow${fileId}`)
+
+            // Create the file input
+            var newField = document.createElement('input');
+            newField.setAttribute('type','file');
+            newField.setAttribute('name','file[]');
+            newField.setAttribute('placeholder','Fichier');
+            newField.classList.add("fileFields", "col-sm", "form-control", "rounded-0", "h-100")
+            newRow.appendChild(newField);
+
+            // Create the file select
+            var newSelect = document.createElement('select');
+            newSelect.setAttribute('name','type[]');
+            newSelect.classList.add("col-sm", "border-0")
+
+            // Create the options
+            var selectTypes = ['Autre', 'CV', 'Lettre de motivation']
+            selectTypes.forEach(element => {
+                var newSelectType = document.createElement('option')
+                newSelectType.value = element;
+                newSelectType.text = element;
+
+                newSelect.appendChild(newSelectType);
+            })
+            newRow.appendChild(newSelect);
+
+            // Create the delete button
+            var deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = 'X'
+            deleteBtn.onclick = (event) => {
+                event.preventDefault();
+
+                newRow.remove();
+            }
+            deleteBtn.classList.add("col-sm", "border-0", "btn", "btn-dark", "rounded-0")
+
+            newRow.appendChild(deleteBtn);
+
+            return newRow;
+        }
+
+        const addPiece = () => {
+            var files = document.getElementsByClassName("fileFields");
+
+            // If exist one element and has a file => exit
+            if(files[files.length - 1]?.files?.length === 0)
+                return;
+
+            var newPiece = createPiece(PIECES_COUNT)
+
+            PIECES_COUNT++;
+
+            formField.appendChild(newPiece);
+        }
+
+        const submitForm = () => {
+            formField.submit();
+        }
+    </script>
   </body>
 </html>
