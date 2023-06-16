@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="stylesheets/index.css"/>
+    <script src="https://unpkg.com/@spreadtheweb/multi-range-slider@1.0.2/dist/range-slider.main.min.js"></script>
     <title>WORKYS</title>
   </head>
   <body>
@@ -47,44 +48,65 @@
     </div>
     <main>
         <aside class="p-3">
+            <form class="multi-range-field">
             <h1>Affiner votre recherche</h1>
-            <div class="p-2">
-                <h2>Type de contrat</h2>
-                <div class="py-2 px-4">
-                    <div class="d-flex align-items-center">
-                        <input type="checkbox" class="border-2 border-dark"/> 
-                        <label class="form-check-label px-1"> CDI </label>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <input type="checkbox" class="border-2 border-dark"/> 
-                        <label class="form-check-label px-1"> CDD </label>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <input type="checkbox" class="border-2 border-dark"/> 
-                        <label class="form-check-label px-1"> Stage </label>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <input type="checkbox" class="border-2 border-dark"/> 
-                        <label class="form-check-label px-1"> Mission </label>
+                <div class="p-2">
+                    <h2>Type de contrat</h2>
+                    <div class="py-2 px-4">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="border-2 border-dark"/> 
+                            <label class="form-check-label px-1"> CDI </label>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="border-2 border-dark"/> 
+                            <label class="form-check-label px-1"> CDD </label>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="border-2 border-dark"/> 
+                            <label class="form-check-label px-1"> Stage </label>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="border-2 border-dark"/> 
+                            <label class="form-check-label px-1"> Mission </label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="p-2">
-                <h2>Localisation</h2>
-                <input type="text" placeholder="Ajouter une localisation..." class="border border-2 border-dark py-1 px-2"/>
-            </div>
-            <div class="p-2">
-                <h2>Fourchette de salaire</h2>
-                <img src="images/salaray_slider.svg" id="salaray_slider" class="my-3"/>
-            </div>
-            <div class="p-2">
-                <h2>Entreprise</h2>
-                <input type="text" placeholder="Ajouter une entreprise..." class="border border-2 border-dark py-1 px-2"/>
-            </div>
-            <div class="p-2">
-                <h2>Mots-clés</h2>
-                <input type="text" placeholder="Ajouter un mot-clé..." class="border border-2 border-dark py-1 px-2"/>
-            </div>
+                <div class="p-2">
+                    <h2>Localisation</h2>
+                    <input type="text" placeholder="Ajouter une localisation..." class="border border-2 border-dark py-1 px-2"/>
+                </div>
+                <div class="p-2">
+                    <h2>Fourchette de salaire</h2>
+                    <div class="pt-3 pb-1">
+                       <div class="slider"></div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <span>0k€</span>
+                        <span>150k€</span>
+                    </div>
+                    <script>
+                        let slider = new RangeSlider('.slider', {
+                            pointRadius: 9,
+                            railHeight: 8,
+                            trackHeight: 8,
+                            colors: {
+                                points: "#000000",
+                                rail: "#FFFFFFF",
+                                tracks: "#000000"
+                        }});
+
+                        slider.onChange(values => console.log(values));
+                    </script>
+                </div>
+                <div class="p-2">
+                    <h2>Entreprise</h2>
+                    <input type="text" placeholder="Ajouter une entreprise..." class="border border-2 border-dark py-1 px-2"/>
+                </div>
+                <div class="p-2">
+                    <h2>Mots-clés</h2>
+                    <input type="text" placeholder="Ajouter un mot-clé..." class="border border-2 border-dark py-1 px-2"/>
+                </div>
+            </form>
         </aside>
         <section class="p-3">
             <% annonces.forEach((annonce)=> { %>

@@ -11,6 +11,7 @@
     "collectCoverage": true
   },
   "dependencies": {
+    "@spreadtheweb/multi-range-slider": "^1.0.3",
     "bootstrap": "^5.2.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

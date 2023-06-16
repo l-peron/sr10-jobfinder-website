@@ -84,3 +84,15 @@ header {
 #modal_overlay {
     
 }
+
+.range-slider__container{
+    margin-bottom: 0 !important;
+}
+
+.range-slider__rail {
+    border: 2px solid black;
+}
+
+.range-slider__point {
+    border-radius: 0 !important;
+}
