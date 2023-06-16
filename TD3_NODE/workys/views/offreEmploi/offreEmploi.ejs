@@ -10,50 +10,64 @@
         <div id="main_overlay"></div>
         <script type="module" src="/javascripts/index.js"></script>
         <%- include('../header.ejs') %>
-        <main class="p-3">
-            <h1><%= offre.title %></h1>
-            <div class="d-flex flex-row">
-                <div class="p-1">
-                    <h2 class="mx-2 d-inline">Nom de l'entreprise : </h2>
-                    <p class="mx-2 d-inline"><%= offre.name %></p>
+        <main>
+            <section>
+                <div class="p-3 border-bottom border-2 border-dark">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <h1 class="col-2 text-nowrap text-center"><%= offre.title %></h1>
+                        </div>
+                        <div class="row justify-content-between">
+                            <h2 class="mx-2 d-inline col-2 text-start"><%= offre.type %></h2>
+                            <h2 class="mx-2 d-inline col-2 text-end"><%= offre.average_salary %>€/an</h2>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex flex-row">
-                <div class="p-1">
-                    <h2 class="mx-2 d-inline">Type de contrat :</h2>
-                    <p class="mx-2 d-inline"><%= offre.type %></p>
-                </div>
-            </div>
-            <div class="d-flex flex-row">
-                <div class="p-1">
-                    <h2 class="mx-2 d-inline">Salaire moyen :</h2>
-                    <p class="mx-2 d-inline"><%= offre.average_salary %>€/an</p>
-                </div>
-            </div>
-            <div class="d-flex flex-row">
-                <div class="p-1">
-                    <h2 class="mx-2">Description de l'offre :</h2>
+                <div class="p-2">
+                    <h1 class="mx-2">Description de l'offre :</h1>
                     <p class="mx-2"><%= offre.description %></h2>
                 </div>
-            </div>
-            <div class="d-flex flex-row">
-                <h1>Postuler à cette offre...</h1>
-            </div>
-            <div class="container">
-                <div class="row m-2">
-                    <h2>
-                        Mes pièces
-                    </h2>
-                    <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="/offreemploi/<%= offre.id %>/apply" id="candidature_form" enctype="multipart/form-data">
-                    </form>
+                <div class="p-2">
+                    <h1>Postuler à cette offre...</h1>
+                    <div class="container">
+                        <div class="row m-2">
+                            <h2>
+                            Mes pièces
+                            </h2>
+                            <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="/offreemploi/<%= offre.id %>/apply" id="candidature_form" enctype="multipart/form-data">
+                            </form>
+                        </div>
+                        <div class="row m-2">
+                            <button onclick="addPiece()">Ajouter une pièce</button>
+                        </div>
+                        <div class="row m-2">
+                            <button onclick="submitForm()">Envoyer ma candidature</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="row m-2">
-                    <button onclick="addPiece()">Ajouter une pièce</button>
+            </section>
+            <aside class="p-2">
+                <div class="d-flex flex-column align-items-center">
+                    <h1>L'entreprise</h1>
+                    <h2 class="mx-2"><%= offre.organisation.name %></h2>
+                    <ul class="my-3">
+                        <li><%= offre.organisation.type %></li>
+                        <li><%= offre.organisation.address %></li>
+                    </ul>
                 </div>
-                <div class="row m-2">
-                    <button onclick="submitForm()">Envoyer ma candidature</button>
+                <h1>Cette entreprise vous plait ?</h1>
+                <h2>Voici d'autres offres...</h2>
+                <div style="height: 65%;" class="px-2 overflow-auto">
+                    <% others.forEach((annonce)=> { %>
+                        <article style="z-index: 1" class="border border-2 border-dark p-2 my-3 d-flex flex-column flex-wrap align-items-left justify-content-between">
+                                <h1><%= annonce.title %></h2>
+                                <h4><%= annonce.type %> - <%= annonce.avg_salary %>€/an</h4>
+                            <p style="max-height: 120px; overflow: hidden;"><%= annonce.description %></p>
+                            <button style="z-index: 2" class="w-100" onclick="window.location.href='/offreemploi/<%= annonce.id %>'">Voir plus...</button>
+                        </article>
+                    <% }) %>
                 </div>
-            </div>
+            </aside>
         </main>
         <%- include('../nav.ejs'); %>
         <script>
