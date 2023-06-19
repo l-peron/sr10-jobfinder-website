@@ -10,6 +10,55 @@ var multiparty = require('multiparty');
 
 const FILE_PATH = `${__dirname}/../private/files/`
 
+router.post('/', function(req, res, next) {
+  const query_string = `%${req.body.query || ''}%`
+  const filters = JSON.parse(req.body.filters);
+
+  offreEmploiModel.searchAllWithExtendedInfos(query_string, function(result) {
+    const annonces = result
+    .filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; })
+    // Filtre sur les types
+    .filter(a => { return filters.types.length === 0 || filters.types.includes(a.type)})
+    // Filtre sur les localisations
+    .filter(a => { return filters.localisations.length === 0 || 
+      filters.localisations.some(e => new RegExp(`.*${e.toLowerCase().trim()}.*`).test(a.address.toLowerCase().trim()))})
+    // Filtre sur les mots clés
+    // => N'importe quel champ contient la valeur
+    .filter(a => { return filters.keywords.length === 0 || 
+      filters.keywords.some(e => 
+        Object.entries(a).some((item) => {
+          // item[1] is value
+          // JSON stringify to insure it's a string
+          return new RegExp(`.*${e.toLowerCase().trim()}.*`).test(JSON.stringify(item[1]).replaceAll("\"", "").toLowerCase().trim())
+        })
+      )
+    })
+    // Filtre sur le prix min
+    .filter(a => { return filters.min_price === undefined || filters.min_price <= a.min_salary })
+    // Filtre sur le prix max
+    .filter(a => { return filters.max_price === undefined || filters.max_price >= a.max_salary })
+    .map(a => {
+      return {
+        id: a.id,
+        description: a.description,
+        title: a.title,
+        poste_status: a.poste_status,
+        type: a.type,
+        address: a.address,
+        responsable: a.responsable,
+        max_salary: a.max_salary,
+        min_salary: a.min_salary,
+        avg_salary: a.average_salary,
+        hours: a.hours,
+        day_off: a.day_off,
+        org_name: a.name
+      }
+    });
+
+    return res.json({ result : annonces })
+  });
+})
+
 router.get('/:id', function(req, res, next) {
   const offer_id = Number(req.params.id);
 

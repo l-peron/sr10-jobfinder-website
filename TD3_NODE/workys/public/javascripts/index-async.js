@@ -1,0 +1,109 @@
+// ASYNC FILTER
+
+var filters = {
+    types : [],
+    localisations : [],
+    min_price : undefined,
+    max_price: undefined,
+    entreprises: [],
+    keywords : []
+}
+
+// ASYNC LOAD
+
+const annoncesList = $("#annonces-list");
+
+const createAnnonce = (annonce) => {
+    var $article = $("<article>", {"class": "border border-2 border-dark p-2 my-3"});
+
+    // Title
+    var $divTitle = $("<div>", {"class": "d-flex flex-row flex-wrap align-items-center justify-content-between"}).appendTo($article);
+    $("<h1>").text(annonce.title).appendTo($divTitle)
+    $("<h4>").text(`${annonce.type} - ${annonce.avg_salary}€/an`).appendTo($divTitle);
+
+    // Org name & loca
+    $("<h3>").html(`par <b>${annonce.org_name}</b> situé à <b>${annonce.address}</b>`).appendTo($article);
+    
+    // Description
+    $("<p>").text(annonce.description).appendTo($article)
+    
+    // Footer
+    var $divFooter = $("<div>", {"class" : "row align-items-end"}).appendTo($article);
+    // Candidater button
+    var $divFooterLeft = $("<div>", {"class" : "col-3 align-self-start"}).appendTo($divFooter)
+    $("<button>", {"class": "w-100", "click" : () => openAnnonceModal(annonce) }).text("Candidater").appendTo($divFooterLeft)
+    
+    $("<div>", {"class" : "col-6"}).appendTo($divFooter)
+
+    var $divFooterRight = $("<div>", {"class" : "col-3 align-self-end"}).appendTo($divFooter)
+    $("<button>", {"class": "w-100", "click" : () => window.location.href=`/offreemploi/${annonce.id}`}).text("Voir plus").appendTo($divFooterRight)
+    
+    return $article;
+}
+
+$spinner = $("#spinner-wrapper").clone();
+
+const updateFilters = () => {
+    // Types
+    filters.types = []
+    $(".filter-input-type").each((i, elt)  => {
+        if(elt.checked) 
+            filters.types.push(elt.value);
+    })
+    // Localisations
+    filters.localisations = []
+    $(".localisation-form-input").each((i, elt) => {
+        filters.localisations.push(elt.innerHTML);
+    })
+    // Keywords
+    filters.keywords = []
+    $(".keywords-form-input").each((i, elt) => {
+        filters.keywords.push(elt.innerHTML);
+    })
+}
+
+const asyncAnnoncesFetch = () => {
+    // Retrieve the filters
+    updateFilters();
+
+    console.log(filters);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
+
+    $("#annonces-list").children().remove();
+
+    $("#annonces-list").append($spinner.clone())
+
+    const request = $.ajax({
+        type: 'POST',          
+        url : 'offreemploi', 
+        data : {
+            "query" : queryParam,
+            "filters" : JSON.stringify(filters)
+        },
+        asynch : false          
+    });
+
+    request.done((res) => {
+        const result = res.result;
+
+        $("#spinner-wrapper").remove();
+
+        result.forEach((annonce) => {
+            annoncesList.append(createAnnonce(annonce))
+        })
+    })
+
+    request.fail((err) => {
+        console.log(err);
+    })
+}
+
+// AJAX REQUEST FOR FILTERS
+const filters_elements = $(".filter-input");
+filters_elements.on("change", function() {
+    asyncAnnoncesFetch();
+})
+
+asyncAnnoncesFetch();

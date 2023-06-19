@@ -6,29 +6,10 @@ var offresEmploiModel = require('../models/offre_emplois.js');
 router.get('/', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
   
-  offresEmploiModel.readAllWithExtendedInfos(function(result) {
+  offresEmploiModel.getMinMaxIncomes(function(income_result) {
+    const income = income_result[0];
 
-    result.forEach(s => console.log(new Date() < new Date(s.valid_date)));
-
-    const annonces = result.filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; }).map(a => {
-      return {
-        id: a.id,
-        description: a.description,
-        title: a.title,
-        poste_status: a.poste_status,
-        type: a.type,
-        address: a.poste_description,
-        responsable: a.responsable,
-        max_salary: a.max_salary,
-        min_salary: a.min_salary,
-        avg_salary: a.average_salary,
-        hours: a.hours,
-        day_off: a.day_off,
-        org_name: a.name
-      }
-    });
-
-    res.render('index', { user: req.session.user, annonces, query : req.query });
+    res.render('index', { user: req.session.user, query : req.query, income : {min: income.min, max: income.max } });
   });
 });
 

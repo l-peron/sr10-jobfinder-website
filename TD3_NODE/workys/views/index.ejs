@@ -3,12 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
     <link rel="stylesheet" href="stylesheets/index.css"/>
     <script src="https://unpkg.com/@spreadtheweb/multi-range-slider@1.0.2/dist/range-slider.main.min.js"></script>
     <title>WORKYS</title>
   </head>
   <body>
-    <script type="module" src="javascripts/index.js"></script>
     <!-- Pas d'import parceque recherche ! -->
     <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
         <a href="/" class="navbar-brand px-3">WORKYS</a>
@@ -22,18 +24,26 @@
     </div>
     <div id="modal_overlay_bg">
         <div class="h-100 d-flex align-items-center justify-content-center">
-            <div id="modal_overlay" class="bg-white border border-2 border-dark shadow-sm w-50 h-50 position-relative p-2">
+            <div id="modal_overlay" class="bg-white border border-2 border-dark shadow-sm w-50 position-relative p-2">
                 <button onclick="closeAnnonceModal()" class="position-absolute top-0 end-0 m-2">X</button>
                 <h1 id="modal_title" class="text-dark">Title</h1>
                 <h2 id="modal_org" class="text-dark">par Organization</h2>
                 <h3 class="text-dark pt-2">Description de l'offre : </h3>
-                <p id="modal_desc" class="text-dark">Descritpion</p>
+                <p id="modal_desc" class="text-dark h-25 overflow-hidden">Descritpion</p>
                 <div class="container">
                     <div class="row m-2">
                         <h2>
                             Mes pièces
                         </h2>
                         <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="#" id="candidature_form" enctype="multipart/form-data">
+                            <div class="row w-100 p-0 m-0" id="fileRow0"><input type="file" name="file[]" placeholder="Fichier" class="fileFields col-sm form-control rounded-0 h-100">
+                                <select name="type[]" class="col-sm border-0">
+                                    <option value="Autre">Autre</option>
+                                    <option value="CV">CV</option>
+                                    <option value="Lettre de motivation">Lettre de motivation</option>
+                                </select>
+                                <button class="col-sm border-0 btn btn-dark rounded-0" disabled></button>
+                            </div>
                         </form>
                     </div>
                     <div class="row m-2">
@@ -48,181 +58,88 @@
     </div>
     <main>
         <aside class="p-3">
-            <form class="multi-range-field">
             <h1>Affiner votre recherche</h1>
-                <div class="p-2">
-                    <h2>Type de contrat</h2>
-                    <div class="py-2 px-4">
-                        <div class="d-flex align-items-center">
-                            <input type="checkbox" class="border-2 border-dark"/> 
-                            <label class="form-check-label px-1"> CDI </label>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <input type="checkbox" class="border-2 border-dark"/> 
-                            <label class="form-check-label px-1"> CDD </label>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <input type="checkbox" class="border-2 border-dark"/> 
-                            <label class="form-check-label px-1"> Stage </label>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <input type="checkbox" class="border-2 border-dark"/> 
-                            <label class="form-check-label px-1"> Mission </label>
-                        </div>
+            <div class="p-2">
+                <h2>Type de contrat</h2>
+                <div class="py-2 px-4">
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" class="border-2 border-dark filter-input filter-input-type" value="CDI"/> 
+                        <label class="form-check-label px-1"> CDI </label>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" class="border-2 border-dark filter-input filter-input-type" value="CDD"/> 
+                        <label class="form-check-label px-1"> CDD </label>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" class="border-2 border-dark filter-input filter-input-type" value="Stage"/> 
+                        <label class="form-check-label px-1"> Stage </label>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" class="border-2 border-dark filter-input filter-input-type" value="Mission"/> 
+                        <label class="form-check-label px-1"> Mission </label>
                     </div>
                 </div>
-                <div class="p-2">
-                    <h2>Localisation</h2>
-                    <input type="text" placeholder="Ajouter une localisation..." class="border border-2 border-dark py-1 px-2"/>
+            </div>
+            <form class="p-2" id="localisation-form" name="localisation-form">
+                <h2>Localisation</h2>
+                <input type="text" placeholder="Ajouter une localisation..." class="border border-2 border-dark py-1 px-2"/>
+                <div class="m-2"></div>
+            </form>
+            <div class="p-2">
+                <h2>Fourchette de salaire</h2>
+                <div class="pt-3 pb-1">
+                   <div class="slider"></div>
                 </div>
-                <div class="p-2">
-                    <h2>Fourchette de salaire</h2>
-                    <div class="pt-3 pb-1">
-                       <div class="slider"></div>
-                    </div>
-                    <div class="d-flex flex-row justify-content-between">
-                        <span>0k€</span>
-                        <span>150k€</span>
-                    </div>
-                    <script>
-                        let slider = new RangeSlider('.slider', {
-                            pointRadius: 9,
-                            railHeight: 8,
-                            trackHeight: 8,
-                            colors: {
-                                points: "#000000",
-                                rail: "#FFFFFFF",
-                                tracks: "#000000"
-                        }});
+                <div class="d-flex flex-row justify-content-between">
+                    <span><%= income.min %>€</span>
+                    <span><%= income.max %>€</span>
+                </div>
+                <script>
+                    let slider = new RangeSlider('.slider', {
+                        pointRadius: 9,
+                        railHeight: 8,
+                        trackHeight: 8,
+                        colors: {
+                            points: "#000000",
+                            rail: "#FFFFFFF",
+                            tracks: "#000000"
+                        },
+                        min : <%= income.min %>,
+                        max : <%= income.max %>,
+                        values : [<%= income.min %>, <%= income.max %>]
+                    });
 
-                        slider.onChange(values => console.log(values));
-                    </script>
-                </div>
-                <div class="p-2">
-                    <h2>Entreprise</h2>
-                    <input type="text" placeholder="Ajouter une entreprise..." class="border border-2 border-dark py-1 px-2"/>
-                </div>
-                <div class="p-2">
-                    <h2>Mots-clés</h2>
-                    <input type="text" placeholder="Ajouter un mot-clé..." class="border border-2 border-dark py-1 px-2"/>
-                </div>
+                    const updateValues = (values) => {
+                        filters.min_price = values[0];
+                        filters.max_price = values[1];
+                    }
+
+                    slider.onChange(values => {
+                        updateValues(values);
+                        asyncAnnoncesFetch();
+                    });
+
+                    updateValues(slider.values);
+                </script>
+            </div>
+            <form class="p-2" id="keywords-form" name="keywords-form">
+                <h2>Mots-clés</h2>
+                <input type="text" placeholder="Ajouter un mot-clé..." class="border border-2 border-dark py-1 px-2"/>
+                <div class="m-2"></div>
             </form>
         </aside>
-        <section class="p-3">
-            <% annonces.forEach((annonce)=> { %>
-                <article style="z-index: 1" class="border border-2 border-dark p-2 my-3">
-                    <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                        <h1><%= annonce.title %></h2>
-                        <h4><%= annonce.type %> - <%= annonce.avg_salary %>€/an</h4>
-                    </div>
-                    <h3>par <b><%= annonce.org_name %></b></h3>
-                    <p><%= annonce.description %> </p>
-                    <div class="row align-items-end">
-                        <div class="col-3 align-self-start">
-                            <button style="z-index: 2" class="w-100" onclick="openAnnonceModal(<%= JSON.stringify(annonce) %>)">Candidater</button>
-                        </div>
-                        <div class="col-6"></div>
-                        <div class="col-3 align-self-end">
-                            <button style="z-index: 2" class="w-100" onclick="window.location.href='/offreemploi/<%= annonce.id %>'">Voir plus...</button>
-                        </div>
-                    </div>
-                </article>
-            <% }) %>
+        <section id="annonces-list" class="p-3">
+            <div id="spinner-wrapper" class="h-100 d-flex align-items-center justify-content-center">
+                <div class="spinner-border" role="status">
+                </div>
+            </div>
         </section>
     </main>
     <%- include('./nav.ejs'); %>
-    <script>
-        const mainOverlayBg = document.querySelector('#modal_overlay_bg');
-        const mainOverlay = document.querySelector('#modal_overlay');
-        
-        const modal = {
-            title : document.querySelector('#modal_title'),
-            organization : document.querySelector('#modal_org'),
-            description : document.querySelector('#modal_desc'),
-
-        }
-       
-        const openAnnonceModal = (annonce) => {
-            mainOverlayBg.classList.toggle('active');
-            mainOverlay.classList.toggle('active');
-
-            modal.title.innerHTML = annonce.title;
-            modal.description.innerHTML = annonce.description;
-            modal.organization.innerHTML = `par ${annonce.org_name}`;
-            
-            formField.action = `/offreemploi/${annonce.id}/apply`
-        }
-
-        const closeAnnonceModal = () => {
-            mainOverlayBg.classList.remove('active');
-            mainOverlay.classList.remove('active');
-        }
-    </script>
-    <script>
-        const formField = document.getElementById("candidature_form");
-        let PIECES_COUNT = 0;
-
-        const createPiece = (fileId) => {
-            var newRow = document.createElement('div');
-            newRow.classList.add("row", "w-100", "p-0", "m-0")
-            newRow.setAttribute('id', `fileRow${fileId}`)
-
-            // Create the file input
-            var newField = document.createElement('input');
-            newField.setAttribute('type','file');
-            newField.setAttribute('name','file[]');
-            newField.setAttribute('placeholder','Fichier');
-            newField.classList.add("fileFields", "col-sm", "form-control", "rounded-0", "h-100")
-            newRow.appendChild(newField);
-
-            // Create the file select
-            var newSelect = document.createElement('select');
-            newSelect.setAttribute('name','type[]');
-            newSelect.classList.add("col-sm", "border-0")
-
-            // Create the options
-            var selectTypes = ['Autre', 'CV', 'Lettre de motivation']
-            selectTypes.forEach(element => {
-                var newSelectType = document.createElement('option')
-                newSelectType.value = element;
-                newSelectType.text = element;
-
-                newSelect.appendChild(newSelectType);
-            })
-            newRow.appendChild(newSelect);
-
-            // Create the delete button
-            var deleteBtn = document.createElement('button');
-            deleteBtn.innerHTML = 'X'
-            deleteBtn.onclick = (event) => {
-                event.preventDefault();
-
-                newRow.remove();
-            }
-            deleteBtn.classList.add("col-sm", "border-0", "btn", "btn-dark", "rounded-0")
-
-            newRow.appendChild(deleteBtn);
-
-            return newRow;
-        }
-
-        const addPiece = () => {
-            var files = document.getElementsByClassName("fileFields");
-
-            // If exist one element and has a file => exit
-            if(files[files.length - 1]?.files?.length === 0)
-                return;
-
-            var newPiece = createPiece(PIECES_COUNT)
-
-            PIECES_COUNT++;
-
-            formField.appendChild(newPiece);
-        }
-
-        const submitForm = () => {
-            formField.submit();
-        }
+    <script src="/javascripts/index.js"></script>
+    <script src="/javascripts/index-async.js"></script>
+    <script src="/javascripts/index-filters.js"></script>
+    <script src="/javascripts/fileUpload.js">
     </script>
   </body>
 </html>

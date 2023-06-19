@@ -16,3 +16,27 @@ const hideLateralMenu = () => {
 navigationToggle.addEventListener('click', showLateralMenu);
 navigationUntoggle.addEventListener('click', hideLateralMenu);
 mainOverlay.addEventListener('click', hideLateralMenu);
+
+const mainOverlayBg = document.querySelector('#modal_overlay_bg');
+        
+const modal = {
+    title : document.querySelector('#modal_title'),
+    organization : document.querySelector('#modal_org'),
+    description : document.querySelector('#modal_desc'),
+}
+
+const closeAnnonceModal = () => {
+    mainOverlayBg.classList.remove('active');
+    mainOverlay.classList.remove('active');
+}
+
+const openAnnonceModal = (annonce) => {
+    mainOverlayBg.classList.toggle('active');
+    mainOverlay.classList.toggle('active');
+
+    modal.title.innerHTML = annonce.title;
+    modal.description.innerHTML = annonce.description;
+    modal.organization.innerHTML = `par ${annonce.org_name}`;
+    
+    formField.action = `/offreemploi/${annonce.id}/apply`
+}
