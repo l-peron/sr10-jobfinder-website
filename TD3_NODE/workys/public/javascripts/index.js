@@ -40,3 +40,14 @@ const openAnnonceModal = (annonce) => {
     
     formField.action = `/offreemploi/${annonce.id}/apply`
 }
+
+const setPage = (index) => {
+    window.history.replaceState(null, null, '?p=' + index);
+}
+const modifyPage = (offset) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageParam = urlParams.get('p') || 0;
+
+    setPage(Number(pageParam) + offset)
+    asyncAnnoncesFetch();
+}

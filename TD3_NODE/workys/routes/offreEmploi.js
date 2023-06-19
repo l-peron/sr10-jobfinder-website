@@ -9,9 +9,12 @@ var organizationModel = require('../models/organization.js');
 var multiparty = require('multiparty');
 
 const FILE_PATH = `${__dirname}/../private/files/`
+const PAGE_SIZE = process.env.PAGE_SIZE;
 
 router.post('/', function(req, res, next) {
   const query_string = `%${req.body.query || ''}%`
+  const query_page = Number(req.body.page) || 0
+
   const filters = JSON.parse(req.body.filters);
 
   offreEmploiModel.searchAllWithExtendedInfos(query_string, function(result) {
@@ -53,9 +56,15 @@ router.post('/', function(req, res, next) {
         day_off: a.day_off,
         org_name: a.name
       }
-    });
+    })
 
-    return res.json({ result : annonces })
+
+
+    return res.json({ result : { 
+      annonces : annonces.slice(query_page * PAGE_SIZE, (query_page + 1) * PAGE_SIZE) ,
+      has_before : query_page > 0,
+      has_after : ((query_page + 1) * PAGE_SIZE) < annonces.length
+    }})
   });
 })
 

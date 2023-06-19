@@ -33,5 +33,7 @@ const filterElt = (event) => {
     $("<button>", {"class" : "text-light bg-dark border-0", "click": () => { $tagItem.remove(); asyncAnnoncesFetch() } ,"type": "button"}).text("X").appendTo($tagItem);
 
     // Refresh
+    setPage(0);
+
     asyncAnnoncesFetch();
 }
