@@ -12,7 +12,8 @@ module.exports = {
         sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, offre_emplois.description, 
         fiche_postes.title, fiche_postes.status AS poste_status, fiche_postes.type, fiche_postes.address, 
         fiche_postes.description AS poste_description, fiche_postes.responsable, salarys.max_salary, 
-        salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off, organisations.name 
+        salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off, 
+        organisations.name, organisations.siren
         FROM offre_emplois 
         INNER JOIN fiche_postes ON offre_emplois.fiche = fiche_postes.id 
         INNER JOIN salarys ON fiche_postes.salary = salarys.id 
@@ -28,7 +29,8 @@ module.exports = {
         sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, offre_emplois.description, 
         fiche_postes.title, fiche_postes.status AS poste_status, fiche_postes.type, fiche_postes.address, 
         fiche_postes.description AS poste_description, fiche_postes.responsable, salarys.max_salary, 
-        salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off, organisations.name 
+        salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off,
+        organisations.name, organisations.siren
         FROM offre_emplois 
         INNER JOIN fiche_postes ON offre_emplois.fiche = fiche_postes.id 
         INNER JOIN salarys ON fiche_postes.salary = salarys.id 
