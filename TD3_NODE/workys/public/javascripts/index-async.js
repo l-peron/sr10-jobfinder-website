@@ -66,20 +66,28 @@ const asyncAnnoncesFetch = () => {
     // Retrieve the filters
     updateFilters();
 
-    console.log(filters);
-
     const urlParams = new URLSearchParams(window.location.search);
     const queryParam = urlParams.get('q');
+    const pageParam = urlParams.get('p');
+
+    $("#spinner-wrapper").addClass("d-block");
+    $("#spinner-wrapper").removeClass("d-none");
 
     $("#annonces-list").children().remove();
 
-    $("#annonces-list").append($spinner.clone())
+    // Pages button hide
+    $("#prev-page-btn").addClass("d-none");
+    $("#prev-page-btn").removeClass("d-block");
+
+    $("#next-page-btn").addClass("d-none");
+    $("#next-page-btn").removeClass("d-block");
 
     const request = $.ajax({
         type: 'POST',          
         url : 'offreemploi', 
         data : {
             "query" : queryParam,
+            "page": pageParam,
             "filters" : JSON.stringify(filters)
         },
         asynch : false          
@@ -88,11 +96,22 @@ const asyncAnnoncesFetch = () => {
     request.done((res) => {
         const result = res.result;
 
-        $("#spinner-wrapper").remove();
+        $("#spinner-wrapper").addClass("d-none");
+        $("#spinner-wrapper").removeClass("d-block");
 
-        result.forEach((annonce) => {
+        result.annonces.forEach((annonce) => {
             annoncesList.append(createAnnonce(annonce))
         })
+
+        if(result.has_before){
+            $("#prev-page-btn").addClass("d-block")
+            $("#prev-page-btn").removeClass("d-none")
+        }
+
+        if(result.has_after){
+            $("#next-page-btn").addClass("d-block")
+            $("#next-page-btn").removeClass("d-none")
+        }
     })
 
     request.fail((err) => {
@@ -103,6 +122,8 @@ const asyncAnnoncesFetch = () => {
 // AJAX REQUEST FOR FILTERS
 const filters_elements = $(".filter-input");
 filters_elements.on("change", function() {
+    setPage(0);
+
     asyncAnnoncesFetch();
 })
 
