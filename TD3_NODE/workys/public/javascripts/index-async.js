@@ -62,7 +62,13 @@ const updateFilters = () => {
     })
 }
 
+var FETCH_LOCK = false;
+
 const asyncAnnoncesFetch = () => {
+    // LOCK ON FETCH
+    if(FETCH_LOCK) return;
+    FETCH_LOCK = true;
+    
     // Retrieve the filters
     updateFilters();
 
@@ -116,6 +122,10 @@ const asyncAnnoncesFetch = () => {
 
     request.fail((err) => {
         console.log(err);
+    })
+
+    request.always(() => {
+        FETCH_LOCK = false;
     })
 }
 
