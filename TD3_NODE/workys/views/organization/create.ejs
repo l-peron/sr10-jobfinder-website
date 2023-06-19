@@ -1,10 +1,39 @@
-<body>
-    <h1><%= title %></h1>
-    <form method="post" action="/organization/create/validate">
-        <input type="text" name="org_siren" placeholder="SIREN"/>
-        <input type="text" name="org_name" placeholder="Nom de l'organisation"/>
-        <input type="text" name="org_type" placeholder="Type de l'organisation"/>
-        <input type="text" name="org_adress" placeholder="Adresse de l'organisation"/>
-        <input type="submit" value="Envoyer"/>
-    </form> 
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/stylesheets/organisation_create.css"/>
+    <title>S'INSCRIRE</title>
+  </head>
+  <body>
+    <main class="d-flex justify-content-center">
+      <section id="register_wrapper" class="border border-2 border-dark">
+        <h1><%= title %></h1>
+        <form method="post" action="/organization/create/validate" class="container d-flex flex-column justify-content-center">
+            <div class="d-flex">
+                <div class="p-2 d-inline-block flex-grow-1">
+                    <h2>SIREN</h2>
+                    <input type="text" name="org_siren" placeholder="SIREN" class="border border-2 border-dark py-1 px-2"/>
+                </div>
+                <div class="p-2 d-inline-block flex-grow-1">
+                    <h2>Nom de l'organisation</h2>
+                    <input type="text" name="org_name" placeholder="Nom de l'organisation" class="border border-2 border-dark py-1 px-2"/>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="p-2 d-inline-block flex-grow-1">
+                    <h2>Type de l'organisation</h2>
+                    <input type="text" name="org_type" placeholder="Type de l'organisation" class="border border-2 border-dark py-1 px-2"/>
+                </div>
+                <div class="p-2 d-inline-block flex-grow-1">
+                    <h2>Adresse de l'organisation</h2>
+                    <input type="text" name="org_adress" placeholder="Adresse de l'organisation" class="border border-2 border-dark py-1 px-2"/>
+                </div>
+            </div> 
+            <input type="submit" class="m-2 border border-2 border-dark d-flex justify-content-center" value="Demander la création"/>
+        </form> 
+      </section>
+    </main>
+  </body>
+</html>
