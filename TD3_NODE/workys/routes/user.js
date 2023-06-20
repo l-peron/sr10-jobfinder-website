@@ -48,24 +48,31 @@ router.post('/:id/update', function (req, res, next) {
     user_phone : req.body.phone,
   }
 
+  const user_password = req.body.pwd;
+
   for (const [key, value] of Object.entries(user_update)) {
     if(!value || value === '')
       return res.status(403).send('Null or empty values');
   }
 
-  result=userModel.update(
-      user_id, 
-      user_update.user_fname, 
-      user_update.user_lname, 
-      user_update.user_mail, 
-      user_update.user_phone,
+  userModel.areValid(req.session.user.user_mail, user_password, function(valid) {
+    if(valid) {
+      result=userModel.update(
+        user_id, 
+        user_update.user_fname, 
+        user_update.user_lname, 
+        user_update.user_mail, 
+        user_update.user_phone,
       function(result) {
         if(req.session.user.user_id === user_id) {
           return res.redirect('/connect/logout');
         }
-        
         return res.redirect(`/user/${user_id}`)
       });
+    } else {
+      return res.redirect('back');
+    }
+  })
 });
 
 // CANDIDATURES

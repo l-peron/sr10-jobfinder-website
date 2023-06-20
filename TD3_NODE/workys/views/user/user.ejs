@@ -43,24 +43,30 @@
                         </div>
                     </div>
                     <!-- Default row -->
-                    <div id="default-row" class="row">
-                        <div class="col mx-1 my-2 w-100">
+                    <div id="default-row" class="row justify-content-center m-5">
+                        <div class="col-4 mx-1 my-2 align-self-center">
                             <button type="button" class="w-100" onclick="modifyInfos()">
                                 Modifier mes informations
                             </button>
                         </div>
                     </div>
                     <!-- Save row -->
-                    <div id="save-row" class="row d-none">
-                        <div class="col mx-1 my-2 w-100">
-                            <button type="button" class="w-100" onclick="cancelModifications()">
-                                Annuler
-                            </button>
+                    <div id="save-row" class="row d-none justify-content-center m-5">
+                        <div class="row justify-content-center">
+                            <h2 class="col-4">Veuillez entrer votre mot de passe pour effectuer les changements...</h2>
+                            <input class="col-4" type="password" name="pwd" placeholder="Mot de passe" required/>
                         </div>
-                        <div class="col mx-1 my-2 w-100">
-                            <button class="w-100 bg-dark text-white border-2 border-white">
-                                Sauvegarder les modifications
-                            </button>
+                        <div class="row justify-content-center">
+                            <div class="col-4 mx-1 my-2">
+                                <button type="button" class="w-100" onclick="cancelModifications()">
+                                    Annuler
+                                </button>
+                            </div>
+                            <div class="col-4 mx-1 my-2">
+                                <button class="w-100 bg-dark text-white border-2 border-white">
+                                    Sauvegarder les modifications
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
