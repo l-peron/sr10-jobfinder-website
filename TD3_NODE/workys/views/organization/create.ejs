@@ -4,36 +4,54 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/stylesheets/organisation_create.css"/>
-    <title>S'INSCRIRE</title>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <title>CREER UNE ORGANISATION</title>
   </head>
   <body>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../header.ejs'); %>
     <main class="d-flex justify-content-center">
       <section id="register_wrapper" class="border border-2 border-dark">
         <h1><%= title %></h1>
-        <form method="post" action="/organization/create/validate" class="container d-flex flex-column justify-content-center">
-            <div class="d-flex">
-                <div class="p-2 d-inline-block flex-grow-1">
+        <form method="post" action="/organization/create/validate" class="container d-flex flex-column justify-content-center needs-validation" novalidate>
+            <div class="row">
+                <div class="col p-2">
                     <h2>SIREN</h2>
-                    <input type="text" name="org_siren" placeholder="SIREN" class="border border-2 border-dark py-1 px-2"/>
+                    <input type="text" name="org_siren" placeholder="SIREN" class="border border-2 border-dark py-1 px-2" required/>
+                    <div class="invalid-feedback">
+                      Veuillez renseigner le SIREN de l'organisation
+                    </div>
                 </div>
-                <div class="p-2 d-inline-block flex-grow-1">
+                <div class="col p-2">
                     <h2>Nom de l'organisation</h2>
-                    <input type="text" name="org_name" placeholder="Nom de l'organisation" class="border border-2 border-dark py-1 px-2"/>
+                    <input type="text" name="org_name" placeholder="Nom de l'organisation" class="border border-2 border-dark py-1 px-2" required/>
+                    <div class="invalid-feedback">
+                      Veuillez renseigner le nom de l'organisation
+                    </div>
                 </div>
             </div>
-            <div class="d-flex">
-                <div class="p-2 d-inline-block flex-grow-1">
+            <div class="row d-flex">
+                <div class="col p-2">
                     <h2>Type de l'organisation</h2>
-                    <input type="text" name="org_type" placeholder="Type de l'organisation" class="border border-2 border-dark py-1 px-2"/>
-                </div>
-                <div class="p-2 d-inline-block flex-grow-1">
+                    <input type="text" name="org_type" placeholder="Type de l'organisation" class="border border-2 border-dark py-1 px-2" required/>
+                    <div class="invalid-feedback">
+                      Veuillez renseigner le type d'organisation
+                    </div>
+                  </div>
+                <div class="col p-2">
                     <h2>Adresse de l'organisation</h2>
-                    <input type="text" name="org_adress" placeholder="Adresse de l'organisation" class="border border-2 border-dark py-1 px-2"/>
+                    <input type="text" name="org_adress" placeholder="Adresse de l'organisation" class="border border-2 border-dark py-1 px-2" required/>
+                    <div class="invalid-feedback">
+                      Veuillez renseigner l'adresse de l'organisation
+                    </div>
                 </div>
             </div> 
             <input type="submit" class="m-2 border border-2 border-dark d-flex justify-content-center" value="Demander la création"/>
         </form> 
       </section>
     </main>
+    <%- include('../nav.ejs'); %>
   </body>
+  <script src="/javascripts/bootstrap-form-validation.js"></script>
 </html>

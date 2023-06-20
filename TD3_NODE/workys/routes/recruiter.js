@@ -9,7 +9,7 @@ var workflowModel = require('../models/workflows.js');
 
 // Recrutier check 🥳
 router.use('/', function(req, res, next) {
-  if(req.session.user.user_role === 'utilisateur')
+  if(req.session.user.user_role !== 'recruteur')
     return res.redirect('/');
   
   next()

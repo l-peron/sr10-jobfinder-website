@@ -8,7 +8,7 @@
             <li class="border border-2 border-white p-2 m-2 w-100 d-block">
                 <a href="/user/me">Mon compte</a>
             </li>
-            <% if(user.user_role != 'utilisateur' && user.org_siren !== null) { %>
+            <% if(user.user_role === 'recruteur') { %>
                 <li class="border border-2 border-white p-2 m-2 w-100 d-block">
                     <a href="/recruiter">Espace recruteur</a>
                 </li>
@@ -20,7 +20,7 @@
                     <a href="/organization/create">Créer une organisation</a>
                 </li>
             <% } %>
-            <% if(user.user_role === 'administrateur') { %>
+            <% if(user.is_admin) { %>
                 <li class="border border-2 border-white p-2 m-2 w-100 d-block">
                     <a href="/admin">Espace administrateur</a>
                 </li>

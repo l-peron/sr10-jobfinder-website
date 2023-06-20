@@ -35,8 +35,9 @@
                         <h2>
                             Mes pièces
                         </h2>
-                        <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="#" id="candidature_form" enctype="multipart/form-data">
-                            <div class="row w-100 p-0 m-0" id="fileRow0"><input type="file" name="file[]" placeholder="Fichier" class="fileFields col-sm form-control rounded-0 h-100">
+                        <form class="border border-1 border-dark p-0 d-block mh-25 needs-validation" method="post" action="#" id="candidature_form" enctype="multipart/form-data" novalidate>
+                            <div class="row w-100 p-0 m-0" id="fileRow0">
+                                <input type="file" name="file[]" placeholder="Fichier" class="fileFields col-sm form-control rounded-0 h-100" required>
                                 <select name="type[]" class="col-sm border-0">
                                     <option value="Autre">Autre</option>
                                     <option value="CV">CV</option>
@@ -44,13 +45,13 @@
                                 </select>
                                 <button class="col-sm border-0 btn btn-dark rounded-0" disabled></button>
                             </div>
+                            <div class="row m-2">
+                                <button type="button" onclick="addPiece()">Ajouter une pièce</button>
+                            </div>
+                            <div class="row m-2">
+                                <input type="submit" value="Envoyer ma candidature"/>
+                            </div>
                         </form>
-                    </div>
-                    <div class="row m-2">
-                        <button onclick="addPiece()">Ajouter une pièce</button>
-                    </div>
-                    <div class="row m-2">
-                        <button onclick="submitForm()">Envoyer ma candidature</button>
                     </div>
                 </div>
             </div>
@@ -149,7 +150,7 @@
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/index-async.js"></script>
     <script src="/javascripts/index-filters.js"></script>
-    <script src="/javascripts/fileUpload.js">
-    </script>
+    <script src="/javascripts/fileUpload.js"></script>
+    <script src="/javascripts/bootstrap-form-validation.js"></script>
   </body>
 </html>

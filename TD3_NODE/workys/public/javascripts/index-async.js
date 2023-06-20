@@ -111,9 +111,14 @@ const asyncAnnoncesFetch = () => {
         $("#spinner-wrapper").addClass("d-none");
         $("#spinner-wrapper").removeClass("d-block");
 
-        result.annonces.forEach((annonce) => {
-            annoncesList.append(createAnnonce(annonce))
-        })
+        if(result.annonces.length > 0) {
+            result.annonces.forEach((annonce) => {
+                annoncesList.append(createAnnonce(annonce))
+            })
+        } else {
+            var $h3 = $("<h3>", {"class": "border-bottom border-1 border-grey"}).appendTo(annoncesList)
+            $("<p>").text("Aucune offre ne correspond à la recherche...").appendTo($h3)
+        }
 
         if(result.has_before){
             $("#prev-page-btn").addClass("d-block")

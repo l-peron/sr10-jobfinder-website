@@ -61,6 +61,6 @@ th {
 }
 
 td {
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid lightgrey !important;
     max-width: 700px;
 }

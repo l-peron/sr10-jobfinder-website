@@ -64,7 +64,7 @@ router.get('/', function(req, res, next) {
 
       return res.json({ result : { 
         annonces : annonces.slice(query_page * PAGE_SIZE, (query_page + 1) * PAGE_SIZE) ,
-        has_before : query_page > 0,
+        has_before : query_page > 0 && (query_page * PAGE_SIZE) < annonces.length,
         has_after : ((query_page + 1) * PAGE_SIZE) < annonces.length
       }})
     })

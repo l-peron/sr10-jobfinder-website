@@ -9,19 +9,25 @@
   <body>
     <main class="d-flex justify-content-center">
         <section class="w-50 vh-100 d-flex justify-content-center align-items-center">
-            <form method="post" action="/connect/login" class="container d-flex flex-column justify-content-center align-items-center">
+            <form method="post" action="/connect/login" class="container d-flex flex-column justify-content-center align-items-center needs-validation" novalidate>
                 <h1 class="p-2" id="workys_title">WORKYS</h1>
                 <div class="p-3 border border-2 border-dark h-auto d-flex flex-column">
                     <div class="p-2">
                         <h2>Email</h2>
-                        <input type="text" name="mail" placeholder="Entrer votre adresse mail..." class="border border-2 border-dark py-1 px-2 w-100"/>
+                        <input type="email" name="mail" placeholder="Entrer votre adresse mail..." class="border border-2 border-dark py-1 px-2 w-100" required/>
+                        <div class="invalid-feedback">
+                          Veuillez renseigner votre e-mail
+                        </div>
                     </div>
                     <div class="p-2">
                         <h2>Mot de passe</h2>
-                        <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2 w-100"/>
+                        <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2 w-100" required/>
+                        <div class="invalid-feedback">
+                          Veuillez entrer votre mot de passe
+                        </div>
                     </div>
                     <input type="submit" value="Se connecter" class="mx-2 my-3"/>
-                    <button class="mx-2 my-2 p-3">Mot de passe oublié</button>
+                    <button type="button" class="mx-2 my-2 p-3">Mot de passe oublié</button>
                     <h3>Pas encore inscrit.e ? <a href="/register">Inscrivez-vous !</a></h3>
                 </div>
             </form>
@@ -40,5 +46,6 @@
         </aside>
     </main>
     <footer><p class="m-2">made by léo péron and eugène valty</p></footer>
+    <script src="/javascripts/bootstrap-form-validation.js"></script>
   </body>
 </html>
