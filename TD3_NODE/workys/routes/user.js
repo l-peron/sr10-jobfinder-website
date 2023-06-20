@@ -5,6 +5,7 @@ var piecesJointesModel = require('../models/pieces_jointes.js');
 var fs = require('fs');
 var router = express.Router();
 var multiparty = require('multiparty');
+const bcrypt = require("bcrypt")
 
 const FILE_PATH = `${__dirname}/../private/files/`
 
@@ -19,7 +20,9 @@ router.get('/me', function (req, res, next) {
 
 // PERSONAL OR ADMIN HEADER
 
-router.use(function(req, res, next) {
+router.use('/:id', function(req, res, next) {
+  const user_id = Number(req.params.id);
+
   if(req.session.user.user_role !== 'administrateur' && req.session.user.user_id != user_id)
     return res.redirect('/')
 
@@ -55,23 +58,28 @@ router.post('/:id/update', function (req, res, next) {
       return res.status(403).send('Null or empty values');
   }
 
-  userModel.areValid(req.session.user.user_mail, user_password, function(valid) {
-    if(valid) {
-      result=userModel.update(
-        user_id, 
-        user_update.user_fname, 
-        user_update.user_lname, 
-        user_update.user_mail, 
-        user_update.user_phone,
-      function(result) {
-        if(req.session.user.user_id === user_id) {
-          return res.redirect('/connect/logout');
-        }
-        return res.redirect(`/user/${user_id}`)
-      });
-    } else {
-      return res.redirect('back');
-    }
+  userModel.read(req.session.user.user_mail, function(user_result) {
+    user_result = user_result[0];
+    
+    bcrypt.compare(user_password, user_result.password, function(err, valid) {
+      if(valid) {
+        result=userModel.update(
+          user_id, 
+          user_update.user_fname, 
+          user_update.user_lname, 
+          user_update.user_mail, 
+          user_update.user_phone,
+        function(result) {
+          if(req.session.user.user_id === user_id) {
+            return res.redirect('/connect/logout');
+          }
+          return res.redirect(`/user/${user_id}`)
+        });
+      } else {
+        console.log(err);
+        return res.redirect('back');
+      }
+    })
   })
 });
 
