@@ -14,6 +14,8 @@ var filters = {
 const annoncesList = $("#annonces-list");
 
 const createAnnonce = (annonce) => {
+    console.log(annonce);
+
     var $article = $("<article>", {"class": "border border-2 border-dark p-2 my-3"});
 
     // Title
@@ -29,9 +31,13 @@ const createAnnonce = (annonce) => {
     
     // Footer
     var $divFooter = $("<div>", {"class" : "row align-items-end"}).appendTo($article);
+
     // Candidater button
     var $divFooterLeft = $("<div>", {"class" : "col-3 align-self-start"}).appendTo($divFooter)
-    $("<button>", {"class": "w-100", "click" : () => openAnnonceModal(annonce) }).text("Candidater").appendTo($divFooterLeft)
+
+    if(!annonce.has_applied) {
+        $("<button>", {"class": "w-100", "click" : () => openAnnonceModal(annonce) }).text("Candidater").appendTo($divFooterLeft)
+    }
     
     $("<div>", {"class" : "col-6"}).appendTo($divFooter)
 

@@ -141,7 +141,7 @@ router.get('/:id/candidatures/:cid/pieces_jointes/:pjid/delete', function(req, r
   const piece_id = Number(req.params.pjid);
 
   piecesJointesModel.delete(piece_id, function(result) {
-    res.redirect('/')
+    res.redirect('back')
   })
 })
 

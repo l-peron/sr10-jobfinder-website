@@ -1,52 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <title>WORKYS</title>
+  </head>
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    <table border>
-        <thead>
-            <tr>
-                <th>SIREN de l'entreprise</th>
-                <th>Nom de l'entreprise</th>
-                <th>Date de création</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr> 
-                <td> 
-                    <%= candidature.siren %> 
-                </td>
-                <td> 
-                    <%= candidature.name %> 
-                </td>
-                <td> 
-                    <%= candidature.date %> 
-                </td>
-                <td>
-                    <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/delete'">
-                        Supprimer la candidature
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-        <ul>
-            <form method="post" action="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/add" id="candidature_form" enctype="multipart/form-data">
-                <input type="file" name="file" placeholder="Fichier"/> 
-                <select name="type">
-                    <option value="Autre">Autre</option>
-                    <option value="CV">CV</option>
-                    <option value="Lettre de motivation">Lettre de motivation</option>
-                </select>
-                <input type="submit" value="Ajouter une pièce"/>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../../header.ejs'); %>
+    <main class="p-3">
+        <h1>
+            Candidature du <%= candidature.date.toLocaleString() %> 
+        </h1>
+        <div class="p-3">
+            <table class="w-100 border border-2 border-dark">
+                <thead class="w-100 border-bottom border-1 border-dark">
+                    <tr>
+                        <th class="px-3 text-center">Voir</th>
+                        <th class="px-3 text-center">SIREN de l'entreprise</th>
+                        <th class="px-3 text-center">Nom de l'entreprise</th>
+                        <th class="px-3 text-center">Date de la candidature</th>
+                        <th class="px-3 text-center">Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-bottom border-1 border-grey"> 
+                        <td class="py-2 px-1 text-center"> 
+                            <button onclick="window.location.href='/offreemploi/<%= candidature.offer_id %>'">
+                                Voir l'offre
+                            </button> 
+                        </td>
+                        <td class="py-2 px-1 text-center"> 
+                            <%= candidature.siren %> 
+                        </td>
+                        <td class="py-2 px-1 text-center"> 
+                            <%= candidature.name %> 
+                        </td>
+                        <td class="py-2 px-1 text-center"> 
+                            <%= candidature.date.toLocaleString() %> 
+                        </td>
+                        <td class="py-2 px-1 text-center">
+                            <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/delete'">
+                                Supprimer la candidature
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h1>Mes pièces</h1>
+        <div class="p-3">
+            <table class="w-100 border border-2 border-dark">
+                <thead class="w-100 border-bottom border-1 border-dark">
+                    <tr>
+                        <th class="px-3 text-center">Pièce jointe</th>
+                        <th class="px-3 text-center">Type de la pièce</th>
+                        <th class="px-3 text-center">Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% pieces.forEach((piece)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 px-1 text-center"> 
+                                <a href="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/<%= piece.id %>" target="_blank"><%= piece.original_filename %></a>
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= piece.categorie %>
+                                </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/<%= piece.id %>/delete'">
+                                    Supprimer la PJ
+                                </button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <h1>Ajouter une pièce</h1>
+        <div class="p-3">
+            <form 
+                method="post" 
+                class="border border-1 border-dark p-0 d-block mh-25" 
+                action="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/add" 
+                id="candidature_form" 
+                enctype="multipart/form-data"
+            >
+                <div class="row w-100 p-0 m-0" id="fileRow">
+                    <input type="file" name="file" placeholder="Fichier" class="fileFields col-sm form-control rounded-0 h-100">
+                    <select name="type" class="col-sm border-0">
+                        <option value="Autre">Autre</option>
+                        <option value="CV">CV</option>
+                        <option value="Lettre de motivation">Lettre de motivation</option>
+                    </select>
+                    <button class="col-sm border-0 bg-dark text-light" type="submit" value="Ajouter une pièce">Ajouter une pièce</button>
+                </div>
             </form>
-            <% pieces.forEach((piece)=> { %>
-                <li>
-                    <a href="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/<%= piece.id %>" target="_blank"><%= piece.original_filename %></a>
-                    <p><%= piece.categorie %></p>
-                    <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/<%= piece.id %>/delete'">
-                        Supprimer la PJ
-                    </button>
-                </li>
-            <% }) %>
-        </ul>
+        </div>
+    </main>            
+    <%- include('../../nav.ejs'); %>
 </body>
+</html>

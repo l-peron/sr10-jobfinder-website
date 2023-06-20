@@ -1,43 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <title>WORKYS</title>
+  </head>
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    <% if(candidatures.length > 0) { %>
-        <table border>
-            <thead>
-                <tr>
-                    <th>SIREN de l'entreprise</th>
-                    <th>Nom de l'entreprise</th>
-                    <th>Date de création</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% candidatures.forEach((candidature)=> { %>
-                    <tr> 
-                        <td> 
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../../header.ejs'); %>
+    <main class="p-3">
+        <h1>
+           Liste des candidatures
+        </h1>
+        <div class="p-3">
+            <table class="w-100 border border-2 border-dark">
+                <thead class="w-100 border-bottom border-1 border-dark">
+                    <tr>
+                        <th class="px-3">Voir</th>
+                        <th class="px-3 text-center">SIREN de l'entreprise</th>
+                        <th class="px-3 text-center">Nom de l'entreprise</th>
+                        <th class="px-3 text-center">Date de la candidature</th>
+                        <th class="px-3">Action</th>
+                        <th class="px-3">Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% if(candidatures.length > 0) {
+                    candidatures.forEach((candidature)=> { %>
+                    <tr class="border-bottom border-1 border-grey"> 
+                        <td class="py-2 px-1 text-center"> 
+                            <button onclick="window.location.href='/offreemploi/<%= candidature.offer_id %>'">
+                                Voir l'offre
+                            </button>
+                        </td>
+                        <td class="py-2 px-1 text-center"> 
                             <%= candidature.siren %> 
                         </td>
-                        <td> 
+                        <td class="py-2 px-1 text-center"> 
                             <%= candidature.name %> 
                         </td>
-                        <td> 
-                            <%= candidature.date %> 
+                        <td class="py-2 px-1 text-center"> 
+                            <%= candidature.date.toLocaleString() %> 
                         </td>
-                        <td>
+                        <td class="py-2 px-1 text-center"> 
                             <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>'">
                                 Modifier la candidature
                             </button>
                         </td>
-                        <td>
+                        <td class="py-2 px-1 text-center"> 
                             <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/delete'">
                                 Supprimer la candidature
                             </button>
                         </td>
                     </tr>
-                <% }) %>
-            </tbody>
-        <% } else { %>
-            Pas de candidature :(
-        <% } %>
-</body>
+                    <% }) 
+                    } else { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <p>Pas de candidature</p>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body> 
+</html>
