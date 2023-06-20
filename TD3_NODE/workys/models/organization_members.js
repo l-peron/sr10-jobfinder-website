@@ -39,7 +39,7 @@ module.exports = {
         });
     },
     getUserOrganization: function(user_id, callback) {
-        sql = "SELECT organisation FROM organisations_members WHERE user=?"
+        sql = "SELECT * FROM organisations_members WHERE user=?"
         db.query(sql, [user_id], function(err, results) {
             if(err) throw err;
             callback(results[0]);

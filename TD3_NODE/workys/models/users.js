@@ -3,9 +3,9 @@ var db = require('./db.js');
 const pageSize = Number(process.env.PAGE_SIZE);
 
 module.exports = {
-    read: function(email, callback, page = 0) {
-        sql = "SELECT * FROM utilisateurs WHERE utilisateurs.email LIKE ? LIMIT ? OFFSET ?";
-        db.query(sql, [email, pageSize, pageSize * page], function(err, results) {
+    read: function(email, callback) {
+        sql = "SELECT * FROM utilisateurs WHERE utilisateurs.email LIKE ?";
+        db.query(sql, [email], function(err, results) {
             if(err) throw err;
             callback(results);
         });
@@ -59,6 +59,13 @@ module.exports = {
     changeRole: function(id, role, callback) {
         sql = "UPDATE utilisateurs SET role=? WHERE id=?"
         db.query(sql, [role, id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
+    setAdmin: function(id, bool, callback) {
+        sql = "UPDATE utilisateurs SET admin=? WHERE id=?"
+        db.query(sql, [bool, id], function(err, results) {
             if(err) throw err;
             callback(results);
         });

@@ -6,7 +6,7 @@ var organizationMembersModel = require('../models/organization_members.js');
 
 // Now admin
 router.use(function(req, res, next) {
-  if(req.session.user.user_role != "administrateur")
+  if(!req.session.user.is_admin)
     return res.redirect('/');
 
   res.locals.user = req.session.user;
@@ -21,12 +21,11 @@ router.get('/', function(req, res, next) {
 // USERS
 
 router.get('/user/list', function(req, res, next) {
-  const page = req.query.p || 0
   const query_string = `%${req.query.q || ''}%`
 
   userModel.read(query_string, function(result) {
     return res.render('admin/user/list', { title : "Liste des utilisateurs", users: result, query: req.query })
-  }, page)
+  })
 })
 
 router.get('/user/:id', function(req, res, next) {
@@ -38,7 +37,7 @@ router.get('/user/:id', function(req, res, next) {
 router.get('/user/:id/elevate', function(req, res, next) {
   const user_id = Number(req.params.id);
 
-  userModel.changeRole(user_id, 'administrateur', function(result) {
+  userModel.setAdmin(user_id, 1, function(result) {
     return res.redirect('/admin/user/list');
   })
 })
@@ -65,7 +64,11 @@ router.get('/organization/list', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
 
   organizationModel.read(query_string, function(result) {
-    return res.render('admin/organization/list', { title : "Liste des organisations", organizations: result, query : req.query})
+    return res.render('admin/organization/list', { 
+      title : "Liste des organisations", 
+      organizations: result.filter(e => !e.active), 
+      query : req.query
+    })
   })
 })
 
@@ -78,19 +81,14 @@ router.get('/organization/:siren/enable', function(req, res, next) {
     // Get the creator of the org
     organizationModel.getOrganizationCreator(org_siren, function(result) {
       const user_id = result[0].id;
-      const user_role = result[0].role;
 
       // Change the status to that user to active in the organization
       organizationMembersModel.setActive(org_siren, user_id, 1, function(result) {
 
         // Change the role to that user to recruiter (if not admin)
-        if(user_role != 'administrateur') {
-          userModel.changeRole(user_id, 'recruteur', function(result) {
-            return res.redirect('/admin/organization/list');
-          })
-        } else {
+        userModel.changeRole(user_id, 'recruteur', function(result) {
           return res.redirect('/admin/organization/list');
-        }
+        })
       })
     })
   })

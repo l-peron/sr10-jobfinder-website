@@ -23,7 +23,7 @@ router.get('/me', function (req, res, next) {
 router.use('/:id', function(req, res, next) {
   const user_id = Number(req.params.id);
 
-  if(req.session.user.user_role !== 'administrateur' && req.session.user.user_id != user_id)
+  if(!req.session.user.is_admin && req.session.user.user_id != user_id)
     return res.redirect('/')
 
   next();
@@ -31,9 +31,6 @@ router.use('/:id', function(req, res, next) {
 
 router.get('/:id', function (req, res, next) { 
   const user_id = Number(req.params.id);
-
-  if(req.session.user.user_role !== 'administrateur' && req.session.user.user_id != user_id)
-    return res.redirect('/')
 
   result=userModel.readById(user_id, function(result) {
     const accountEmail = result.email;

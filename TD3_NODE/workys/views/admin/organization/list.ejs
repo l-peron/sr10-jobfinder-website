@@ -1,50 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <link rel="stylesheet" href="/stylesheets/index.css"/>
+    <title>WORKYS</title>
+  </head>
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    <table border>
-        <form method="get" action="/admin/organization/list">
-            <input type="text" name="q" placeholder="Rechercher une organisation..." value="<%= query.q %>"/>
-            <input type="submit" value="Rechercher"/>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <!-- Pas d'import parceque recherche ! -->
+    <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
+        <a href="/" class="navbar-brand px-3">WORKYS</a>
+        <form method="get" action="#" class="header_search w-50 p-2 border border-2 border-dark d-flex">
+            <img src="/images/mag_glass.svg" id="mag_glass"/>
+            <input type="text" name="q" placeholder="Rechercher une organisation..." value="<%= query.q %>" class="border border-0 pull-right flex-grow-1 mx-2"/>
         </form>
-        <thead>
-            <tr>
-                <th>SIREN</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Address</th>
-                <th>Active</th>
-                <th>Gérer</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% organizations.forEach((organization)=> { %>
-                <tr> 
-                    <td> 
-                        <%= organization.siren %> 
-                    </td>
-                    <td> 
-                        <%= organization.name %> 
-                    </td>
-                    <td> 
-                        <%= organization.type %> 
-                    </td> 
-                    <td> 
-                        <%= organization.address %> 
-                    </td>
-                    <td>
-                        <% if(organization.active) { %>
-                        <% } else { %>
-                            <button onclick="window.location.href='/admin/organization/<%= organization.siren %>/enable'">Rendre active</button>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if(organization.active) { %>
-                            <button onclick="window.location.href='/admin/organization/<%= organization.siren %>'">Gérer</button>
-                        <% } else { %>
-                        <% } %>
-                    </td>
-                </tr>
-            <% }) %>
-        </tbody>
+        <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
+    </header>
+    <main class="p-3">
+        <h1>
+            Liste des demandes de création d'organisation
+        </h1>
+        <div class="p-3">
+            <% if(organizations.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">SIREN</th>
+                            <th class="px-3 text-center">Name</th>
+                            <th class="px-3 text-center">Type</th>
+                            <th class="px-3 text-center">Address</th>
+                            <th class="px-3 text-center">Active</th>
+                            <th class="px-3 text-center">Gérer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% organizations.forEach((organization)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.siren %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.name %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.type %> 
+                            </td> 
+                            <td> 
+                                <%= organization.address %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <% if(organization.active) { %>
+                                <% } else { %>
+                                    <button onclick="window.location.href='/admin/organization/<%= organization.siren %>/enable'">Rendre active</button>
+                                <% } %>
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <% if(organization.active) { %>
+                                    <button onclick="window.location.href='/admin/organization/<%= organization.siren %>'">Gérer</button>
+                                <% } else { %>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune organisation ne correspond a la recherche...</p>
+                </h3>
+            <% } %>
+        </div>
+        <%- include('../../nav.ejs'); %>
+    </main>
 </body>
+</html>

@@ -8,9 +8,20 @@ var router = express.Router();
 // LIST ORGANIZATION
 router.get('/list', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
+  const user_id = req.session.user.user_id;
 
-  result = organizationModel.read(query_string, function(result) {
-    return res.render('organization/list', { title : 'Liste des organisation', organizations : result, query : req.query })
+  organizationMembersModel.getUserOrganization(user_id, function(user_orgs_result) {
+    if(user_orgs_result) {
+      organizationModel.read(user_orgs_result.organisation, function(result) {
+        const organization = result[0]
+        
+        return res.render('organization/applied', { query : req.query, organization : organization, appliance : user_orgs_result })
+      })
+    } else {
+      result = organizationModel.read(query_string, function(result) {
+        return res.render('organization/list', { title : 'Liste des organisation', organizations : result, query : req.query })
+      })
+    }
   })
 })
 

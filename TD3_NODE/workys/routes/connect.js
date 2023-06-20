@@ -74,7 +74,6 @@ router.post('/login', function(req, res, next) {
   const user_mail = req.body.mail;
   const user_pwd = req.body.pwd;
 
-  
   userModel.read(user_mail, function(user_result) {
     user_result = user_result[0];
 
@@ -87,7 +86,8 @@ router.post('/login', function(req, res, next) {
             user_id : user_result.id,
             user_mail : user_result.email,
             user_role : user_result.role,
-            org_siren : (org_result)? org_result.organisation : null
+            is_admin : user_result.admin,
+            org_siren : (org_result)? org_result.organisation : null,
           }
 
           return res.redirect('/');

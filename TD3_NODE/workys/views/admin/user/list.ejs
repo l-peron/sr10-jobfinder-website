@@ -1,69 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <link rel="stylesheet" href="/stylesheets/index.css"/>
+    <title>WORKYS</title>
+  </head>
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    <form method="get" action="/admin/user/list">
-        <input type="text" name="q" placeholder="Rechercher une organisation..." value="<%= query.q %>"/>
-        <input type="submit" value="Rechercher"/>
-    </form>
-    <table border>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Email</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% users.forEach((user)=> { %>
-                <tr> 
-                    <td> 
-                        <%= user.id %> 
-                    </td>
-                    <td> 
-                        <%= user.name %> 
-                    </td>
-                    <td> 
-                        <%= user.surname %> 
-                    </td> 
-                    <td> 
-                        <%= user.email %> 
-                    </td>
-                    <td>
-                        <button
-                            onclick="window.location.href='/admin/user/<%= user.id %>'"
-                        >
-                            Modifier
-                        </button>
-                    </td>
-                    <td>
-                        <button 
-                            onclick="window.location.href='/admin/user/<%= user.id %>/elevate'"
-                            <%= (user.role === 'administrateur')? "disabled" : ""  %>
-                        >
-                            Passer administrateur
-                        </button>
-                    </td>
-                    <td>
-                        <% if(user.active) { %>
-                            <button
-                                onclick="window.location.href='/admin/user/<%= user.id %>/desactivate'"
-                            >
-                                Desactiver le compte
-                            </button>
-                        <% } else { %>
-                            <button
-                                onclick="window.location.href='/admin/user/<%= user.id %>/activate'"
-                            >
-                                Activer le compte
-                            </button>
-                        <% } %>
-                    </td>
-                </tr>
-            <% }) %>
-        </tbody>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <!-- Pas d'import parceque recherche ! -->
+    <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
+        <a href="/" class="navbar-brand px-3">WORKYS</a>
+        <form method="get" action="#" class="header_search w-50 p-2 border border-2 border-dark d-flex">
+            <img src="/images/mag_glass.svg" id="mag_glass"/>
+            <input type="text" name="q" placeholder="Rechercher une utilisateur..." value="<%= query.q %>" class="border border-0 pull-right flex-grow-1 mx-2"/>
+        </form>
+        <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
+    </header>
+    <main class="p-3">
+        <h1>
+            Liste des utilisateurs
+        </h1>
+        <div class="p-3">
+            <% if(users.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">Email</th>
+                            <th class="px-3 text-center">Administration</th>
+                            <th class="px-3 text-center">Action</th>
+                            <th class="px-3 text-center">Activation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% users.forEach((user)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= user.email %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <button
+                                    onclick="window.location.href='/admin/user/<%= user.id %>'"
+                                >
+                                    Voir le profil de l'utilisateur
+                                </button>
+                            </td>
+                            <td class="py-2 px-1 text-center">
+                                <% if(!user.admin) { %>
+                                    <button onclick="window.location.href='/admin/user/<%= user.id %>/elevate'">
+                                        Passer administrateur
+                                    </button>
+                                <% } %>
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <% if(user.active) { %>
+                                    <button
+                                        onclick="window.location.href='/admin/user/<%= user.id %>/desactivate'"
+                                    >
+                                        Desactiver le compte
+                                    </button>
+                                <% } else { %>
+                                    <button
+                                        onclick="window.location.href='/admin/user/<%= user.id %>/activate'"
+                                    >
+                                        Activer le compte
+                                    </button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucun utilisateur ne correspond a la recherche...</p>
+                </h3>
+            <% } %>
+        </div>
+    </main>
+    <%- include('../../nav.ejs'); %>
 </body>
+</html>

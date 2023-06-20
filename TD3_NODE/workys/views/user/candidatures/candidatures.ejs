@@ -83,23 +83,25 @@
         <div class="p-3">
             <form 
                 method="post" 
-                class="border border-1 border-dark p-0 d-block mh-25" 
+                class="border border-1 border-dark p-0 d-block mh-25 needs-validation" 
                 action="/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/pieces_jointes/add" 
                 id="candidature_form" 
                 enctype="multipart/form-data"
+                novalidate
             >
                 <div class="row w-100 p-0 m-0" id="fileRow">
-                    <input type="file" name="file" placeholder="Fichier" class="fileFields col-sm form-control rounded-0 h-100">
-                    <select name="type" class="col-sm border-0">
+                    <input type="file" name="file" placeholder="Fichier" class="fileFields col form-control rounded-0 p-0" required>
+                    <select name="type" class="col border-0 m-0 p-1">
                         <option value="Autre">Autre</option>
                         <option value="CV">CV</option>
                         <option value="Lettre de motivation">Lettre de motivation</option>
                     </select>
-                    <button class="col-sm border-0 bg-dark text-light" type="submit" value="Ajouter une pièce">Ajouter une pièce</button>
+                    <input class="col border-0 bg-dark text-light m-0 p-0" type="submit" value="Ajouter une pièce"/>
                 </div>
             </form>
         </div>
     </main>            
     <%- include('../../nav.ejs'); %>
+    <script src="/javascripts/bootstrap-form-validation.js"></script>
 </body>
 </html>

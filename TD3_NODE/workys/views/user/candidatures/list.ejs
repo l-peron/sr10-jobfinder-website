@@ -15,55 +15,56 @@
            Liste des candidatures
         </h1>
         <div class="p-3">
-            <table class="w-100 border border-2 border-dark">
-                <thead class="w-100 border-bottom border-1 border-dark">
-                    <tr>
-                        <th class="px-3">Voir</th>
-                        <th class="px-3 text-center">SIREN de l'entreprise</th>
-                        <th class="px-3 text-center">Nom de l'entreprise</th>
-                        <th class="px-3 text-center">Date de la candidature</th>
-                        <th class="px-3">Action</th>
-                        <th class="px-3">Supprimer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <% if(candidatures.length > 0) {
-                    candidatures.forEach((candidature)=> { %>
-                    <tr class="border-bottom border-1 border-grey"> 
-                        <td class="py-2 px-1 text-center"> 
-                            <button onclick="window.location.href='/offreemploi/<%= candidature.offer_id %>'">
-                                Voir l'offre
-                            </button>
-                        </td>
-                        <td class="py-2 px-1 text-center"> 
-                            <%= candidature.siren %> 
-                        </td>
-                        <td class="py-2 px-1 text-center"> 
-                            <%= candidature.name %> 
-                        </td>
-                        <td class="py-2 px-1 text-center"> 
-                            <%= candidature.date.toLocaleString() %> 
-                        </td>
-                        <td class="py-2 px-1 text-center"> 
-                            <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>'">
-                                Modifier la candidature
-                            </button>
-                        </td>
-                        <td class="py-2 px-1 text-center"> 
-                            <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/delete'">
-                                Supprimer la candidature
-                            </button>
-                        </td>
-                    </tr>
-                    <% }) 
-                    } else { %>
-                        <tr class="border-bottom border-1 border-grey"> 
-                            <p>Pas de candidature</p>
+            <% if(candidatures.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3">Voir</th>
+                            <th class="px-3 text-center">SIREN de l'entreprise</th>
+                            <th class="px-3 text-center">Nom de l'entreprise</th>
+                            <th class="px-3 text-center">Date de la candidature</th>
+                            <th class="px-3">Action</th>
+                            <th class="px-3">Supprimer</th>
                         </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% candidatures.forEach((candidature)=> { %>
+                            <tr class="border-bottom border-1 border-grey"> 
+                                <td class="py-2 px-1 text-center"> 
+                                    <button onclick="window.location.href='/offreemploi/<%= candidature.offer_id %>'">
+                                        Voir l'offre
+                                    </button>
+                                </td>
+                                <td class="py-2 px-1 text-center"> 
+                                    <%= candidature.siren %> 
+                                </td>
+                                <td class="py-2 px-1 text-center"> 
+                                    <%= candidature.name %> 
+                                </td>
+                                <td class="py-2 px-1 text-center"> 
+                                    <%= candidature.date.toLocaleString() %> 
+                                </td>
+                                <td class="py-2 px-1 text-center"> 
+                                    <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>'">
+                                        Modifier la candidature
+                                    </button>
+                                </td>
+                                <td class="py-2 px-1 text-center"> 
+                                    <button onclick="window.location.href='/user/<%= user.user_id %>/candidatures/<%= candidature.id %>/delete'">
+                                        Supprimer la candidature
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune candidature en cours...</p>
+                </h3>
+            <% } %>
         </div>
     </main>
+    <%- include('../../nav.ejs'); %>
 </body> 
 </html>

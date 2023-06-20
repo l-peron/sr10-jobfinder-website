@@ -42,7 +42,10 @@ const openAnnonceModal = (annonce) => {
 }
 
 const setPage = (index) => {
-    window.history.replaceState(null, null, '?p=' + index);
+    const url = new URL(window.location);
+    url.searchParams.set('p', index);
+
+    window.history.replaceState(null, null, url.toString());
 }
 const modifyPage = (offset) => {
     const urlParams = new URLSearchParams(window.location.search);
