@@ -4,6 +4,9 @@ var userModel = require('../models/users.js');
 var organizationMembersModel = require('../models/organization_members.js');
 var offresEmploiModel = require('../models/offre_emplois.js');
 
+// For password encryption
+const bcrypt = require("bcrypt")
+const SALT_ROUNDS = 10
 
 // LOGOUT
 router.get('/logout', function(req, res, next) {
@@ -57,8 +60,12 @@ router.post('/create', function (req, res, next) {
   const user_pwd = req.body.pwd;
   const user_phnbr = req.body.phnbr;
 
-  result = userModel.createAccount(user_fname, user_lname, user_mail, user_pwd, user_phnbr, function(result) {
-    res.redirect('/connect');
+  bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
+    bcrypt.hash(user_pwd, salt, function(err, hash) {
+      result = userModel.createAccount(user_fname, user_lname, user_mail, hash, salt, user_phnbr, function(result) {
+        res.redirect('/connect');
+      })
+    })
   })
 })
 
@@ -67,12 +74,13 @@ router.post('/login', function(req, res, next) {
   const user_mail = req.body.mail;
   const user_pwd = req.body.pwd;
 
-  result = userModel.areValid(user_mail, user_pwd, function(result) {
+  
+  userModel.read(user_mail, function(user_result) {
+    user_result = user_result[0];
 
-    if(result) {
-      userModel.read(user_mail, function(user_result) {
-        user_result = user_result[0];
-        
+    bcrypt.compare(user_pwd, user_result.password, function(err, result) {
+      if (result) {
+
         organizationMembersModel.getUserOrganization(user_result.id, function(org_result) {
 
           req.session.user = {
@@ -84,9 +92,10 @@ router.post('/login', function(req, res, next) {
 
           return res.redirect('/');
         })
-      })
-    } else res.redirect('/connect');
+      } else res.redirect('/connect');
+      
+    })
   });
-})
+});
 
 module.exports = router;

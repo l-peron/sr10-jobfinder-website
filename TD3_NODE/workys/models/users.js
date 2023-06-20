@@ -42,9 +42,9 @@ module.exports = {
             }
         });
     },
-    createAccount: function(name, surname, email, password, phoneNumber, callback) {
-        sql = "INSERT INTO utilisateurs (name, surname, email, password, phone_number) VALUES (?, ?, ?, ?, ?)";
-        db.query(sql, [name, surname, email, password, phoneNumber], function(err, results) {
+    createAccount: function(name, surname, email, password, salt, phoneNumber, callback) {
+        sql = "INSERT INTO utilisateurs (name, surname, email, password, salt, phone_number) VALUES (?, ?, ?, ?, ?, ?)";
+        db.query(sql, [name, surname, email, password, salt, phoneNumber], function(err, results) {
             if(err) throw err;
             callback(results);
         });
