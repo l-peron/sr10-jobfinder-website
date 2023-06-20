@@ -95,11 +95,11 @@ const asyncAnnoncesFetch = () => {
     $("#next-page-btn").removeClass("d-block");
 
     const request = $.ajax({
-        type: 'POST',          
+        type: 'GET',          
         url : 'offreemploi', 
         data : {
-            "query" : queryParam,
-            "page": pageParam,
+            "query" : JSON.stringify(queryParam),
+            "page": JSON.stringify(pageParam),
             "filters" : JSON.stringify(filters)
         },
         asynch : false          

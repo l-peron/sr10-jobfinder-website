@@ -11,12 +11,12 @@ var multiparty = require('multiparty');
 const FILE_PATH = `${__dirname}/../private/files/`
 const PAGE_SIZE = process.env.PAGE_SIZE;
 
-router.post('/', function(req, res, next) {
-  const query_string = `%${req.body.query || ''}%`
-  const query_page = Number(req.body.page) || 0
+router.get('/', function(req, res, next) {
+  const query_string = `%${(JSON.parse(req.query.query) || '')}%`
+  const query_page = Number(JSON.parse(req.query.page)) || 0
   const user_id = req.session.user.user_id;
 
-  const filters = JSON.parse(req.body.filters);
+  const filters = JSON.parse(req.query.filters);
 
   offreEmploiModel.searchAllWithExtendedInfos(query_string, function(result) {
     candidaturesModel.readByUserId(user_id, function(candidatures_result) {

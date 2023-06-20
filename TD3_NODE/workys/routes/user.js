@@ -84,7 +84,7 @@ router.get('/:id/candidatures/:cid', function (req, res, next) {
   candidaturesModel.readById(candidature_id, function(result) {
     const candidature_result = result[0]
 
-    piecesJointesModel.read(candidature_id, function(piece_result) {
+    piecesJointesModel.readByCandidatureId(candidature_id, function(piece_result) {
       return res.render('user/candidatures/candidatures', { title: `Candidature X`, candidature: candidature_result, pieces : piece_result });
     })
   })
@@ -123,13 +123,13 @@ router.post('/:id/candidatures/:cid/pieces_jointes/add', function(req, res, next
 })
 
 router.get('/:id/candidatures/:cid/pieces_jointes/:pjid', function(req, res, next) {
-  const candidature_id = Number(req.params.cid);
+  const piece_id = Number(req.params.pjid);
 
-  piecesJointesModel.read(candidature_id, function(result) {
+  piecesJointesModel.read(piece_id, function(result) {
     try {
       const piece_result = result[0]
       const file = `${FILE_PATH}${piece_result.filename}`;
-      
+
       return res.download(file, piece_result.orginal_filename);
     } catch {
       return res.status(404).send('File not found');
