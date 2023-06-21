@@ -11,67 +11,71 @@
     <script type="module" src="/javascripts/index.js"></script>
     <%- include('../../header.ejs'); %>
     <main class="p-3">
-        <h1>
-            <%= list_title %>
-        </h1>
+        <h1><%= list_title %></h1>
         <div class="p-3">
-            <table class="w-100 border border-2 border-dark">
-                <thead class="w-100 border-bottom border-1 border-dark">
-                    <tr>
-                        <th class="px-3 text-center">Id</th>
-                        <th class="px-3 text-center">Status</th>
-                        <th class="px-3 text-center">Poste</th>
-                        <th class="px-3 text-center">Status du Poste</th>
-                        <th class="px-3 text-center">Description</th>
-                        <th class="px-3 text-center">Date de fin de validité</th>
-                        <th class="px-3">Action</th>
-                        <th class="px-3">Supprimer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% offresEmploi.forEach((offreEmploi)=> { %>
-                        <tr class="border-bottom border-1 border-grey"> 
-                            <td class="py-2 px-1 text-center"> 
-                                <%= offreEmploi.id %> 
-                            </td>
-                            <td class="py-2 px-1 text-center">
-                                <% if(offreEmploi.status != 'published') { %>
-                                    Brouillon
-                                <% } else { %>
-                                    Publié
-                                <% } %>
-                            </td>
-                            <td class="py-2 px-1"> 
-                                <p><%= offreEmploi.title %></p>
-                            </td>
-                            <td class="py-2 px-1"> 
-                                <p><%= offreEmploi.poste_status %></p>
-                            </td>
-                            <td class="py-2 px-1"> 
-                                <div class="description">
-                                    <p><%= offreEmploi.description %></p>
-                                </div> 
-                            </td>
-                            <td class="py-2 px-1 text-center">
-                                <%= offreEmploi.valid_date %>
-                            </td>
-                            <td class="py-2 px-1">
-                                <div class="d-flex flex-column h-100">
-                                    <% if(offreEmploi.status != 'published') { %>
-                                        <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/published'">Publier</button>
-                                    <% } else { %>
-                                        <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/drafted'">Mettre en brouillon</button>
-                                    <% } %>
-                                    <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/edit'">Editer</button>
-                                </div>
-                            </td>
-                            <td class="py-2 px-1">
-                                <button onclick="window.location.href='/admin/organization/<%= offreEmploi.id %>/delete'">Supprimer</button>
-                            </td>
+            <% if(offresEmploi.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">Id</th>
+                            <th class="px-3 text-center">Status</th>
+                            <th class="px-3 text-center">Poste</th>
+                            <th class="px-3 text-center">Status du Poste</th>
+                            <th class="px-3 text-center">Description</th>
+                            <th class="px-3 text-center">Date de fin de validité</th>
+                            <th class="px-3">Action</th>
+                            <th class="px-3">Supprimer</th>
                         </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% offresEmploi.forEach((offreEmploi)=> { %>
+                            <tr class="border-bottom border-1 border-grey"> 
+                                <td class="py-2 px-1 text-center"> 
+                                    <%= offreEmploi.id %> 
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    <% if(offreEmploi.status != 'published') { %>
+                                        Brouillon
+                                    <% } else { %>
+                                        Publié
+                                    <% } %>
+                                </td>
+                                <td class="py-2 px-1"> 
+                                    <p><%= offreEmploi.title %></p>
+                                </td>
+                                <td class="py-2 px-1"> 
+                                    <p><%= offreEmploi.poste_status %></p>
+                                </td>
+                                <td class="py-2 px-1"> 
+                                    <div class="description">
+                                        <p><%= offreEmploi.description %></p>
+                                    </div> 
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    <%= offreEmploi.valid_date %>
+                                </td>
+                                <td class="py-2 px-1">
+                                    <div class="d-flex flex-column h-100">
+                                        <% if(offreEmploi.status != 'published') { %>
+                                            <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/published'">Publier</button>
+                                        <% } else { %>
+                                            <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/drafted'">Mettre en brouillon</button>
+                                        <% } %>
+                                        <button class="my-1" onclick="window.location.href='/recruiter/offresemploi/<%= offreEmploi.id %>/edit'">Editer</button>
+                                    </div>
+                                </td>
+                                <td class="py-2 px-1">
+                                    <button onclick="window.location.href='/admin/organization/<%= offreEmploi.id %>/delete'">Supprimer</button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey my-2"> 
+                    <p>Aucune offres d'emploi pour l'instant...</p>
+                </h3>
+            <% } %>
         </div>
         <h1><%= create_title %></h1>
         <form method="post" action="/recruiter/offresemploi/create" class="d-flex flex-column flex-grow-1 p-3">

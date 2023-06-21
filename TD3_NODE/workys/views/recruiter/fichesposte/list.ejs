@@ -12,46 +12,52 @@
     <%- include('../../header.ejs'); %>
     <main class="p-3">
         <h1><%= list_title%></h1>
-        <table class="w-100 border border-2 border-dark m-2">
-            <thead class="w-100 border-bottom border-1 border-dark">
-                <tr>
-                    <th class="px-3 text-center">Titre</th>
-                    <th class="px-3 text-center">Status</th>
-                    <th class="px-3 text-center">Type</th>
-                    <th class="px-3 text-center">Adresse</th>
-                    <th class="px-3 text-center">Description</th>
-                    <th class="px-3 text-center">Responsable</th>
-                    <th class="px-3 text-center">Détail</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% fichesPoste.forEach((fichePoste)=> { %>
-                    <tr class="border-bottom border-1 border-grey"> 
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.title %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.status %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.type %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.address %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.description %> 
-                        </td>
-                        <td class="py-2 text-center"> 
-                            <%= fichePoste.responsable.name + ' ' + fichePoste.responsable.surname %> 
-                        </td>
-                        <td>
-                            <button class="mx-2 my-1" onclick="window.location.href='/recruiter/fichesposte/<%= fichePoste.id %>/edit'">Détail</button>
-                        </td>
+        <% if(fichesPoste.length > 0) { %>
+            <table class="w-100 border border-2 border-dark m-2">
+                <thead class="w-100 border-bottom border-1 border-dark">
+                    <tr>
+                        <th class="px-3 text-center">Titre</th>
+                        <th class="px-3 text-center">Status</th>
+                        <th class="px-3 text-center">Type</th>
+                        <th class="px-3 text-center">Adresse</th>
+                        <th class="px-3 text-center">Description</th>
+                        <th class="px-3 text-center">Responsable</th>
+                        <th class="px-3 text-center">Détail</th>
                     </tr>
-                <% }) %>   
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% fichesPoste.forEach((fichePoste)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 text-center"> 
+                                <%= fichePoste.title %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= fichePoste.status %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= fichePoste.type %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= fichePoste.address %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= fichePoste.description %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= fichePoste.responsable.name + ' ' + fichePoste.responsable.surname %> 
+                            </td>
+                            <td>
+                                <button class="mx-2 my-1" onclick="window.location.href='/recruiter/fichesposte/<%= fichePoste.id %>/edit'">Détail</button>
+                            </td>
+                        </tr>
+                    <% }) %>   
+                </tbody>
+            </table>
+        <% } else { %>
+            <h3 class="border-bottom border-1 border-grey my-2"> 
+                <p>Aucune fiches de poste pour l'instant...</p>
+            </h3>
+        <% } %>
         <h1><%= create_title %></h1>
         <form method="post" action="/recruiter/fichesposte/create" class="m-2 p-2">
             <div class="container">

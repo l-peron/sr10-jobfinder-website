@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/candidature_list.css"/>
+    <title>WORKYS</title>
+  </head>
+  <body>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../../header.ejs'); %>
+    <main class="p-3">
+        <h1><%= list_title%></h1>
+        <% if(candidatures.length > 0) { %>
+            <table class="w-100 border border-2 border-dark m-2">
+                <thead class="w-100 border-bottom border-1 border-dark">
+                    <tr>
+                        <th class="px-3 text-center">Prénom</th>
+                        <th class="px-3 text-center">Nom</th>
+                        <th class="px-3 text-center">Adresse Mail</th>
+                        <th class="px-3 text-center">Numéro de Téléphone</th>
+                        <th class="px-3 text-center">Offre Postulé</th>
+                        <th class="px-3 text-center">Date de candidature</th>
+                        <th class="px-3 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% candidatures.forEach((candidature)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 text-center"> 
+                                <%= candidature.name %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= candidature.surname %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= candidature.email %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= candidature.phone_number %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= candidature.title %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <%= candidature.candid_date %> 
+                            </td>
+                            <td class="py-2 text-center"> 
+                                <button class="my-1" onclick="window.location.href='/recruiter/candidatures/<%= candidature.candid_id %>'">Voir la candidature</button>
+                            </td>
+                        </tr>
+                    <% }) %>   
+                </tbody>
+            </table>
+        <% } else { %>
+            <h3 class="border-bottom border-1 border-grey my-2"> 
+                <p>Aucune candidature pour l'instant...</p>
+            </h3>
+        <% } %>
+    </main>
+    <%- include('../../nav.ejs'); %>
+</body>
+</html>

@@ -6,6 +6,8 @@ var fichesPosteModel = require('../models/fiche_postes.js');
 var userModel = require('../models/users.js');
 var salaryModel = require('../models/salarys.js');
 var workflowModel = require('../models/workflows.js');
+var candidatureModel = require('../models/candidatures.js');
+const piecesJointeModel = require('../models/pieces_jointes.js');
 
 // Recrutier check 🥳
 router.use('/', function(req, res, next) {
@@ -207,6 +209,26 @@ router.post('/fichesposte/create', function(req, res, next) {
   });
 
   return res.redirect('recruiter/fichesposte/list');
+});
+
+// /candidatures
+
+router.get('/candidatures/list', function(req, res, next) {
+  result = candidatureModel.readByOrganizationSiren(req.session.user.org_siren, function(candidatures, err) {
+    candidatures = candidatures.map(c => { return { ...c, candid_date: new Date(c.candid_date).toISOString().split('T') }});
+    return res.render('recruiter/candidatures/list', { list_title: 'Liste des candidatures', candidatures });
+  });
+});
+
+router.get('/candidatures/:id', function(req, res, next) {
+
+  const id = parseInt(req.params.id);
+
+  result = candidatureModel.readyByIdWithExtendedInfos(id, function(candidature, err) {
+    result = piecesJointeModel.readByCandidatureId(id, function(pieces) {
+      return res.render('recruiter/candidatures/unique', { candidature: candidature[0], pieces});
+    });
+  });
 });
 
 // /requests
