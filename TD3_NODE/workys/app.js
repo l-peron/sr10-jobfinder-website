@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const flash = require('connect-flash');
 
 // Routers
 var indexRouter = require('./routes/index');
@@ -36,6 +37,14 @@ app.use(session({
   saveUninitialized: true,
   cookie: {}
 }))
+app.use(flash());
+
+// Flash messages handler
+app.use(function(req, res, next){
+  // On utilise "req.flash(type, msg)" pour flasher des messages
+  res.locals.messages = req.flash();
+  next();
+});
 
 // Not logged in
 app.use('/connect', connectRouter);
