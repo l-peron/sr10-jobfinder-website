@@ -19,12 +19,7 @@
                 <li>Numéro de Téléphone: <%= candidature.phone_number %></li>
             </ul>
         </div>
-        <div class="py-2">
-            <h1>Rappel de l'offre</h1>
-            <h2 class="px-4 py-3"><%= candidature.title %></h2>
-            <p><%= candidature.description %></p>
-        </div>
-        <h1>Mes pièces</h1>
+        <h1>Les pièces jointes</h1>
         <div class="p-3">
             <table class="w-100 border border-2 border-dark">
                 <thead class="w-100 border-bottom border-1 border-dark">
@@ -46,6 +41,11 @@
                     <% }) %>
                 </tbody>
             </table>
+        </div>
+        <div class="py-2 border-top border-2 border-dark">
+            <h1>Rappel de l'offre</h1>
+            <h2 class="px-4 py-3"><%= candidature.title %></h2>
+            <p><%= candidature.description %></p>
         </div>
     </main>
     <%- include('../../nav.ejs'); %>
