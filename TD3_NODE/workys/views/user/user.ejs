@@ -18,6 +18,11 @@
                 <li class="border border-2 border-dark p-2 m-2 d-block">
                     <a class="w-100 d-block" href="/user/<%= user.id %>/candidatures/list">Gestion des candidatures</a>
                 </li>
+                <% if(user.user_role !== 'recruteur') { %>
+                    <li class="border border-2 border-dark p-2 m-2 d-block">
+                        <a class="w-100 d-block" href="/user/<%= user.id %>/requests/list">Voir mes demandes d'ajout à une organisation</a>
+                    </li>
+                <% } %>
             </ul>
             <h1>
                 Modifier mes informations

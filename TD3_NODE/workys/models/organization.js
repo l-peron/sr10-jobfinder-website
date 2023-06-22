@@ -2,17 +2,8 @@ var db = require('./db.js');
 
 module.exports = {
     read: function(siren, callback) {
-        sql = "SELECT * FROM organisations WHERE siren LIKE ? AND active = 1";
+        sql = "SELECT * FROM organisations WHERE siren LIKE ?";
         db.query(sql, siren, function(err, results) {
-            if(err) throw err;
-            callback(results);
-        });
-    },
-    readNotJoined: function(siren, user_id, callback) {
-        sql = "SELECT * FROM organisations WHERE siren LIKE ? " + 
-            "AND ? NOT IN (SELECT user FROM organisations_members WHERE organisation LIKE ?) " + 
-            "AND active = 1";
-        db.query(sql, [siren, user_id, siren], function(err, results) {
             if(err) throw err;
             callback(results);
         });
@@ -25,7 +16,7 @@ module.exports = {
         });
     },
     createOrganization: function(siren, name, type, address, created_by, callback) {
-        sql = "INSERT INTO organisations (siren, name, type, address, created_by, active) VALUES (?, ?, ?, ?, ?, 0)"
+        sql = "INSERT INTO organisations (siren, name, type, address, created_by) VALUES (?, ?, ?, ?, ?)"
         db.query(sql, [siren, name, type, address, created_by], function(err, results) {
             if(err) throw err;
             callback(results);
@@ -43,9 +34,9 @@ module.exports = {
             callback(results);
         });
     },
-    setActive: function(siren, active, callback) {
-        sql = "UPDATE organisations SET active=? WHERE siren=?"
-        db.query(sql, [active, siren], function(err, results) {
+    setStatus: function(siren, status, callback) {
+        sql = "UPDATE organisations SET status=? WHERE siren=?"
+        db.query(sql, [status, siren], function(err, results) {
             if(err) throw err;
             callback(results);
         });

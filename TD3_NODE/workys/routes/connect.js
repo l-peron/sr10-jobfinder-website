@@ -80,14 +80,14 @@ router.post('/login', function(req, res, next) {
     bcrypt.compare(user_pwd, user_result.password, function(err, result) {
       if (result) {
 
-        organizationMembersModel.getUserOrganization(user_result.id, function(org_result) {
+        organizationMembersModel.getUserOrganizations(user_result.id, function(org_result) {
 
           req.session.user = {
             user_id : user_result.id,
             user_mail : user_result.email,
             user_role : user_result.role,
             is_admin : user_result.admin,
-            org_siren : (org_result)? org_result.organisation : null,
+            org_siren : (org_result.length > 0)? org_result[0].organisation : null,
           }
 
           return res.redirect('/');

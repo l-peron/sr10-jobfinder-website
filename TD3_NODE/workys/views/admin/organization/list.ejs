@@ -21,7 +21,7 @@
     </header>
     <main class="p-3">
         <h1>
-            Liste des demandes de création d'organisation
+            Liste des organisations
         </h1>
         <div class="p-3">
             <% if(organizations.length > 0) { %>
@@ -29,11 +29,11 @@
                     <thead class="w-100 border-bottom border-1 border-dark">
                         <tr>
                             <th class="px-3 text-center">SIREN</th>
-                            <th class="px-3 text-center">Name</th>
+                            <th class="px-3 text-center">Nom</th>
                             <th class="px-3 text-center">Type</th>
-                            <th class="px-3 text-center">Address</th>
-                            <th class="px-3 text-center">Active</th>
-                            <th class="px-3 text-center">Gérer</th>
+                            <th class="px-3 text-center">Adresse</th>
+                            <th class="px-3 text-center">Créée le</th>
+                            <th class="px-3 text-center"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,21 +48,16 @@
                             <td class="py-2 px-1 text-center"> 
                                 <%= organization.type %> 
                             </td> 
-                            <td> 
+                            <td class="py-2 px-1 text-center"> 
                                 <%= organization.address %> 
                             </td>
                             <td class="py-2 px-1 text-center"> 
-                                <% if(organization.active) { %>
-                                <% } else { %>
-                                    <button onclick="window.location.href='/admin/organization/<%= organization.siren %>/enable'">Rendre active</button>
-                                <% } %>
+                                <%= organization.created_at.toLocaleString() %> 
                             </td>
                             <td class="py-2 px-1 text-center"> 
-                                <% if(organization.active) { %>
-                                    <button onclick="window.location.href='/admin/organization/<%= organization.siren %>'">Gérer</button>
-                                <% } else { %>
-                                <% } %>
+                                <button onclick="window.location.href='/admin/user/<%= organization.created_by %>'">Voir le profil du créateur</button>
                             </td>
+                            
                         </tr>
                     <% }) %>
                 </tbody>

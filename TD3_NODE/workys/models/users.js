@@ -70,16 +70,9 @@ module.exports = {
             callback(results);
         });
     },
-    desactivateAccount: function(id, callback) {
-        sql = "UPDATE utilisateurs SET active=false WHERE id=?"
-        db.query(sql, [id], function(err, results) {
-            if(err) throw(err);
-            callback(results);
-        });
-    },
-    activateAccount: function(id, callback) {
-        sql = "UPDATE utilisateurs SET active=true WHERE id=?"
-        db.query(sql, [id], function(err, results) {
+    setActive: function(id, bool, callback) {
+        sql = "UPDATE utilisateurs SET active=? WHERE id=?"
+        db.query(sql, [bool, id], function(err, results) {
             if(err) throw(err);
             callback(results);
         });

@@ -10,16 +10,39 @@ router.get('/list', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
   const user_id = req.session.user.user_id;
 
-  organizationMembersModel.getUserOrganization(user_id, function(user_orgs_result) {
-    if(user_orgs_result) {
-      organizationModel.read(user_orgs_result.organisation, function(result) {
-        const organization = result[0]
+  organizationMembersModel.getUserOrganizations(user_id, function(user_orgs_result) {
+    // Utilisateur n'a aucune requête acceptée 
+    if(!user_orgs_result.some(e => e.status === 'accepted')) {
+
+      // Si une est en cours, redirection requêtes en cours
+      if(user_orgs_result.some(e => e.status === 'pending')) {
         
-        return res.render('organization/applied', { query : req.query, organization : organization, appliance : user_orgs_result })
-      })
+        return res.redirect(`/user/${user_id}/requests/list`)
+      // Sinon, on affiche la liste des organisations
+      } else {
+        organizationModel.read(query_string, function(result) {
+          return res.render('organization/list', { 
+            title : 'Liste des organisation', 
+            organizations : result.filter(e => e.status === 'accepted'), 
+            query : req.query 
+          })
+        })
+      }
+    // L'utilisateur est accepté dans une entreprise
     } else {
-      result = organizationModel.read(query_string, function(result) {
-        return res.render('organization/list', { title : 'Liste des organisation', organizations : result, query : req.query })
+      const user_org = user_orgs_result.filter(e => e.status === 'accepted')[0];
+
+      organizationModel.read(user_org.organisation, function(result) {
+        const organization = result[0];
+
+        // Soit l'entreprise est accepté (on ne devrait pas accéder à cette page)
+        if(organization.status === 'accepted') {
+          return res.redirect('/recruiter');
+
+        // Soit l'entreprise est en attente ou refusé (l'utilisateur est créateur)
+        } else {
+          return res.render('organization/pending', {organization : organization});
+        }
       })
     }
   })
@@ -34,6 +57,21 @@ router.get('/:siren/apply', function(req, res, next) {
     return res.redirect('/organization/list');
   })
 
+})
+
+router.use('/create', function(req, res, next) {
+  const user_id = req.session.user.user_id;
+
+  organizationMembersModel.getUserOrganizations(user_id, function(user_orgs_result) {
+    // Utilisateur n'a aucune requête acceptée 
+    if(user_orgs_result.some(e => e.status === 'accepted')) {
+      return res.redirect('/recruiter')
+    } else if(user_orgs_result.some(e => e.status === 'pending')){
+      return res.redirect(`/user/${user_id}/requests/list`)
+    } else {
+      next();
+    }
+  })
 })
 
 // CREATE ORGANIZATION
@@ -51,7 +89,9 @@ router.post('/create/validate', function(req, res, next) {
 
   organizationModel.createOrganization(org_siren, org_name, org_type, org_adress, user_id, function(result) {
     organizationMembersModel.apply(org_siren, user_id, function(result) {
-      return res.redirect('/');
+      organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(result) {
+        return res.redirect('/');
+      })
     })
   })
 });
