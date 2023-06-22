@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <link rel="stylesheet" href="/stylesheets/index.css"/>
+    <title>WORKYS</title>
+  </head>
+<body>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../../../header.ejs'); %>
+    <main class="p-3">
+        <h1>
+            Liste des demandes de création d'organisation
+        </h1>
+        <div class="p-3">
+            <% if(pending_organizations.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">SIREN</th>
+                            <th class="px-3 text-center">Nom</th>
+                            <th class="px-3 text-center">Type</th>
+                            <th class="px-3 text-center">Adresse</th>
+                            <th class="px-3 text-center">Créée le</th>
+                            <th class="px-3 text-center"></th>
+                            <th class="px-3 text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% pending_organizations.forEach((organization)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.siren %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.name %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.type %> 
+                            </td> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.address %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.created_at.toLocaleString() %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <button onclick="window.location.href='/admin/organization/<%= organization.siren %>/accept'">Accepter</button>
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <button onclick="window.location.href='/admin/organization/<%= organization.siren %>/reject'">Refuser</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune demande de création d'organisation</p>
+                </h3>
+            <% } %>
+        </div>
+        <h1>
+            Liste des demandes refusés
+        </h1>
+        <div class="p-3">
+            <% if(refused_organizations.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">SIREN</th>
+                            <th class="px-3 text-center">Nom</th>
+                            <th class="px-3 text-center">Type</th>
+                            <th class="px-3 text-center">Adresse</th>
+                            <th class="px-3 text-center">Créée le</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% refused_organizations.forEach((organization)=> { %>
+                        <tr class="border-bottom border-1 border-grey"> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.siren %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.name %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.type %> 
+                            </td> 
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.address %> 
+                            </td>
+                            <td class="py-2 px-1 text-center"> 
+                                <%= organization.created_at.toLocaleString() %> 
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune demande de création d'organisation refusé</p>
+                </h3>
+            <% } %>
+        </div>
+    </main>
+    <%- include('../../../nav.ejs'); %>
+</body>
+</html>

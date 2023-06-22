@@ -2,6 +2,7 @@ var express = require('express');
 var userModel = require('../models/users.js');
 var candidaturesModel = require('../models/candidatures.js');
 var piecesJointesModel = require('../models/pieces_jointes.js');
+var organizationMembersModel = require('../models/organization_members.js');
 var fs = require('fs');
 var router = express.Router();
 var multiparty = require('multiparty');
@@ -154,6 +155,17 @@ router.get('/:id/candidatures/:cid/pieces_jointes/:pjid/delete', function(req, r
 
   piecesJointesModel.delete(piece_id, function(result) {
     res.redirect('back')
+  })
+})
+
+router.get('/:id/requests/list', function(req, res, next) {
+  const user_id = Number(req.params.id);
+
+  organizationMembersModel.readByUserId(user_id, function(result) {
+    return res.render('user/request/list', { 
+      pending_requests : result.filter(e => e.status === 'pending'),
+      refused_requests : result.filter(e => e.status === 'refused')
+    });
   })
 })
 

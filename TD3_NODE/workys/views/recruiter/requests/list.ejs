@@ -1,28 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <title>WORKYS</title>
+  </head>
 <body>
-    <h1>
-        <%= title %>
-    </h1>
-    <table border>
-        <thead>
-            <tr>
-                <th>Mail</th>
-                <th>Valider</th>
-                <th>Refuser</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% requests.forEach((request)=> { %>
-                <tr> 
-                    <td> 
-                        <%= request.email %> 
-                    </td>
-                    <td> 
-                        <button onclick="window.location.href='/recruiter/requests/<%= request.user %>/validate'">Accepter</button>
-                    </td>
-                    <td> 
-                        <button onclick="window.location.href='/recruiter/requests/<%= request.user %>/reject'">Refuser</button>
-                    </td> 
-                </tr>
-            <% }) %>
-        </tbody>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../../header.ejs'); %>
+    <main class="p-3">
+        <h1>
+            Liste des demandes d'ajout à l'organisation
+        </h1>
+        <div class="p-3">
+            <% if(pending_requests.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">Mail</th>
+                            <th class="px-3 text-center">Demande envoyée le</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% pending_requests.forEach((request)=> { %>
+                            <tr class="border-bottom border-1 border-grey"> 
+                                <td class="py-2 px-1 text-center">
+                                    <%= request.email %> 
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    <%= request.requested_at.toLocaleString() %> 
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    <button onclick="window.location.href='/recruiter/requests/<%= request.user %>/accept'">Accepter</button>
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    <button onclick="window.location.href='/recruiter/requests/<%= request.user %>/reject'">Refuser</button>
+                                </td> 
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune demande d'ajout en cours</p>
+                </h3>
+            <% } %>
+        </div>
+        <h1>
+            Liste des demandes d'ajout refusés
+        </h1>
+        <div class="p-3">
+            <% if(refused_requests.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">Mail</th>
+                            <th class="px-3 text-center">Demande envoyée le</th>
+                            <th class="px-3 text-center">Demande refusé le</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% refused_requests.forEach((request)=> { %>
+                            <tr class="border-bottom border-1 border-grey"> 
+                                <td class="py-2 px-1 text-center">
+                                    <%= request.email %> 
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    <%= request.requested_at.toLocaleString() %> 
+                                </td>
+                                <td class="py-2 px-1 text-center">
+                                    TODO
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune demande refusée</p>
+                </h3>
+            <% } %>
+        </div>
+    </main>
 </body>
+</html>

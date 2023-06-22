@@ -10,18 +10,10 @@
 <body>
     <div id="main_overlay"></div>
     <script type="module" src="/javascripts/index.js"></script>
-    <!-- Pas d'import parceque recherche ! -->
-    <header class="navbar fixed-top border-bottom border-2 border-dark z-0">
-        <a href="/" class="navbar-brand px-3">WORKYS</a>
-        <form method="get" action="#" class="header_search w-50 p-2 border border-2 border-dark d-flex">
-            <img src="/images/mag_glass.svg" id="mag_glass"/>
-            <input type="text" name="q" placeholder="Rechercher une organisation..." value="<%= query.q %>" class="border border-0 pull-right flex-grow-1 mx-2"/>
-        </form>
-        <img src="/images/burger_icon.svg" id="burger_icon" class="px-3"/>
-    </header>
+    <%- include('../header.ejs'); %>
     <main class="p-3">
         <h1>
-           Demande d'ajout à une organisation en cours...
+           Etat de la demande de création d'organisation
         </h1>
         <div class="p-3">
             <table class="w-100 border border-2 border-dark">
@@ -31,7 +23,8 @@
                         <th class="px-3 text-center">Nom</th>
                         <th class="px-3 text-center">Type</th>
                         <th class="px-3 text-center">Adresse</th>
-                        <th class="px-3 text-center">Postulé le</th>
+                        <th class="px-3 text-center">Envoyée le</th>
+                        <th class="px-3 text-center">Etat</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,7 +42,14 @@
                             <%= organization.address %> 
                         </td>
                         <td class="py-2 px-1 text-center"> 
-                            <%= appliance.requested_at.toLocaleString() %> 
+                            <%= organization.created_at.toLocaleString() %> 
+                        </td>
+                        <td class="py-2 px-1 text-center"> 
+                            <% if(organization.status === 'pending') { %>
+                                En attente
+                            <% } else { %>
+                                Refusé
+                            <% } %>
                         </td>
                     </tr>
                 </tbody>

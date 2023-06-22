@@ -236,19 +236,24 @@ router.get('/candidatures/:id', function(req, res, next) {
 router.get('/requests/list', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
 
-  result = organizationMembersModel.read(org_siren, 0, function(result) {
-    return res.render('recruiter/requests/list', { title : 'Liste des requêtes d\'adhésion', requests : result })
+  result = organizationMembersModel.read(org_siren, function(result) {
+    return res.render('recruiter/requests/list', 
+    { 
+      title : 'Liste des requêtes d\'adhésion', 
+      pending_requests : result.filter(e => e.status === 'pending'),
+      refused_requests : result.filter(e => e.status === 'refused')
+    })
   })
 })
 
 // Actions
-router.get('/requests/:id/validate', function(req, res, next) {
+router.get('/requests/:id/accept', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
   const user_id = Number(req.params.id);
 
-  result = organizationMembersModel.setActive(org_siren, user_id, 1, function(result) {
+  result = organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(result) {
     result = userModel.changeRole(user_id, "recruteur", function(result) {
-      return res.redirect('/recruiter/requests/list');
+      return res.redirect('back');
     })
   })
 })
@@ -257,8 +262,8 @@ router.get('/requests/:id/reject', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
   const user_id = Number(req.params.id);
 
-  result = organizationMembersModel.delete(org_siren, user_id, function(result) {
-    return res.redirect('/recruiter/requests/list');
+  result = organizationMembersModel.setStatus(org_siren, user_id, 'refused', function(result) {
+    return res.redirect('back');
   })
 })
 
