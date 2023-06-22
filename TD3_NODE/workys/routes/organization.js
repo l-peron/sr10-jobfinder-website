@@ -11,6 +11,13 @@ router.get('/list', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
   organizationMembersModel.getUserOrganizations(user_id, function(err, user_orgs_result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     // Utilisateur n'a aucune requête acceptée 
     if(!user_orgs_result.some(e => e.status === 'accepted')) {
 
@@ -21,6 +28,13 @@ router.get('/list', function(req, res, next) {
       // Sinon, on affiche la liste des organisations
       } else {
         organizationModel.read(query_string, function(err, result) {
+          if(err) {
+            console.log(err);
+            
+            req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+            return res.redirect('back');
+          }
+
           return res.render('organization/list', { 
             title : 'Liste des organisation', 
             organizations : result.filter(e => e.status === 'accepted'), 
@@ -33,6 +47,13 @@ router.get('/list', function(req, res, next) {
       const user_org = user_orgs_result.filter(e => e.status === 'accepted')[0];
 
       organizationModel.read(user_org.organisation, function(err, result) {
+        if(err) {
+          console.log(err);
+
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
+
         const organization = result[0];
 
         // Soit l'entreprise est accepté (on ne devrait pas accéder à cette page)
@@ -46,6 +67,13 @@ router.get('/list', function(req, res, next) {
         } else {
           // Sinon, (ne devrait pas arriver), on affiche la liste
           organizationModel.read(query_string, function(err, result) {
+            if(err) {
+              console.log(err);
+
+              req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+              return res.redirect('back');
+            }
+
             return res.render('organization/list', { 
               title : 'Liste des organisation', 
               organizations : result.filter(e => e.status === 'accepted'), 
@@ -64,6 +92,13 @@ router.get('/:siren/apply', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
   result = organizationMembersModel.apply(org_siren, user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     return res.redirect('/organization/list');
   })
 
@@ -74,6 +109,13 @@ router.get('/create', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
   organizationMembersModel.getUserOrganizations(user_id, function(err, user_orgs_result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     // Utilisateur n'a aucune requête acceptée 
     if(user_orgs_result.some(e => e.status === 'accepted')) {
       return res.redirect('/recruiter')
@@ -99,8 +141,30 @@ router.post('/create/validate', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
   organizationModel.createOrganization(org_siren, org_name, org_type, org_adress, user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     organizationMembersModel.apply(org_siren, user_id, function(err, result) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(err, result) {
+        if(err) {
+          console.log(err);
+
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
+
+        req.flash('success', 'Demande de création d\'organisation envoyée')
         return res.redirect('/');
       })
     })

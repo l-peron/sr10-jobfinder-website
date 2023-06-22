@@ -14,7 +14,6 @@ var filters = {
 const annoncesList = $("#annonces-list");
 
 const createAnnonce = (annonce) => {
-    console.log(annonce);
 
     var $article = $("<article>", {"class": "border border-2 border-dark p-2 my-3"});
 
@@ -132,7 +131,6 @@ const asyncAnnoncesFetch = () => {
     })
 
     request.fail((err) => {
-        console.log(err);
     })
 
     request.always(() => {

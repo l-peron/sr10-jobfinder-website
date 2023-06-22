@@ -53,15 +53,15 @@ module.exports = {
             callback(err, results);
         });
     },
-    create: function(valid_date, description, fiche, org_siren, callback) {
-        sql= "INSERT INTO offre_emplois (valid_date, description, fiche, organisation) VALUES (?, ?, ?, ?)";
-        db.query(sql, [valid_date, description, fiche, org_siren], function(err, results) {
+    create: function(valid_date, fiche, org_siren, callback) {
+        sql= "INSERT INTO offre_emplois (valid_date, fiche, organisation) VALUES (?, ?, ?)";
+        db.query(sql, [valid_date, fiche, org_siren], function(err, results) {
             callback(err, results);
         });
     },
-    update: function(id, valid_date, description, fiche, callback) {
-        sql= " UPDATE offre_emplois SET valid_date=?, description=?, fiche=? WHERE id=?";
-        db.query(sql, [valid_date, description, fiche, id], function(err, results) {
+    update: function(id, valid_date, fiche, callback) {
+        sql= " UPDATE offre_emplois SET valid_date=?, fiche=? WHERE id=?";
+        db.query(sql, [valid_date, fiche, id], function(err, results) {
             callback(err, results);
         });
     },

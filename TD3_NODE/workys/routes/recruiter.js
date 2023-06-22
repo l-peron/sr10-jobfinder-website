@@ -11,8 +11,10 @@ const piecesJointeModel = require('../models/pieces_jointes.js');
 
 // Recrutier check 🥳
 router.use('/', function(req, res, next) {
-  if(req.session.user.user_role !== 'recruteur')
+  if(req.session.user.user_role !== 'recruteur') {
+    req.flash('error', 'Vous n\'avez pas accès a cette page')
     return res.redirect('/');
+  }
   
   next()
 })
@@ -29,7 +31,21 @@ router.get('/', function(req, res, next) {
 
 router.get('/offresemploi/list', function(req, res, next) {
   offresEmploiModel.read(req.session.user.org_siren, function(err,offres) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     fichesPosteModel.readByOrganization(req.session.user.org_siren, function(err, fiches) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       return res.render('recruiter/offresemploi/list', { list_title : 'Liste des offres d\'emplois', create_title: 'Créer une offre d\'emploi' , offresEmploi : offres.map(o => { return {...o, valid_date: new Date(o.valid_date).toLocaleDateString("fr") }; }  ), fichesPoste: fiches});
     });
   });
@@ -37,39 +53,76 @@ router.get('/offresemploi/list', function(req, res, next) {
 
 router.post('/offresemploi/create', function(req, res, next) {
   const valid_date = req.body.oe_valid_date;
-  const description = req.body.oe_description;
   const fiche_id = req.body.oe_fiche;
   const org_siren = req.session.user.org_siren;
 
-  offresEmploiModel.create(valid_date, description, fiche_id, org_siren, function(err, results) {});
-  
-  return res.redirect('/recruiter/offresemploi/list');
+  offresEmploiModel.create(valid_date, fiche_id, org_siren, function(err, results) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success', "Offre d'emploi créée avec succès")
+    return res.redirect('/recruiter/offresemploi/list');
+  });
 });
 
 router.get('/offresemploi/:id/published', function(req, res, next) {
 
   const offre_id = Number(req.params.id);
 
-  offresEmploiModel.setPublished(offre_id, function(err, results) {});
-  
-  return res.redirect('/recruiter/offresemploi/list');
+  offresEmploiModel.setPublished(offre_id, function(err, results) {
+    if(err) {
+      console.log(err);
+      
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success', "Changement d'état de l'offre d'emploi effectué avec succès")
+    return res.redirect('back');
+  });
 });
 
 router.get('/offresemploi/:id/drafted', function(req, res, next) {
 
   const offre_id = Number(req.params.id);
 
-  offresEmploiModel.setDrafted(offre_id, function(err, results) {});
+  offresEmploiModel.setDrafted(offre_id, function(err, results) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success', "Changement d'état de l'offre d'emploi effectué avec succès")
+    return res.redirect('back');
+  });
   
-  return res.redirect('/recruiter/offresemploi/list');
 });
 
 router.get('/offresemploi/:id/edit', function(req, res, next) {
   const offre_id = Number(req.params.id);
 
   offresEmploiModel.readAllWithExtendedInfos(function(err, offres) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
 
     fichesPosteModel.readByOrganization(req.session.user.org_siren, function(err, fichesPoste) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       return res.render('recruiter/offresemploi/unique', { offre: [offres.find(o => o.id === offre_id )].map(o => { return { ...o, valid_date: new Date(o.valid_date).toISOString().split('T')[0] }})[0], fichesPoste});
     });
 
@@ -80,10 +133,17 @@ router.post('/offresemploi/:id/edit', function(req, res, next) {
   const offre_id = Number(req.params.id);
 
   const valid_date = req.body.oe_valid_date;
-  const description = req.body.oe_description;
   const fiche_id = req.body.oe_fiche;
 
-  offresEmploiModel.update(offre_id, valid_date, description, fiche_id, function(err, result) {
+  offresEmploiModel.update(offre_id, valid_date, fiche_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success','Offre d\'emploi édité avec succès')
     return res.redirect(`/recruiter/offresemploi/${offre_id}/edit`);
   }); 
 });
@@ -92,10 +152,28 @@ router.post('/offresemploi/:id/edit', function(req, res, next) {
 
 router.get('/fichesposte/list', function(req, res, next) {
   result = fichesPosteModel.readByOrganization(req.session.user.org_siren, function(err, fiches) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
 
     userModel.readAll(function(err, users) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
 
       organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(err, members_id) {
+        if(err) {
+          console.log(err);
+
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
 
         const members = users.filter(u => members_id.find(m => m.user === u.id));
 
@@ -123,18 +201,48 @@ router.get('/fichesposte/:id/edit', function(req, res, next) {
   const fiche_id = Number(req.params.id);
 
   userModel.readAll(function(err, users) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
 
     organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(err, members_id) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
 
       const members = users.filter(u => members_id.find(m => m.user === u.id));
 
       fichesPosteModel.readById(fiche_id, function(err, fiche) {
+        if(err) {
+          console.log(err);
+
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
 
         fiche = fiche[0];
 
         workflowModel.read(fiche.workflow, function(err, workflow) {
+          if(err) {
+            console.log(err);
+
+            req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+            return res.redirect('back');
+          }
 
           salaryModel.read(fiche.salary, function(err, salary) {
+            if(err) {
+              console.log(err);
+
+              req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+              return res.redirect('back');
+            }
 
             cleaned_fiche = {
               id: fiche.id,
@@ -178,8 +286,30 @@ router.post('/fichesposte/:id/edit', function(req, res, next) {
   const desc = req.body.fp_desc;
 
   workflowModel.modifyWorkflow(wf_id,workflow, remote, dayoff, function(err, workflow) {
+    if(err) {
+      console.log(err);
+      
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     salaryModel.modifySalary(salary_id,(min_salary+max_salary)/2, min_salary, max_salary, function(err, salary) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       fichesPosteModel.updateFichePoste(fiche_id, title, role, type, address, desc, resp_id, function(err, result) {
+        if(err) {
+          console.log(err);
+
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
+
+        req.flash('success', 'Fiche de poste éditée avec succès')
         return res.redirect(`/recruiter/fichesposte/${fiche_id}/edit`);
       });
     });
@@ -202,19 +332,47 @@ router.post('/fichesposte/create', function(req, res, next) {
   const desc = req.body.fp_desc;
 
   workflowModel.createWorkflow(workflow, remote, dayoff, function(err, workflow) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
 
     salaryModel.createSalary((min_salary+max_salary)/2, min_salary, max_salary, function(err, salary) {
-      fichesPosteModel.createFichePoste(title, role, type, address, desc, resp_id, workflow.insertId, salary.insertId, req.session.user.org_siren, function(err, result) {});
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
+      fichesPosteModel.createFichePoste(title, role, type, address, desc, resp_id, workflow.insertId, salary.insertId, req.session.user.org_siren, function(err, result) {
+        if(err) {
+          console.log(err);
+          
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
+
+        req.flash('success', "Fiche de poste créée avec succès")
+        return res.redirect('/recruiter/fichesposte/list');
+      });
     });
   });
-
-  return res.redirect('recruiter/fichesposte/list');
 });
 
 // /candidatures
 
 router.get('/candidatures/list', function(req, res, next) {
   result = candidatureModel.readByOrganizationSiren(req.session.user.org_siren, function(err, candidatures) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     candidatures = candidatures.map(c => { return { ...c, candid_date: new Date(c.candid_date).toISOString().split('T') }});
     return res.render('recruiter/candidatures/list', { list_title: 'Liste des candidatures', candidatures });
   });
@@ -225,7 +383,21 @@ router.get('/candidatures/:id', function(req, res, next) {
   const id = parseInt(req.params.id);
 
   result = candidatureModel.readyByIdWithExtendedInfos(id, function(err, candidature) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     result = piecesJointeModel.readByCandidatureId(id, function(err, pieces) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       return res.render('recruiter/candidatures/unique', { candidature: candidature[0], pieces});
     });
   });
@@ -237,6 +409,13 @@ router.get('/requests/list', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
 
   result = organizationMembersModel.read(org_siren, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     return res.render('recruiter/requests/list', 
     { 
       title : 'Liste des requêtes d\'adhésion', 
@@ -252,7 +431,22 @@ router.get('/requests/:id/accept', function(req, res, next) {
   const user_id = Number(req.params.id);
 
   result = organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     result = userModel.changeRole(user_id, "recruteur", function(err, result) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
+      req.flash('success', 'Demande d\'adhésion à l\'organisation accepté avec succès')
       return res.redirect('back');
     })
   })
@@ -263,6 +457,14 @@ router.get('/requests/:id/reject', function(req, res, next) {
   const user_id = Number(req.params.id);
 
   result = organizationMembersModel.setStatus(org_siren, user_id, 'refused', function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success', 'Demande d\'adhésion à l\'organisation accepté avec succès')
     return res.redirect('back');
   })
 })
