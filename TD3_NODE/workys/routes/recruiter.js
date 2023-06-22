@@ -28,8 +28,8 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/offresemploi/list', function(req, res, next) {
-  offresEmploiModel.read(req.session.user.org_siren, function(offres) {
-    fichesPosteModel.readByOrganization(req.session.user.org_siren, function(fiches) {
+  offresEmploiModel.read(req.session.user.org_siren, function(err,offres) {
+    fichesPosteModel.readByOrganization(req.session.user.org_siren, function(err, fiches) {
       return res.render('recruiter/offresemploi/list', { list_title : 'Liste des offres d\'emplois', create_title: 'Créer une offre d\'emploi' , offresEmploi : offres.map(o => { return {...o, valid_date: new Date(o.valid_date).toLocaleDateString("fr") }; }  ), fichesPoste: fiches});
     });
   });
@@ -41,7 +41,7 @@ router.post('/offresemploi/create', function(req, res, next) {
   const fiche_id = req.body.oe_fiche;
   const org_siren = req.session.user.org_siren;
 
-  offresEmploiModel.create(valid_date, description, fiche_id, org_siren, function(results) {});
+  offresEmploiModel.create(valid_date, description, fiche_id, org_siren, function(err, results) {});
   
   return res.redirect('/recruiter/offresemploi/list');
 });
@@ -50,7 +50,7 @@ router.get('/offresemploi/:id/published', function(req, res, next) {
 
   const offre_id = Number(req.params.id);
 
-  offresEmploiModel.setPublished(offre_id, function(results) {});
+  offresEmploiModel.setPublished(offre_id, function(err, results) {});
   
   return res.redirect('/recruiter/offresemploi/list');
 });
@@ -59,7 +59,7 @@ router.get('/offresemploi/:id/drafted', function(req, res, next) {
 
   const offre_id = Number(req.params.id);
 
-  offresEmploiModel.setDrafted(offre_id, function(results) {});
+  offresEmploiModel.setDrafted(offre_id, function(err, results) {});
   
   return res.redirect('/recruiter/offresemploi/list');
 });
@@ -67,9 +67,9 @@ router.get('/offresemploi/:id/drafted', function(req, res, next) {
 router.get('/offresemploi/:id/edit', function(req, res, next) {
   const offre_id = Number(req.params.id);
 
-  offresEmploiModel.readAllWithExtendedInfos(function(offres) {
+  offresEmploiModel.readAllWithExtendedInfos(function(err, offres) {
 
-    fichesPosteModel.readByOrganization(req.session.user.org_siren, function(fichesPoste) {
+    fichesPosteModel.readByOrganization(req.session.user.org_siren, function(err, fichesPoste) {
       return res.render('recruiter/offresemploi/unique', { offre: [offres.find(o => o.id === offre_id )].map(o => { return { ...o, valid_date: new Date(o.valid_date).toISOString().split('T')[0] }})[0], fichesPoste});
     });
 
@@ -83,7 +83,7 @@ router.post('/offresemploi/:id/edit', function(req, res, next) {
   const description = req.body.oe_description;
   const fiche_id = req.body.oe_fiche;
 
-  offresEmploiModel.update(offre_id, valid_date, description, fiche_id, function(result) {
+  offresEmploiModel.update(offre_id, valid_date, description, fiche_id, function(err, result) {
     return res.redirect(`/recruiter/offresemploi/${offre_id}/edit`);
   }); 
 });
@@ -91,11 +91,11 @@ router.post('/offresemploi/:id/edit', function(req, res, next) {
 // Fiche poste
 
 router.get('/fichesposte/list', function(req, res, next) {
-  result = fichesPosteModel.readByOrganization(req.session.user.org_siren, function(fiches) {
+  result = fichesPosteModel.readByOrganization(req.session.user.org_siren, function(err, fiches) {
 
-    userModel.readAll(function(users) {
+    userModel.readAll(function(err, users) {
 
-      organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(members_id) {
+      organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(err, members_id) {
 
         const members = users.filter(u => members_id.find(m => m.user === u.id));
 
@@ -122,19 +122,19 @@ router.get('/fichesposte/list', function(req, res, next) {
 router.get('/fichesposte/:id/edit', function(req, res, next) {
   const fiche_id = Number(req.params.id);
 
-  userModel.readAll(function(users) {
+  userModel.readAll(function(err, users) {
 
-    organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(members_id) {
+    organizationMembersModel.getOrganizationMembers(req.session.user.org_siren, function(err, members_id) {
 
       const members = users.filter(u => members_id.find(m => m.user === u.id));
 
-      fichesPosteModel.readById(fiche_id, function(fiche) {
+      fichesPosteModel.readById(fiche_id, function(err, fiche) {
 
         fiche = fiche[0];
 
-        workflowModel.read(fiche.workflow, function(workflow) {
+        workflowModel.read(fiche.workflow, function(err, workflow) {
 
-          salaryModel.read(fiche.salary, function(salary) {
+          salaryModel.read(fiche.salary, function(err, salary) {
 
             cleaned_fiche = {
               id: fiche.id,
@@ -177,9 +177,9 @@ router.post('/fichesposte/:id/edit', function(req, res, next) {
   const max_salary = req.body.fp_salary_max;
   const desc = req.body.fp_desc;
 
-  workflowModel.modifyWorkflow(wf_id,workflow, remote, dayoff, function(workflow) {
-    salaryModel.modifySalary(salary_id,(min_salary+max_salary)/2, min_salary, max_salary, function(salary) {
-      fichesPosteModel.updateFichePoste(fiche_id, title, role, type, address, desc, resp_id, function(result) {
+  workflowModel.modifyWorkflow(wf_id,workflow, remote, dayoff, function(err, workflow) {
+    salaryModel.modifySalary(salary_id,(min_salary+max_salary)/2, min_salary, max_salary, function(err, salary) {
+      fichesPosteModel.updateFichePoste(fiche_id, title, role, type, address, desc, resp_id, function(err, result) {
         return res.redirect(`/recruiter/fichesposte/${fiche_id}/edit`);
       });
     });
@@ -201,10 +201,10 @@ router.post('/fichesposte/create', function(req, res, next) {
   const max_salary = req.body.fp_salary_max;
   const desc = req.body.fp_desc;
 
-  workflowModel.createWorkflow(workflow, remote, dayoff, function(workflow) {
+  workflowModel.createWorkflow(workflow, remote, dayoff, function(err, workflow) {
 
-    salaryModel.createSalary((min_salary+max_salary)/2, min_salary, max_salary, function(salary) {
-      fichesPosteModel.createFichePoste(title, role, type, address, desc, resp_id, workflow.insertId, salary.insertId, req.session.user.org_siren, function(result) {});
+    salaryModel.createSalary((min_salary+max_salary)/2, min_salary, max_salary, function(err, salary) {
+      fichesPosteModel.createFichePoste(title, role, type, address, desc, resp_id, workflow.insertId, salary.insertId, req.session.user.org_siren, function(err, result) {});
     });
   });
 
@@ -214,7 +214,7 @@ router.post('/fichesposte/create', function(req, res, next) {
 // /candidatures
 
 router.get('/candidatures/list', function(req, res, next) {
-  result = candidatureModel.readByOrganizationSiren(req.session.user.org_siren, function(candidatures, err) {
+  result = candidatureModel.readByOrganizationSiren(req.session.user.org_siren, function(err, candidatures) {
     candidatures = candidatures.map(c => { return { ...c, candid_date: new Date(c.candid_date).toISOString().split('T') }});
     return res.render('recruiter/candidatures/list', { list_title: 'Liste des candidatures', candidatures });
   });
@@ -224,8 +224,8 @@ router.get('/candidatures/:id', function(req, res, next) {
 
   const id = parseInt(req.params.id);
 
-  result = candidatureModel.readyByIdWithExtendedInfos(id, function(candidature, err) {
-    result = piecesJointeModel.readByCandidatureId(id, function(pieces) {
+  result = candidatureModel.readyByIdWithExtendedInfos(id, function(err, candidature) {
+    result = piecesJointeModel.readByCandidatureId(id, function(err, pieces) {
       return res.render('recruiter/candidatures/unique', { candidature: candidature[0], pieces});
     });
   });
@@ -236,7 +236,7 @@ router.get('/candidatures/:id', function(req, res, next) {
 router.get('/requests/list', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
 
-  result = organizationMembersModel.read(org_siren, function(result) {
+  result = organizationMembersModel.read(org_siren, function(err, result) {
     return res.render('recruiter/requests/list', 
     { 
       title : 'Liste des requêtes d\'adhésion', 
@@ -251,8 +251,8 @@ router.get('/requests/:id/accept', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
   const user_id = Number(req.params.id);
 
-  result = organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(result) {
-    result = userModel.changeRole(user_id, "recruteur", function(result) {
+  result = organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(err, result) {
+    result = userModel.changeRole(user_id, "recruteur", function(err, result) {
       return res.redirect('back');
     })
   })
@@ -262,7 +262,7 @@ router.get('/requests/:id/reject', function(req, res, next) {
   const org_siren = req.session.user.org_siren;
   const user_id = Number(req.params.id);
 
-  result = organizationMembersModel.setStatus(org_siren, user_id, 'refused', function(result) {
+  result = organizationMembersModel.setStatus(org_siren, user_id, 'refused', function(err, result) {
     return res.redirect('back');
   })
 })
