@@ -14,7 +14,7 @@ const FILE_PATH = `${__dirname}/../private/files/`
 router.get('/me', function (req, res, next) { 
   const accountEmail = req.session.user.user_mail;
 
-  result=userModel.read(accountEmail, function(result) {
+  result=userModel.read(accountEmail, function(err, result) {
     const user = result[0] 
     res.render('user/user', { title: `Compte de ${accountEmail}`, user: user });
   });
@@ -34,7 +34,7 @@ router.use('/:id', function(req, res, next) {
 router.get('/:id', function (req, res, next) { 
   const user_id = Number(req.params.id);
 
-  result=userModel.readById(user_id, function(result) {
+  result=userModel.readById(user_id, function(err, result) {
     const accountEmail = result.email;
     return res.render('user/user', { title: `Compte de ${accountEmail}`, user: result });
   });
@@ -57,7 +57,7 @@ router.post('/:id/update', function (req, res, next) {
       return res.status(403).send('Null or empty values');
   }
 
-  userModel.read(req.session.user.user_mail, function(user_result) {
+  userModel.read(req.session.user.user_mail, function(err, user_result) {
     user_result = user_result[0];
     
     bcrypt.compare(user_password, user_result.password, function(err, valid) {
@@ -68,7 +68,7 @@ router.post('/:id/update', function (req, res, next) {
           user_update.user_lname, 
           user_update.user_mail, 
           user_update.user_phone,
-        function(result) {
+        function(err, result) {
           if(req.session.user.user_id === user_id) {
             return res.redirect('/connect/logout');
           }
@@ -87,7 +87,7 @@ router.post('/:id/update', function (req, res, next) {
 router.get('/:id/candidatures/list', function (req, res, next) { 
   const user_id = Number(req.params.id);
 
-  candidaturesModel.readByUserId(user_id, function(result) {
+  candidaturesModel.readByUserId(user_id, function(err, result) {
     return res.render('user/candidatures/list', { title: `Candidature de X`, candidatures: result });
   })
 })
@@ -95,10 +95,10 @@ router.get('/:id/candidatures/list', function (req, res, next) {
 router.get('/:id/candidatures/:cid', function (req, res, next) { 
   const candidature_id = Number(req.params.cid);
 
-  candidaturesModel.readById(candidature_id, function(result) {
+  candidaturesModel.readById(candidature_id, function(err, result) {
     const candidature_result = result[0]
 
-    piecesJointesModel.readByCandidatureId(candidature_id, function(piece_result) {
+    piecesJointesModel.readByCandidatureId(candidature_id, function(err, piece_result) {
       return res.render('user/candidatures/candidatures', { title: `Candidature X`, candidature: candidature_result, pieces : piece_result });
     })
   })
@@ -107,7 +107,7 @@ router.get('/:id/candidatures/:cid', function (req, res, next) {
 router.get('/:id/candidatures/:cid/delete', function (req, res, next) { 
   const candidature_id = Number(req.params.cid);
 
-  candidaturesModel.delete(candidature_id, function(result) {
+  candidaturesModel.delete(candidature_id, function(err, result) {
     res.redirect('back');
   })
 })
@@ -139,7 +139,7 @@ router.post('/:id/candidatures/:cid/pieces_jointes/add', function(req, res, next
 router.get('/:id/candidatures/:cid/pieces_jointes/:pjid', function(req, res, next) {
   const piece_id = Number(req.params.pjid);
 
-  piecesJointesModel.read(piece_id, function(result) {
+  piecesJointesModel.read(piece_id, function(err, result) {
     try {
       const piece_result = result[0]
       const file = `${FILE_PATH}${piece_result.filename}`;
@@ -154,7 +154,7 @@ router.get('/:id/candidatures/:cid/pieces_jointes/:pjid', function(req, res, nex
 router.get('/:id/candidatures/:cid/pieces_jointes/:pjid/delete', function(req, res, next) {
   const piece_id = Number(req.params.pjid);
 
-  piecesJointesModel.delete(piece_id, function(result) {
+  piecesJointesModel.delete(piece_id, function(err, result) {
     res.redirect('back')
   })
 })
@@ -162,7 +162,7 @@ router.get('/:id/candidatures/:cid/pieces_jointes/:pjid/delete', function(req, r
 router.get('/:id/requests/list', function(req, res, next) {
   const user_id = Number(req.params.id);
 
-  organizationMembersModel.readByUserId(user_id, function(result) {
+  organizationMembersModel.readByUserId(user_id, function(err, result) {
     return res.render('user/request/list', { 
       pending_requests : result.filter(e => e.status === 'pending'),
       refused_requests : result.filter(e => e.status === 'refused')
@@ -173,7 +173,7 @@ router.get('/:id/requests/list', function(req, res, next) {
 router.get('/:id/organizations/requests/list', function(req, res, next) {
   const user_id = Number(req.params.id);
 
-  organizationModel.readByCreatorId(user_id, function(result) {
+  organizationModel.readByCreatorId(user_id, function(err, result) {
     return res.render('user/organization/request/list', { 
       pending_requests : result.filter(e => e.status === 'pending'),
       refused_requests : result.filter(e => e.status === 'refused')

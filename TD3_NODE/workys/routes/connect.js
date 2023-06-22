@@ -26,7 +26,7 @@ router.use(function(req, res, next) {
 // UNLOGGED
 router.get('/', function(req, res, next) {
 
-  offresEmploiModel.readAllWithExtendedInfos(function(result) {
+  offresEmploiModel.readAllWithExtendedInfos(function(err, result) {
 
     result.forEach(s => console.log(new Date() < new Date(s.valid_date)));
 
@@ -62,7 +62,7 @@ router.post('/create', function (req, res, next) {
 
   bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
     bcrypt.hash(user_pwd, salt, function(err, hash) {
-      result = userModel.createAccount(user_fname, user_lname, user_mail, hash, salt, user_phnbr, function(result) {
+      result = userModel.createAccount(user_fname, user_lname, user_mail, hash, salt, user_phnbr, function(err, result) {
         res.redirect('/connect');
       })
     })
@@ -74,13 +74,13 @@ router.post('/login', function(req, res, next) {
   const user_mail = req.body.mail;
   const user_pwd = req.body.pwd;
 
-  userModel.read(user_mail, function(user_result) {
+  userModel.read(user_mail, function(err, user_result) {
     user_result = user_result[0];
 
     bcrypt.compare(user_pwd, user_result.password, function(err, result) {
       if (result) {
 
-        organizationMembersModel.getUserOrganizations(user_result.id, function(org_result) {
+        organizationMembersModel.getUserOrganizations(user_result.id, function(err, org_result) {
 
           req.session.user = {
             user_id : user_result.id,

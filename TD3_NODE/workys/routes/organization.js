@@ -10,7 +10,7 @@ router.get('/list', function(req, res, next) {
   const query_string = `%${req.query.q || ''}%`
   const user_id = req.session.user.user_id;
 
-  organizationMembersModel.getUserOrganizations(user_id, function(user_orgs_result) {
+  organizationMembersModel.getUserOrganizations(user_id, function(err, user_orgs_result) {
     // Utilisateur n'a aucune requête acceptée 
     if(!user_orgs_result.some(e => e.status === 'accepted')) {
 
@@ -20,7 +20,7 @@ router.get('/list', function(req, res, next) {
         return res.redirect(`/user/${user_id}/requests/list`)
       // Sinon, on affiche la liste des organisations
       } else {
-        organizationModel.read(query_string, function(result) {
+        organizationModel.read(query_string, function(err, result) {
           return res.render('organization/list', { 
             title : 'Liste des organisation', 
             organizations : result.filter(e => e.status === 'accepted'), 
@@ -32,7 +32,7 @@ router.get('/list', function(req, res, next) {
     } else {
       const user_org = user_orgs_result.filter(e => e.status === 'accepted')[0];
 
-      organizationModel.read(user_org.organisation, function(result) {
+      organizationModel.read(user_org.organisation, function(err, result) {
         const organization = result[0];
 
         // Soit l'entreprise est accepté (on ne devrait pas accéder à cette page)
@@ -45,7 +45,7 @@ router.get('/list', function(req, res, next) {
 
         } else {
           // Sinon, (ne devrait pas arriver), on affiche la liste
-          organizationModel.read(query_string, function(result) {
+          organizationModel.read(query_string, function(err, result) {
             return res.render('organization/list', { 
               title : 'Liste des organisation', 
               organizations : result.filter(e => e.status === 'accepted'), 
@@ -63,7 +63,7 @@ router.get('/:siren/apply', function(req, res, next) {
   const org_siren = String(req.params.siren);
   const user_id = req.session.user.user_id;
 
-  result = organizationMembersModel.apply(org_siren, user_id, function(result) {
+  result = organizationMembersModel.apply(org_siren, user_id, function(err, result) {
     return res.redirect('/organization/list');
   })
 
@@ -73,7 +73,7 @@ router.get('/:siren/apply', function(req, res, next) {
 router.get('/create', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
-  organizationMembersModel.getUserOrganizations(user_id, function(user_orgs_result) {
+  organizationMembersModel.getUserOrganizations(user_id, function(err, user_orgs_result) {
     // Utilisateur n'a aucune requête acceptée 
     if(user_orgs_result.some(e => e.status === 'accepted')) {
       return res.redirect('/recruiter')
@@ -98,9 +98,9 @@ router.post('/create/validate', function(req, res, next) {
 
   const user_id = req.session.user.user_id;
 
-  organizationModel.createOrganization(org_siren, org_name, org_type, org_adress, user_id, function(result) {
-    organizationMembersModel.apply(org_siren, user_id, function(result) {
-      organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(result) {
+  organizationModel.createOrganization(org_siren, org_name, org_type, org_adress, user_id, function(err, result) {
+    organizationMembersModel.apply(org_siren, user_id, function(err, result) {
+      organizationMembersModel.setStatus(org_siren, user_id, 'accepted', function(err, result) {
         return res.redirect('/');
       })
     })
