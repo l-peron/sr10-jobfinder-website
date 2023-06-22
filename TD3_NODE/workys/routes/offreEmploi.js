@@ -18,8 +18,8 @@ router.get('/', function(req, res, next) {
 
   const filters = JSON.parse(req.query.filters);
 
-  offreEmploiModel.searchAllWithExtendedInfos(query_string, function(result) {
-    candidaturesModel.readByUserId(user_id, function(candidatures_result) {
+  offreEmploiModel.searchAllWithExtendedInfos(query_string, function(err, result) {
+    candidaturesModel.readByUserId(user_id, function(err, candidatures_result) {
       const annonces = result
       .filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; })
       // Filtre sur les types
@@ -75,15 +75,15 @@ router.get('/:id', function(req, res, next) {
   const offer_id = Number(req.params.id);
   const user_id = req.session.user.user_id;
 
-  result = offreEmploiModel.readWithExtendedInfos(offer_id, function(result) {
-    candidaturesModel.readByUserId(user_id, function(candidatures_result) {
+  result = offreEmploiModel.readWithExtendedInfos(offer_id, function(err, result) {
+    candidaturesModel.readByUserId(user_id, function(err, candidatures_result) {
       const offer = {...result[0], has_applied : candidatures_result.some(e => e.offer_id === result[0].id)};
 
-      organizationModel.read(offer.siren, function(organisation) {
+      organizationModel.read(offer.siren, function(err, organisation) {
 
         organisation = organisation[0];
 
-        offreEmploiModel.readAllWithExtendedInfos(function(offres) {
+        offreEmploiModel.readAllWithExtendedInfos(function(err, offres) {
 
           return res.render('offreEmploi/offreEmploi', { title : 'Titre', offre : { ...offer, organisation}, others: offres.filter(o => o.siren === organisation.siren) });
 
@@ -99,7 +99,7 @@ router.post('/:id/apply', function(req, res, next) {
 
   const form = new multiparty.Form();
 
-  result = candidaturesModel.apply(offer_id, user_id, function(result) {
+  result = candidaturesModel.apply(offer_id, user_id, function(err, result) {
     // Retrieve the last inserted candidature
     const candidature_id = result.insertId;
 
