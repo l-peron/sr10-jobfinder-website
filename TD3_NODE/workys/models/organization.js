@@ -15,6 +15,13 @@ module.exports = {
             callback(results);
         });
     },
+    readByCreatorId: function(user_id, callback) {
+        sql = "SELECT * FROM organisations WHERE created_by = ?";
+        db.query(sql, [user_id], function(err, results) {
+            if(err) throw err;
+            callback(results);
+        });
+    },
     createOrganization: function(siren, name, type, address, created_by, callback) {
         sql = "INSERT INTO organisations (siren, name, type, address, created_by) VALUES (?, ?, ?, ?, ?)"
         db.query(sql, [siren, name, type, address, created_by], function(err, results) {

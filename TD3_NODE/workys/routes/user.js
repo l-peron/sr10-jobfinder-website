@@ -3,6 +3,7 @@ var userModel = require('../models/users.js');
 var candidaturesModel = require('../models/candidatures.js');
 var piecesJointesModel = require('../models/pieces_jointes.js');
 var organizationMembersModel = require('../models/organization_members.js');
+var organizationModel = require('../models/organization.js');
 var fs = require('fs');
 var router = express.Router();
 var multiparty = require('multiparty');
@@ -163,6 +164,17 @@ router.get('/:id/requests/list', function(req, res, next) {
 
   organizationMembersModel.readByUserId(user_id, function(result) {
     return res.render('user/request/list', { 
+      pending_requests : result.filter(e => e.status === 'pending'),
+      refused_requests : result.filter(e => e.status === 'refused')
+    });
+  })
+})
+
+router.get('/:id/organizations/requests/list', function(req, res, next) {
+  const user_id = Number(req.params.id);
+
+  organizationModel.readByCreatorId(user_id, function(result) {
+    return res.render('user/organization/request/list', { 
       pending_requests : result.filter(e => e.status === 'pending'),
       refused_requests : result.filter(e => e.status === 'refused')
     });

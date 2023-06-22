@@ -40,8 +40,18 @@ router.get('/list', function(req, res, next) {
           return res.redirect('/recruiter');
 
         // Soit l'entreprise est en attente ou refusé (l'utilisateur est créateur)
-        } else {
+        } else if(organization.status === 'pending'){
           return res.render('organization/pending', {organization : organization});
+
+        } else {
+          // Sinon, (ne devrait pas arriver), on affiche la liste
+          organizationModel.read(query_string, function(result) {
+            return res.render('organization/list', { 
+              title : 'Liste des organisation', 
+              organizations : result.filter(e => e.status === 'accepted'), 
+              query : req.query 
+            })
+          })
         }
       })
     }
@@ -59,7 +69,8 @@ router.get('/:siren/apply', function(req, res, next) {
 
 })
 
-router.use('/create', function(req, res, next) {
+// Unicity check
+router.get('/create', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
   organizationMembersModel.getUserOrganizations(user_id, function(user_orgs_result) {

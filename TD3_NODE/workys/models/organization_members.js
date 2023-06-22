@@ -19,7 +19,7 @@ module.exports = {
     },
     delete: function(siren, user_id, callback) {
         sql = "DELETE FROM organisations_members WHERE user = ? AND organisation = ?";
-        db.query(sql, [siren, user_id], function(err, results) {
+        db.query(sql, [user_id, siren], function(err, results) {
             if(err) throw err;
             callback(results);
         })

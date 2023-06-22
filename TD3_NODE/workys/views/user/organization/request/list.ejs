@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
+    <title>WORKYS</title>
+  </head>
+<body>
+    <div id="main_overlay"></div>
+    <script type="module" src="/javascripts/index.js"></script>
+    <%- include('../../../header.ejs'); %>
+    <main class="p-3">
+        <h1>
+           Liste des demandes de création d'entreprise (en cours)
+        </h1>
+        <div class="p-3">
+            <% if(pending_requests.length > 0) { %>
+                <table class="w-100 border border-2 border-dark">
+                    <thead class="w-100 border-bottom border-1 border-dark">
+                        <tr>
+                            <th class="px-3 text-center">SIREN de l'entreprise</th>
+                            <th class="px-3 text-center">Date de la création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% pending_requests.forEach((pending_request)=> { %>
+                            <tr class="border-bottom border-1 border-grey"> 
+                                <td class="py-2 px-1 text-center"> 
+                                    <%= pending_request.siren %> 
+                                </td>
+                                <td class="py-2 px-1 text-center"> 
+                                    <%= pending_request.created_at.toLocaleString() %> 
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h3 class="border-bottom border-1 border-grey"> 
+                    <p>Aucune demande de création d'entreprise en cours...</p>
+                </h3>
+            <% } %>
+        </div>
+        <h1>
+            Liste des demandes de création d'entreprise refusées
+         </h1>
+         <div class="p-3">
+             <% if(refused_requests.length > 0) { %>
+                 <table class="w-100 border border-2 border-dark">
+                     <thead class="w-100 border-bottom border-1 border-dark">
+                         <tr>
+                             <th class="px-3 text-center">SIREN de l'entreprise</th>
+                             <th class="px-3 text-center">Date de la création</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <% refused_requests.forEach((refused_request)=> { %>
+                             <tr class="border-bottom border-1 border-grey"> 
+                                 <td class="py-2 px-1 text-center"> 
+                                     <%= refused_request.siren %> 
+                                 </td>
+                                 <td class="py-2 px-1 text-center"> 
+                                     <%= refused_request.created_at.toLocaleString() %> 
+                                 </td>
+                             </tr>
+                         <% }) %>
+                     </tbody>
+                 </table>
+             <% } else { %>
+                 <h3 class="border-bottom border-1 border-grey"> 
+                     <p>Aucune demande de création d'entreprise refusée...</p>
+                 </h3>
+             <% } %>
+         </div>
+    </main>
+    <%- include('../../../nav.ejs'); %>
+</body> 
+</html>
