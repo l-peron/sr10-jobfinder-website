@@ -6,8 +6,7 @@ module.exports = {
     read: function(email, callback) {
         sql = "SELECT * FROM utilisateurs WHERE utilisateurs.email LIKE ?";
         db.query(sql, [email], function(err, results) {
-            if(err) throw err;
-            callback(results);
+            callback(err, results);
         });
     },
     readById: function(user_id, callback) {
