@@ -6,8 +6,7 @@ module.exports = {
         + "JOIN utilisateurs ON utilisateurs.id = organisations_members.user "
         + "WHERE organisations_members.organisation LIKE ?";
         db.query(sql, [siren], function(err, results) {
-            if(err) throw err;
-            callback(results);
+            callback(err, results);
         });
     },
     readByUserId(user_id, callback) {

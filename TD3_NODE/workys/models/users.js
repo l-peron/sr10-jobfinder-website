@@ -12,8 +12,7 @@ module.exports = {
     readById: function(user_id, callback) {
         sql = "SELECT * FROM utilisateurs WHERE utilisateurs.id = ?";
         db.query(sql, user_id, function(err, results) {
-            if(err) throw err;
-            callback(results[0]);
+            callback(err, results[0]);
         });
     },
     readById: function(id, callback) {
@@ -31,7 +30,6 @@ module.exports = {
     areValid: function(email, password, callback) {
         sql = "SELECT password FROM utilisateurs WHERE email = ? AND active = true";
         db.query(sql, email, function(err, results) {
-            if(err) throw err;
             if(results.length === 1 && results[0].password === password) {
                 callback(err, true);
             } else {
