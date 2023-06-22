@@ -27,8 +27,12 @@ router.use(function(req, res, next) {
 router.get('/', function(req, res, next) {
 
   offresEmploiModel.readAllWithExtendedInfos(function(err, result) {
+    if(err) {
+      console.log(err);
 
-    result.forEach(s => console.log(new Date() < new Date(s.valid_date)));
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
 
     const annonces = result.filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; }).map(a => {
       return {
@@ -61,8 +65,30 @@ router.post('/create', function (req, res, next) {
   const user_phnbr = req.body.phnbr;
 
   bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     bcrypt.hash(user_pwd, salt, function(err, hash) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       result = userModel.createAccount(user_fname, user_lname, user_mail, hash, salt, user_phnbr, function(err, result) {
+        if(err) {
+          console.log(err);
+
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
+        
+        req.flash('success', "Compte créé avec succès")
         res.redirect('/connect');
       })
     })
@@ -75,12 +101,37 @@ router.post('/login', function(req, res, next) {
   const user_pwd = req.body.pwd;
 
   userModel.read(user_mail, function(err, user_result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    if(!user_result || user_result.length === 0) {
+      req.flash('error', "Aucun utilisateur ne correspond à cet email")
+      return res.redirect('back');
+    }
+
     user_result = user_result[0];
 
     bcrypt.compare(user_pwd, user_result.password, function(err, result) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       if (result) {
 
         organizationMembersModel.getUserOrganizations(user_result.id, function(err, org_result) {
+          if(err) {
+            console.log(err);
+
+            req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+            return res.redirect('back');
+          }
 
           req.session.user = {
             user_id : user_result.id,
@@ -92,8 +143,10 @@ router.post('/login', function(req, res, next) {
 
           return res.redirect('/');
         })
-      } else res.redirect('/connect');
-      
+      } else {
+        req.flash('error', "Mot de passe incorrect")
+        res.redirect('/connect');
+      }
     })
   });
 });

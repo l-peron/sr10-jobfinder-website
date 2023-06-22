@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/offresemploi_list.css"/>
     <title>WORKYS</title>
   </head>
 <body>
+    <%- include('../../error.ejs'); %>
     <div id="main_overlay"></div>
     <script type="module" src="/javascripts/index.js"></script>
     <%- include('../../header.ejs'); %>
@@ -92,10 +94,6 @@
                 <h2 class="mx-2">Date de fin de validité</h2>
                 <input type="date" name="oe_valid_date" placeholder="Date de début" class="p-1 m-2"/>
             </div>
-        </div>
-        <div class="p-1">
-            <h2>Description de l'offre</h2>
-            <textarea type="text" name="oe_description" placeholder="Description de l'offre" class="p-1 m-2 w-100 desc_offer"></textarea>
         </div>
         <input type="submit" value="Envoyer"/>
         </form>

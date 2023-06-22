@@ -19,7 +19,21 @@ router.get('/', function(req, res, next) {
   const filters = JSON.parse(req.query.filters);
 
   offreEmploiModel.searchAllWithExtendedInfos(query_string, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     candidaturesModel.readByUserId(user_id, function(err, candidatures_result) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       const annonces = result
       .filter(a => { return new Date() < new Date(a.valid_date) && a.status == 'published'; })
       // Filtre sur les types
@@ -76,14 +90,40 @@ router.get('/:id', function(req, res, next) {
   const user_id = req.session.user.user_id;
 
   result = offreEmploiModel.readWithExtendedInfos(offer_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     candidaturesModel.readByUserId(user_id, function(err, candidatures_result) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       const offer = {...result[0], has_applied : candidatures_result.some(e => e.offer_id === result[0].id)};
 
       organizationModel.read(offer.siren, function(err, organisation) {
+        if(err) {
+          console.log(err);
 
+          req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+          return res.redirect('back');
+        }
+        
         organisation = organisation[0];
 
         offreEmploiModel.readAllWithExtendedInfos(function(err, offres) {
+          if(err) {
+            console.log(err);
+
+            req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+            return res.redirect('back');
+          }
 
           return res.render('offreEmploi/offreEmploi', { title : 'Titre', offre : { ...offer, organisation}, others: offres.filter(o => o.siren === organisation.siren) });
 
@@ -100,6 +140,13 @@ router.post('/:id/apply', function(req, res, next) {
   const form = new multiparty.Form();
 
   result = candidaturesModel.apply(offer_id, user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     // Retrieve the last inserted candidature
     const candidature_id = result.insertId;
 
@@ -119,8 +166,17 @@ router.post('/:id/apply', function(req, res, next) {
         const newFileName = saveFile(parsedFiles[i].path, candidature_id);
 
         // Once saved, add the piece
-        piecesJointesModel.add(candidature_id, newFileName, parsedFiles[i].originalFilename, parsedTypes[i], () => {})
+        piecesJointesModel.add(candidature_id, newFileName, parsedFiles[i].originalFilename, parsedTypes[i], () => {
+          if(err) {
+            console.log(err);
+
+            req.flash('error', "Erreur lors de l'ajout d'une pièce jointe... Veuillez réessayer")
+            return res.redirect('back');
+          }
+        })
       }
+
+      req.flash('success','Candidature effectuée avec succès')
 
       return res.redirect('back')
     });

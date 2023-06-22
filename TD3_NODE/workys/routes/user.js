@@ -15,6 +15,13 @@ router.get('/me', function (req, res, next) {
   const accountEmail = req.session.user.user_mail;
 
   result=userModel.read(accountEmail, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+    
     const user = result[0] 
     res.render('user/user', { title: `Compte de ${accountEmail}`, user: user });
   });
@@ -25,9 +32,11 @@ router.get('/me', function (req, res, next) {
 router.use('/:id', function(req, res, next) {
   const user_id = Number(req.params.id);
 
-  if(!req.session.user.is_admin && req.session.user.user_id != user_id)
+  if(!req.session.user.is_admin && req.session.user.user_id != user_id) {
+    req.flash('error', "Vous n'avez pas accès a cette page")
     return res.redirect('/')
-
+  }
+  
   next();
 })
 
@@ -35,6 +44,13 @@ router.get('/:id', function (req, res, next) {
   const user_id = Number(req.params.id);
 
   result=userModel.readById(user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     const accountEmail = result.email;
     return res.render('user/user', { title: `Compte de ${accountEmail}`, user: result });
   });
@@ -58,9 +74,23 @@ router.post('/:id/update', function (req, res, next) {
   }
 
   userModel.read(req.session.user.user_mail, function(err, user_result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     user_result = user_result[0];
     
     bcrypt.compare(user_password, user_result.password, function(err, valid) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       if(valid) {
         result=userModel.update(
           user_id, 
@@ -69,13 +99,23 @@ router.post('/:id/update', function (req, res, next) {
           user_update.user_mail, 
           user_update.user_phone,
         function(err, result) {
+          if(err) {
+            console.log(err);
+
+            req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+            return res.redirect('back');
+          }
+
           if(req.session.user.user_id === user_id) {
+            req.flash('success', "Modification effectuées avec succès. Vous avez été deconnecté pour appliquer les changements")
             return res.redirect('/connect/logout');
           }
+
+          req.flash('success', "Modification effectuées avec succès.")
           return res.redirect(`/user/${user_id}`)
         });
       } else {
-        console.log(err);
+        req.flash('error', "Les mots de passe ne correspondent pas")
         return res.redirect('back');
       }
     })
@@ -88,6 +128,13 @@ router.get('/:id/candidatures/list', function (req, res, next) {
   const user_id = Number(req.params.id);
 
   candidaturesModel.readByUserId(user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+      
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     return res.render('user/candidatures/list', { title: `Candidature de X`, candidatures: result });
   })
 })
@@ -96,9 +143,23 @@ router.get('/:id/candidatures/:cid', function (req, res, next) {
   const candidature_id = Number(req.params.cid);
 
   candidaturesModel.readById(candidature_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     const candidature_result = result[0]
 
     piecesJointesModel.readByCandidatureId(candidature_id, function(err, piece_result) {
+      if(err) {
+        console.log(err);
+
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+
       return res.render('user/candidatures/candidatures', { title: `Candidature X`, candidature: candidature_result, pieces : piece_result });
     })
   })
@@ -106,9 +167,18 @@ router.get('/:id/candidatures/:cid', function (req, res, next) {
 
 router.get('/:id/candidatures/:cid/delete', function (req, res, next) { 
   const candidature_id = Number(req.params.cid);
+  const user_id = Number(req.params.id);
 
   candidaturesModel.delete(candidature_id, function(err, result) {
-    res.redirect('back');
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success', "Candidature supprimée avec succès")
+    res.redirect(`/user/${user_id}/candidatures/list`);
   })
 })
 
@@ -130,8 +200,16 @@ router.post('/:id/candidatures/:cid/pieces_jointes/add', function(req, res, next
     const newFileName = saveFile(parsedFile.path, candidature_id);
 
     // Once saved, add the piece
-    piecesJointesModel.add(candidature_id, newFileName, parsedFile.originalFilename, parsedType, () => {})
+    piecesJointesModel.add(candidature_id, newFileName, parsedFile.originalFilename, parsedType, () => {
+      if(err) {
+        console.log(err);
 
+        req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+        return res.redirect('back');
+      }
+    })
+
+    req.flash('success', "Pièce jointe.s ajoutée.s avec succès")
     return res.redirect('back')
   });
 })
@@ -140,6 +218,13 @@ router.get('/:id/candidatures/:cid/pieces_jointes/:pjid', function(req, res, nex
   const piece_id = Number(req.params.pjid);
 
   piecesJointesModel.read(piece_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+    
     try {
       const piece_result = result[0]
       const file = `${FILE_PATH}${piece_result.filename}`;
@@ -155,6 +240,14 @@ router.get('/:id/candidatures/:cid/pieces_jointes/:pjid/delete', function(req, r
   const piece_id = Number(req.params.pjid);
 
   piecesJointesModel.delete(piece_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash("success", "Pièce jointe supprimée avec succès")
     res.redirect('back')
   })
 })
@@ -163,6 +256,13 @@ router.get('/:id/requests/list', function(req, res, next) {
   const user_id = Number(req.params.id);
 
   organizationMembersModel.readByUserId(user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+      
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     return res.render('user/request/list', { 
       pending_requests : result.filter(e => e.status === 'pending'),
       refused_requests : result.filter(e => e.status === 'refused')
@@ -174,6 +274,13 @@ router.get('/:id/organizations/requests/list', function(req, res, next) {
   const user_id = Number(req.params.id);
 
   organizationModel.readByCreatorId(user_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
     return res.render('user/organization/request/list', { 
       pending_requests : result.filter(e => e.status === 'pending'),
       refused_requests : result.filter(e => e.status === 'refused')
