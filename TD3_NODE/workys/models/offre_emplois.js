@@ -9,7 +9,7 @@ module.exports = {
         });
     },
     readAllWithExtendedInfos: function(callback) {
-        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, offre_emplois.description, 
+        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, fiche_postes.description, 
         fiche_postes.title, fiche_postes.status AS poste_status, fiche_postes.type, fiche_postes.address, 
         fiche_postes.description AS poste_description, fiche_postes.responsable, salarys.max_salary, 
         salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off, 
@@ -26,7 +26,7 @@ module.exports = {
         });
     },
     searchAllWithExtendedInfos: function(query, callback) {
-        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, offre_emplois.description, 
+        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, fiche_postes.description, 
         fiche_postes.title, fiche_postes.status AS poste_status, fiche_postes.type, fiche_postes.address, 
         fiche_postes.description AS poste_description, fiche_postes.responsable, salarys.max_salary, 
         salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off,
