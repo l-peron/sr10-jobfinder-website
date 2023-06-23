@@ -143,9 +143,25 @@ router.post('/offresemploi/:id/edit', function(req, res, next) {
       return res.redirect('back');
     }
 
-    req.flash('success','Offre d\'emploi édité avec succès')
+    req.flash('success','Offre d\'emploi éditée avec succès')
     return res.redirect(`/recruiter/offresemploi/${offre_id}/edit`);
   }); 
+});
+
+router.get('/offresemploi/:id/delete', function(req, res, next) {
+  const offre_id = Number(req.params.id);
+
+  offresEmploiModel.delete(offre_id, function(err, result) {
+    if(err) {
+      console.log(err);
+
+      req.flash('error', "Une erreur est survenue... Veuillez réessayer")
+      return res.redirect('back');
+    }
+
+    req.flash('success','Offre d\'emploi supprimée avec succès')
+    return res.redirect(`/recruiter/offresemploi/list`);
+  });
 });
 
 // Fiche poste

@@ -83,4 +83,10 @@ module.exports = {
             callback(err, results);
         });
     },
+    delete: function(id, callback) {
+        sql="DELETE FROM offre_emplois WHERE id = ?";
+        db.query(sql, [id], function(err, results) {
+            callback(err, results);
+        });
+    }
 }
