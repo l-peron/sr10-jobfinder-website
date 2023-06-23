@@ -48,9 +48,10 @@
             <div class="d-flex row">
                 <div class="p-2 d-inline-block flex-grow-1 col">
                     <h2>Mot de passe</h2>
-                    <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2" id="password-field" required/>
+                    <input type="password" name="pwd" placeholder="Entrer votre mot de passe..." class="border border-2 border-dark py-1 px-2" id="password-field" 
+                      pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\#\.\,\;\?\!\@\$\%\^\&\*\(\)\-]).{12,}" required/>
                     <div class="invalid-feedback">
-                      Veuillez renseigner votre mot de passe
+                      Le mot de passe doit être composé d'au minimum 12 caractères comprenant des majuscules, des minuscules, des chiffres et des caractères spéciaux
                     </div>
                 </div>
                 <div class="p-2 d-inline-block flex-grow-1 col">
@@ -61,11 +62,15 @@
                   </div>
                 </div>
             </div>
+            <!--
+              Le mot de passe doit être composé d'au minimum 12 caractères
+              comprenant des majuscules, des minuscules, des chiffres et des caractères spéciaux
+            -->
             <input type="submit" class="m-2 border border-2 border-dark d-flex justify-content-center" value="S'inscrire"/>
             <h3>Déjà inscrit.e ? <a href="/connect">Connectez vous !</a></h3>
           </form>
       </section>
     </main>
-    <script src="/javascripts/bootstrap-form-validation.js"></script>
+    <script src="/javascripts/bootstrap-form-validation-register.js"></script>
   </body>
 </html>

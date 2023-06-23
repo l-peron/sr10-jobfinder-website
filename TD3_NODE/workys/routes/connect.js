@@ -64,6 +64,19 @@ router.post('/create', function (req, res, next) {
   const user_pwd = req.body.pwd;
   const user_phnbr = req.body.phnbr;
 
+  [user_fname, user_lname, user_mail, user_pwd, user_phnbr].forEach((value) => {
+    if(!value || value.replaceAll(' ', '') === '')
+    {
+      req.flash('error', "L'un des champs est vide")
+      return res.redirect('back');
+    }
+  })
+    
+  if(!new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#.,;?!@$%^&*()-]).{12,}$").test(user_pwd)){
+    req.flash('error', "Le mot de passe doit être composé d'au minimum 12 caractères comprenant des majuscules, des minuscules, des chiffres et des caractères spéciaux")
+    return res.redirect('back');
+  }
+
   bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
     if(err) {
       console.log(err);

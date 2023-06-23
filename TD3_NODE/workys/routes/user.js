@@ -69,8 +69,11 @@ router.post('/:id/update', function (req, res, next) {
   const user_password = req.body.pwd;
 
   for (const [key, value] of Object.entries(user_update)) {
-    if(!value || value === '')
-      return res.status(403).send('Null or empty values');
+    if(!value || value.replaceAll(' ', '') === '')
+    {
+      req.flash('error', "L'un des champs est vide")
+      return res.redirect('back');
+    }
   }
 
   userModel.read(req.session.user.user_mail, function(err, user_result) {
