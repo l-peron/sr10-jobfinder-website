@@ -24,6 +24,7 @@
                             <th class="px-3 text-center">Poste</th>
                             <th class="px-3 text-center">Status du Poste</th>
                             <th class="px-3 text-center">Description</th>
+                            <th class="px-3 text-center">Documents nécessaires</th>
                             <th class="px-3 text-center">Date de fin de validité</th>
                             <th class="px-3">Action</th>
                             <th class="px-3">Supprimer</th>
@@ -52,6 +53,9 @@
                                     <div class="description">
                                         <p><%= offreEmploi.poste_description %></p>
                                     </div> 
+                                </td>
+                                <td class="py-2 px-1"> 
+                                    <p><%= offreEmploi.required_documents %></p>
                                 </td>
                                 <td class="py-2 px-1 text-center">
                                     <%= offreEmploi.valid_date %>
@@ -89,6 +93,10 @@
                         <option value="<%= fiche.id %>"> <%= fiche.title %> </option>
                     <% }) %>
                 </select>
+            </div>
+            <div class="p-1">
+                <h2 class="mx-2">Documents requis</h2>
+                <input type="text" name="oe_required_documents" placeholder="Documents requis" class="p-1 m-2"/>
             </div>
             <div class="p-1">
                 <h2 class="mx-2">Date de fin de validité</h2>

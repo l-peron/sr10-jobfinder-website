@@ -8,7 +8,7 @@ module.exports = {
         });
     },
     readAllWithExtendedInfos: function(callback) {
-        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, fiche_postes.description, 
+        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, offre_emplois.required_documents, fiche_postes.description, 
         fiche_postes.title, fiche_postes.status AS poste_status, fiche_postes.type, fiche_postes.address, 
         fiche_postes.description AS poste_description, fiche_postes.responsable, salarys.max_salary, 
         salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off, 
@@ -24,7 +24,7 @@ module.exports = {
         });
     },
     searchAllWithExtendedInfos: function(query, callback) {
-        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, fiche_postes.description, 
+        sql = `SELECT offre_emplois.id, offre_emplois.status, offre_emplois.valid_date, offre_emplois.required_documents, fiche_postes.description, 
         fiche_postes.title, fiche_postes.status AS poste_status, fiche_postes.type, fiche_postes.address, 
         fiche_postes.description AS poste_description, fiche_postes.responsable, salarys.max_salary, 
         salarys.min_salary, salarys.average_salary, workflows.hours, workflows.remote, workflows.day_off,
@@ -53,15 +53,15 @@ module.exports = {
             callback(err, results);
         });
     },
-    create: function(valid_date, fiche, org_siren, callback) {
-        sql= "INSERT INTO offre_emplois (valid_date, fiche, organisation) VALUES (?, ?, ?)";
-        db.query(sql, [valid_date, fiche, org_siren], function(err, results) {
+    create: function(valid_date, fiche, org_siren, required_documents, callback) {
+        sql= "INSERT INTO offre_emplois (valid_date, fiche, organisation, required_documents) VALUES (?, ?, ?,?)";
+        db.query(sql, [valid_date, fiche, org_siren, required_documents], function(err, results) {
             callback(err, results);
         });
     },
-    update: function(id, valid_date, fiche, callback) {
-        sql= " UPDATE offre_emplois SET valid_date=?, fiche=? WHERE id=?";
-        db.query(sql, [valid_date, fiche, id], function(err, results) {
+    update: function(id, valid_date, fiche, required_documents, callback) {
+        sql= " UPDATE offre_emplois SET valid_date=?, fiche=?, required_documents=? WHERE id=?";
+        db.query(sql, [valid_date, fiche, required_documents, id], function(err, results) {
             callback(err, results);
         });
     },

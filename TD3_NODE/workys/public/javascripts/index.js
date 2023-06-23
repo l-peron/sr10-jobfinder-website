@@ -23,6 +23,7 @@ const modal = {
     title : document.querySelector('#modal_title'),
     organization : document.querySelector('#modal_org'),
     description : document.querySelector('#modal_desc'),
+    documents: document.querySelector('#modal_documents')
 }
 
 const closeAnnonceModal = () => {
@@ -37,6 +38,7 @@ const openAnnonceModal = (annonce) => {
     modal.title.innerHTML = annonce.title;
     modal.description.innerHTML = annonce.description;
     modal.organization.innerHTML = `par ${annonce.org_name}`;
+    modal.documents.innerHTML = `Pièce requises:  ${annonce.required_documents}`;
     
     formField.action = `/offreemploi/${annonce.id}/apply`
 }

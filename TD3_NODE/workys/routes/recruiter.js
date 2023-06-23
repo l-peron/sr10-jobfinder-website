@@ -55,8 +55,9 @@ router.post('/offresemploi/create', function(req, res, next) {
   const valid_date = req.body.oe_valid_date;
   const fiche_id = req.body.oe_fiche;
   const org_siren = req.session.user.org_siren;
+  const required_documents = req.body.oe_required_documents;
 
-  offresEmploiModel.create(valid_date, fiche_id, org_siren, function(err, results) {
+  offresEmploiModel.create(valid_date, fiche_id, org_siren, required_documents, function(err, results) {
     if(err) {
       console.log(err);
 
@@ -135,7 +136,9 @@ router.post('/offresemploi/:id/edit', function(req, res, next) {
   const valid_date = req.body.oe_valid_date;
   const fiche_id = req.body.oe_fiche;
 
-  offresEmploiModel.update(offre_id, valid_date, fiche_id, function(err, result) {
+  const required_documents = req.body.oe_required_documents;
+
+  offresEmploiModel.update(offre_id, valid_date, fiche_id, required_documents, function(err, result) {
     if(err) {
       console.log(err);
 

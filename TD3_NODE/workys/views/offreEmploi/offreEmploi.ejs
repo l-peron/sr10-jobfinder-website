@@ -36,6 +36,7 @@
                         <h2>
                             Mes pièces
                         </h2>
+                        <p class="my-2">Pièces requises: <%= offre.required_documents %></p>
                         <form class="border border-1 border-dark p-0 d-block mh-25" method="post" action="/offreemploi/<%= offre.id %>/apply" id="candidature_form" enctype="multipart/form-data">
                             <div class="row w-100 p-0 m-0" id="fileRow0"><input type="file" name="file[]" placeholder="Fichier" class="fileFields col-sm form-control rounded-0 h-100">
                                 <select name="type[]" class="col-sm border-0">

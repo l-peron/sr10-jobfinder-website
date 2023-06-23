@@ -71,6 +71,7 @@ router.get('/', function(req, res, next) {
           hours: a.hours,
           day_off: a.day_off,
           org_name: a.name,
+          required_documents: a.required_documents,
           // Check if user has already applied
           has_applied: candidatures_result.some(e => e.offer_id === a.id)
         }
