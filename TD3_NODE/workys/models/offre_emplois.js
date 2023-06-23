@@ -17,7 +17,8 @@ module.exports = {
         INNER JOIN fiche_postes ON offre_emplois.fiche = fiche_postes.id 
         INNER JOIN salarys ON fiche_postes.salary = salarys.id 
         INNER JOIN workflows ON fiche_postes.workflow = workflows.id 
-        INNER JOIN organisations ON fiche_postes.organisation = organisations.siren`;
+        INNER JOIN organisations ON fiche_postes.organisation = organisations.siren
+        ORDER BY offre_emplois.id DESC`;
 
         db.query(sql, function(err, results) {
             callback(err, results);
@@ -35,7 +36,8 @@ module.exports = {
         INNER JOIN workflows ON fiche_postes.workflow = workflows.id 
         INNER JOIN organisations ON fiche_postes.organisation = organisations.siren
         WHERE fiche_postes.title LIKE ?
-        OR fiche_postes.description LIKE ?`;
+        OR fiche_postes.description LIKE ?
+        ORDER BY offre_emplois.id DESC`;
 
         db.query(sql, [query, query], function(err, results) {
             callback(err, results);

@@ -29,7 +29,7 @@
                         <h2>Responsable</h2>
                         <select name="fp_resp" class="w-100">
                             <% members.forEach((member)=> { %>
-                                <% var selected = member.id === fiche.responsable ? 'selected' : '';%>
+                                <% var selected = member.id === fiche.responsable.id ? 'selected' : '';%>
                                 <option value="<%= member.id %>" <%= selected %>>
                                     <%= member.name + ' ' + member.surname %>
                                 </option>
